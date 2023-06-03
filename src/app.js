@@ -12,6 +12,11 @@ let prev_lng, prev_lat
 let panels = document.getElementsByClassName('panel');
 let icons = document.getElementsByClassName('icon');
 let iconClass = [];
+let Gdal
+
+(async function () {
+    Gdal = await initGdalJs({path: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.4.0/dist/package', useWorker: false})
+})();
 
 for (let i = 0; i < panels.length; i++) {
     iconClass.push(icons[i].className);
@@ -34,6 +39,7 @@ let geocoder = new MapboxGeocoder({
     mapboxgl: mapboxgl,
     marker: false
 });
+const pbElement2 = document.getElementById('progress2');
 
 const pbElement = document.getElementById('progress');
 const previewImage = document.getElementById("previewImage");
@@ -69,6 +75,8 @@ map.on('click', function (e) {
 map.on('idle', function () {
     // scope can be set if bindings.js is loaded (because of docReady)
     scope.waterDepth = parseInt(grid.waterDepth) || 50;
+    scope.landscapeSize = parseInt(grid.landscapeSize) || 0;
+    scope.exportType = parseInt(grid.exportType) || 'png';
     saveSettings();
 });
 
@@ -77,8 +85,7 @@ geocoder.on('result', function (query) {
     grid.lat = query.result.center[1];
 
     setGrid(grid.lng, grid.lat, vmapSize);
-    map.setZoom(10.2);
-
+    map.panTo(new mapboxgl.LngLat(grid.lng, grid.lat));
     saveSettings();
     updateInfopanel();
 });
@@ -292,6 +299,8 @@ function loadSettings() {
 function saveSettings() {
     grid.zoom = map.getZoom();
     grid.waterDepth = parseInt(document.getElementById('waterDepth').value);
+    grid.landscapeSize = scope.landscapeSize;
+    grid.exportType = scope.exportType;
     localStorage.setItem('grid', JSON.stringify(grid));
 }
 
@@ -332,7 +341,10 @@ function togglePanel(index) {
             }
             break;
         case 1:
-            if (!isOpens[1]) {
+
+            break;
+        case 2:
+            if (!isOpens[2]) {
                 let styleName = map.getStyle().metadata['mapbox:origin'];
                 if (!(styleName)) {
                     styleName = 'satellite-v9';
@@ -340,7 +352,7 @@ function togglePanel(index) {
                 document.getElementById(styleName).checked = true;
             }
             break;
-        case 2:
+        case 3:
             // none
             break;
     }
@@ -369,7 +381,7 @@ function calcMinMaxHeight(heightmap) {
 function updateInfopanel() {
     let rhs = 17.28 / mapSize * 100;
 
-   // document.getElementById('rHeightscale').innerHTML = rhs.toFixed(1);
+    // document.getElementById('rHeightscale').innerHTML = rhs.toFixed(1);
     document.getElementById('lng').innerHTML = grid.lng.toFixed(5);
     document.getElementById('lat').innerHTML = grid.lat.toFixed(5);
     document.getElementById('minh').innerHTML = grid.minHeight;
@@ -430,7 +442,6 @@ function setBaseLevel() {
 
 function setHeightScale() {
     if (grid.maxHeight === null) {
-        console.log('base')
         new Promise((resolve) => {
             getHeightmap("preview", resolve);
         }).then(() => {
@@ -480,6 +491,8 @@ function sanatizeMap(heightmap, xOffset, yOffset) {
 function getHeightmap(mode = "", callback) {
     overlayOn()
     pbElement.value = 0;
+    pbElement2.value = 0;
+    pbElement2.style.visibility = 'visible';
     pbElement.style.visibility = 'visible';
     let autoCalc = document.getElementById("autoCalcBaseHeight").checked
     // saveSettings(false);
@@ -493,6 +506,7 @@ function getHeightmap(mode = "", callback) {
     let zoom = 14;
 
     incPb(pbElement);
+    incPb(pbElement2);
     // get a tile that covers the top left and bottom right (for the tile count calculation)
     let x = long2tile(extent.topleft[0], zoom);
     let y = lat2tile(extent.topleft[1], zoom);
@@ -506,6 +520,7 @@ function getHeightmap(mode = "", callback) {
     // because Terrain RGB tile distance depends on latitude
     // don't need too many tiles
     incPb(pbElement);
+    incPb(pbElement2);
     if (tileCnt > 6) {
         let z = zoom;
         let tx, ty, tx2, ty2, tc;
@@ -517,6 +532,7 @@ function getHeightmap(mode = "", callback) {
             ty2 = lat2tile(extent.bottomright[1], z);
             tc = Math.max(tx2 - tx + 1, ty2 - ty + 1);
             incPb(pbElement);
+            incPb(pbElement2);
         } while (tc > 6);
         // reflect the fixed result
         x = tx;
@@ -547,6 +563,7 @@ function getHeightmap(mode = "", callback) {
     for (let i = 0; i < tileCnt; i++) {
         for (let j = 0; j < tileCnt; j++) {
             incPb(pbElement);
+            incPb(pbElement2);
             let url = 'https://api.mapbox.com/v4/mapbox.terrain-rgb/' + zoom + '/' + (x + j) + '/' + (y + i) + '@2x.pngraw?access_token=' + mapboxgl.accessToken;
             let woQUrl = 'https://api.mapbox.com/v4/mapbox.terrain-rgb/' + zoom + '/' + (x + j) + '/' + (y + i) + '@2x.pngraw';
             downloadPngToTile(url, woQUrl).then((png) => tiles[i][j] = png);
@@ -559,6 +576,7 @@ function getHeightmap(mode = "", callback) {
     let timer = window.setInterval(function () {
         ticks++;
         incPb(pbElement);
+        incPb(pbElement2);
 
         if (isDownloadComplete(tiles)) {
             console.log('download ok');
@@ -579,6 +597,7 @@ function getHeightmap(mode = "", callback) {
             grid.maxHeight = heights.max;
 
             pbElement.value = 500;
+            pbElement2.value = 500;
             // callback after height calculation is completed
             if (typeof callback === 'function') callback();
 
@@ -586,24 +605,16 @@ function getHeightmap(mode = "", callback) {
             switch (mode) {
 
                 case "png":
-                    convertedHeightmap = convertHeightmap(sanatizedheightMap);
-                    png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
-                    download('heightmap.png', png, false)
-                    break;
-                case "preview": //Set auto level and scale
                     if (autoCalc === true) {
-                        console.log('test')
                         autoCalculateBaseHeight()
                     }
                     convertedHeightmap = convertHeightmap(sanatizedheightMap);
                     png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
-                    imgUrl = download('heightmap.png', png, true);
-                    previewImage.src = imgUrl
-                    updateInfopanel()
+                    download('heightmap.png', png, false)
                     break;
-                case "refresh": // Don't set auto level and scale
+
+                case "preview": //Set auto level and scale
                     if (autoCalc === true) {
-                        console.log('test')
                         autoCalculateBaseHeight()
                     }
                     convertedHeightmap = convertHeightmap(sanatizedheightMap);
@@ -613,11 +624,35 @@ function getHeightmap(mode = "", callback) {
                     updateInfopanel()
                     break;
 
+                case "unreal": //Set auto level and scale
+                    if (autoCalc === true) {
+                        autoCalculateBaseHeight()
+                    }
+                    convertedHeightmap = convertHeightmap(sanatizedheightMap);
+                    png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
+                    updateInfopanel()
+                    sendToUnreal(png)
+                    break;
+
+                // case "refresh": // Don't set auto level and scale
+                //     if (autoCalc === true) {
+                //         console.log('test')
+                //         autoCalculateBaseHeight()
+                //     }
+                //     convertedHeightmap = convertHeightmap(sanatizedheightMap);
+                //     png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
+                //     imgUrl = download('heightmap.png', png, true);
+                //     previewImage.src = imgUrl
+                //     updateInfopanel()
+                //     break;
+
             }
             console.log('complete in ', ticks * 10, ' ms');
             prev_lng = document.getElementById('lng').innerHTML
             prev_lat = document.getElementById('lat').innerHTML
+            pbElement2.style.visibility = 'hidden';
             pbElement.style.visibility = 'hidden';
+            pbElement2.value = 0;
             pbElement.value = 0;
             overlayOff()
         }
@@ -627,9 +662,43 @@ function getHeightmap(mode = "", callback) {
             clearInterval(timer);
             console.error('timeout!');
             pbElement.value = 0;
+            pbElement2.value = 0;
             overlayOff()
         }
     }, 10);
+}
+
+async function sendToUnreal(buff) {
+    let landscapeSize = scope.landscapeSize.toString()
+    let exportType = scope.exportType
+    if (exportType === 'png') {
+        let ZrangeSeaLevel = '32767'
+        let maxPngValue = '65535'
+        let resizeMethod = 'lanczos'
+        let translateOptions = [
+            '-ot', 'UInt16',
+            '-of', 'PNG',
+            //'-scale', grid.minHeight.toString(), grid.maxHeight.toString(), ZrangeSeaLevel, maxPngValue,
+            '-outsize', landscapeSize, landscapeSize, '-r', resizeMethod
+        ];
+
+        await processGdal(buff, 'heightmap.png', translateOptions, "png");
+
+    }
+}
+
+async function processGdal(buff, filename, translateOptions, file_type) {
+
+    let blob = new Blob([new Uint8Array(buff)], {type: 'image/' + file_type})
+    const file = new File([blob], filename);
+    const result = await Gdal.open(file);
+    const dataset = result.datasets[0];
+    const filePath = await Gdal.gdal_translate(dataset, translateOptions);
+    const fileBytes = await Gdal.getFileBytes(filePath);
+    download(filename, fileBytes, false)
+    //  await this.saveImage(fileBytes, filename, file_type)
+
+    Gdal.close(dataset);
 }
 
 
@@ -807,6 +876,7 @@ function getInfo(fileName) {
         'Height contours: ' + grid.heightContours + '\n' +
         'Zoom: ' + grid.zoom + '\n';
 }
+
 function overlayOn() {
     document.getElementById("overlay").style.display = "block";
 }

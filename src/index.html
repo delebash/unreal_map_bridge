@@ -4,31 +4,26 @@
 <head>
     <meta charset='utf-8'/>
     <title>Cities: Skylines map generator</title>
-    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no'/>
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/destyle.css@1.0.15/destyle.css"/>
-
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.8.0/mapbox-gl.js'></script>
-    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/v1.8.0/mapbox-gl.css'/>
-
-    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js"></script>
-    <link rel="stylesheet"
-          href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.css"
+    <meta content='initial-scale=1,maximum-scale=1,user-scalable=no' name='viewport'/>
+    <link href="favicon.ico" rel="shortcut icon" type="image/x-icon">
+    <link href="favicon.ico" rel="icon" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/destyle.css@1.0.15/destyle.css" rel="stylesheet"/>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v1.8.0/mapbox-gl.css' rel='stylesheet'/>
+    <link href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.css"
+          rel="stylesheet"
           type="text/css"/>
-
-    <!-- Fixed no icons with new Font Awesome key -->
-    <script src="https://kit.fontawesome.com/9051d1b58c.js" crossorigin="anonymous"></script>
-    <!-- <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> -->
-
+    <link href="styles.css" rel="stylesheet" type="text/css">
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/9051d1b58c.js"></script>
+    <script
+        src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js"></script>
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.8.0/mapbox-gl.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="styles.css">
-
-    <!-- ANALYTICS SCRIPT -->
-
-    <!-- END OF ANALYTICS SCRIPT -->
+    <script crossorigin="anonymous"
+            integrity="sha384-XlqVvSG4V8zz8Kdw95OpRdsWyJnWE5QUZy++BeAIEVb+f2n5RM7jdbZh5lm0pHWk"
+            src="https://cdn.jsdelivr.net/npm/gdal3.js@2.4.0/dist/package/gdal3.js"
+            type="text/javascript"
+    ></script>
 
 </head>
 
@@ -36,26 +31,28 @@
 <div id="overlay"></div>
 <div class="sideBar column">
     <ul>
-        <li><a onclick="togglePanel(0)" title="Settings"><i class="icon fas fa-info-circle"></i></a></li>
-        <li><a onclick="togglePanel(1)" title="Change map style"><i class="icon fas fa-layer-group"></i></a></li>
-        <li><a onclick="togglePanel(2)" title="Set lng/lat"><i class="icon fas fa-map-marker-alt"></i></a></li>
+        <li><a onclick="togglePanel(0)" title="Info"><i class="icon fas fa-info-circle"></i></a></li>
+        <li><a onclick="togglePanel(1)" title="Settings"><i class="icon fas fa-cog" style="font-size:24px"></i></a></li>
+        <li><a onclick="togglePanel(2)" title="Change map style"><i class="icon fas fa-layer-group"></i></a></li>
+        <li><a onclick="togglePanel(3)" title="Set lng/lat"><i class="icon fas fa-map-marker-alt"></i></a></li>
     </ul>
     <ul class="fill">
-        <li><a onclick="getHeightmap('raw')" title="Download RAW height map"><i class="fas fa-file-download"></i></a></li>
+        <li><a onclick="getHeightmap('raw')" title="Download RAW height map"><i class="fas fa-file-download"></i></a>
+        </li>
         <li><a onclick="getHeightmap('png')" title="Download PNG height map"><i class="fas fa-file-image"></i></a></li>
         <li><a onclick="getMapImage('map_image')" title="Download map image"><i class="fas fa-map"></i></a></li>
         <li><a onclick="getHeightmap('zip')" title="Download ZIP with PNG and lng/lat informations"><i
-                class="fas fa-file-archive"></i></a></li>
+            class="fas fa-file-archive"></i></a></li>
     </ul>
     <ul class="fill">
-        <li><a onclick="showHeightContours(this)" title="Show height contours" id="showHeightContours"><i
-                class="fas fa-mountain"></i></a></li>
-        <li><a onclick="showWaterContours(this)" title="Show water contours" id="showWaterContours"><i
-                class="fas fa-water"></i></a></li>
+        <li><a id="showHeightContours" onclick="showHeightContours(this)" title="Show height contours"><i
+            class="fas fa-mountain"></i></a></li>
+        <li><a id="showWaterContours" onclick="showWaterContours(this)" title="Show water contours"><i
+            class="fas fa-water"></i></a></li>
     </ul>
     <ul class="fill" id="dcBox">
-        <li><a onclick="deleteCaches()" title="Delete caches" id="deleteCaches"><i class="fas fa-database"></i><i
-                class="fas fa-times"></i></a></li>
+        <li><a id="deleteCaches" onclick="deleteCaches()" title="Delete caches"><i class="fas fa-database"></i><i
+            class="fas fa-times"></i></a></li>
     </ul>
     <ul>
         <li><a onclick="zoomIn()" title="Zoom in"><i class="fas fa-search-plus"></i></a></li>
@@ -63,17 +60,18 @@
     </ul>
     <ul>
         <li><a href="" target="_blank" title="Help"><i
-                class="far fa-question-circle"></i></a></li>
-        <li><a href="#" onclick="getHeightmap('map_image')" title="Download tiles map (Terrain-RGB)"><i class="fas fa-bug"></i></a></li>
+            class="far fa-question-circle"></i></a></li>
+        <li><a href="#" onclick="getHeightmap('map_image')" title="Download tiles map (Terrain-RGB)"><i
+            class="fas fa-bug"></i></a></li>
     </ul>
 </div>
 
 <div class="fill wrapper">
-    <div id="map" class="content"></div>
-       <div id="infoPanel" class="panel slide-out hidden">
-        <div id="geocoder" class="geocoder"></div>
+    <div class="content" id="map"></div>
+    <div class="panel slide-out hidden" id="infoPanel">
+        <div class="geocoder" id="geocoder"></div>
         <div class="previewImage">
-            <img id="previewImage" src="heightmap.png" alt="preview image" width="512px" height="512px">
+            <img alt="preview image" height="512px" id="previewImage" src="heightmap.png" width="512px">
         </div>
         <div class="infotable">
             <div class="info">
@@ -109,94 +107,127 @@
                 </header>
                 <dl>
                     <dt>Map size:</dt>
-                    <dd><input type="range" data-model="mapSize" min="8" max="100" step="0.01" id="mapSize"
-                               onkeyup="changeMapsize(this)" onmouseup="changeMapsize(this)"></dd>
-                    <dd><input type="number" data-model="mapSize" min="17.28" max="69.12" step="0.01"
-                               onkeyup="changeMapsize(this)" onmouseup="changeMapsize(this)"></dd>
+                    <dd><input data-model="mapSize" id="mapSize" max="100" min="8" onkeyup="changeMapsize(this)"
+                               onmouseup="changeMapsize(this)"
+                               step="0.01" type="range"></dd>
+                    <dd><input data-model="mapSize" max="69.12" min="17.28" onkeyup="changeMapsize(this)"
+                               onmouseup="changeMapsize(this)"
+                               step="0.01" type="number"></dd>
                     <dd><abbr>km</abbr></dd>
                     <dt class="withUnit">Auto calculate Base & Height:</dt>
-                    <dd><input type="checkbox" id="autoCalcBaseHeight" checked></dd>
+                    <dd><input checked id="autoCalcBaseHeight" type="checkbox"></dd>
                     <dt>Base level:</dt>
-                    <dd><input type="range" data-model="baseLevel" min="-1023.9" max="1023.9" step="0.1" id="baseLevel">
+                    <dd><input data-model="baseLevel" id="baseLevel" max="1023.9" min="-1023.9" step="0.1" type="range">
                     </dd>
-                    <dd><input type="number" data-model="baseLevel" min="-1023.9" max="1023.9" step="0.1"></dd>
+                    <dd><input data-model="baseLevel" max="1023.9" min="-1023.9" step="0.1" type="number"></dd>
                     <dd><abbr>m</abbr></dd>
-<!--                    <dd>-->
-<!--                        <button class="calc" onclick="setBaseLevel()"-->
-<!--                                title="Set to the same value as Min. height"><i class="fas fa-calculator"></i></button>-->
-<!--                    </dd>-->
+                    <!--                    <dd>-->
+                    <!--                        <button class="calc" onclick="setBaseLevel()"-->
+                    <!--                                title="Set to the same value as Min. height"><i class="fas fa-calculator"></i></button>-->
+                    <!--                    </dd>-->
                     <dt>Height scale:</dt>
-                    <dd><input type="range" data-model="heightScale" min="0" max="250" step="1" id="heightScale"></dd>
-                    <dd><input type="number" data-model="heightScale" step="1"></dd>
+                    <dd><input data-model="heightScale" id="heightScale" max="250" min="0" step="1" type="range"></dd>
+                    <dd><input data-model="heightScale" step="1" type="number"></dd>
                     <dd><abbr>%</abbr></dd>
-<!--                    <dd>-->
-<!--                        <button class="calc" onclick="setHeightScale()"-->
-<!--                                title="Set to the maximum scale possible with the current settings"><i-->
-<!--                                class="fas fa-calculator"></i></button>-->
-<!--                    </dd>-->
-<!--                    <dt class="withUnit">Reference height scale:</dt>-->
-<!--                    <dd class="unit2" id="rHeightscale">100.0</dd>-->
-<!--                    <dd><abbr>%</abbr></dd>-->
+                    <!--                    <dd>-->
+                    <!--                        <button class="calc" onclick="setHeightScale()"-->
+                    <!--                                title="Set to the maximum scale possible with the current settings"><i-->
+                    <!--                                class="fas fa-calculator"></i></button>-->
+                    <!--                    </dd>-->
+                    <!--                    <dt class="withUnit">Reference height scale:</dt>-->
+                    <!--                    <dd class="unit2" id="rHeightscale">100.0</dd>-->
+                    <!--                    <dd><abbr>%</abbr></dd>-->
                 </dl>
                 <dl>
                     <dt>Water depth:</dt>
-                    <dd><input type="range" data-model="waterDepth" min="0" max="60" step="1" id="waterDepth"></dd>
-                    <dd><input type="number" data-model="waterDepth" min="0" max="60" step="1"></dd>
+                    <dd><input data-model="waterDepth" id="waterDepth" max="60" min="0" step="1" type="range"></dd>
+                    <dd><input data-model="waterDepth" max="60" min="0" step="1" type="number"></dd>
                     <dd><abbr>m</abbr></dd>
                 </dl>
-<!--                <header><h4>Draw options</h4>-->
-<!--                    <hr>-->
-<!--                </header>-->
+                <!--                <header><h4>Draw options</h4>-->
+                <!--                    <hr>-->
+                <!--                </header>-->
 
-<!--                <header><h4>Smoothing &amp; leveling</h4>-->
-<!--                    <hr>-->
-<!--                </header>-->
+                <!--                <header><h4>Smoothing &amp; leveling</h4>-->
+                <!--                    <hr>-->
+                <!--                </header>-->
             </div>
         </div>
         <hr>
         <div class="footer">
-            <progress id="progress" value="0" max="500"></progress>
+            <progress id="progress" max="500" value="0"></progress>
             <!-- <p class="fill"></p> -->
-            <button onclick="getHeightmap('refresh')"><i class="fas fa-sync-alt"></i>Refresh</button>
-<!--            <button onclick="autoSettings()"><i class="fas fa-cog"></i>Auto</button>-->
+            <button onclick="getHeightmap('preview')"><i class="fas fa-sync-alt"></i>Refresh</button>
+            <!--            <button onclick="autoSettings()"><i class="fas fa-cog"></i>Auto</button>-->
         </div>
     </div>
 
-    <div id="stylePanel" class="panel slide-out hidden">
+    <div class="panel slide-out hidden" id="settingsPanel">
+        <h3>Settings:</h3>
+        <div id="settings">
+            <div class="row">
+                <dl>
+                    <dt>Export Type:</dt>
+                    <dd class="wsSlp wideSelect">
+                        <select data-model="exportType">
+                            <option value="png">Png Unreal</option>
+                            <option value="none">None</option>
+                        </select><i class="fas fa-chevron-down"></i>
+                    </dd>
+                    <dt>Landscape Size:</dt>
+                    <dd class="wsSlp wideSelect">
+                        <select data-model="landscapeSize">
+                            <option value="2017">2017x2017</option>
+                            <option value="0">none</option>
+                        </select><i class="fas fa-chevron-down"></i>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+        <hr>
+        <div class="footer">
+            <progress id="progress2" max="500" value="0"></progress>
+            <button onclick="getHeightmap('unreal')"><i class="fas fa-sync-alt"></i>Export</button>
+        </div>
+    </div>
+
+    <div class="panel slide-out hidden" id="stylePanel">
         <h3>Map style:</h3>
         <div id="mapstyle">
-            <label for="streets-v11"><input id="streets-v11" type="radio" name="msGroup" value="streets"
-                                            onclick="setMapStyle(this)">Streets</label>
-            <label for="outdoors-v11"><input id="outdoors-v11" type="radio" name="msGroup" value="outdoors"
-                                             onclick="setMapStyle(this)">Outdoors</label>
-            <label for="satellite-v9"><input id="satellite-v9" type="radio" name="msGroup" value="satellite"
-                                             onclick="setMapStyle(this)">Satellite</label>
-            <label for="light-v10"><input id="light-v10" type="radio" name="msGroup" value="light"
-                                          onclick="setMapStyle(this)">Light</label>
-            <label for="dark-v10"><input id="dark-v10" type="radio" name="msGroup" value="dark"
-                                         onclick="setMapStyle(this)">Dark</label>
+            <label for="streets-v11"><input id="streets-v11" name="msGroup" onclick="setMapStyle(this)" type="radio"
+                                            value="streets">Streets</label>
+            <label for="outdoors-v11"><input id="outdoors-v11" name="msGroup" onclick="setMapStyle(this)"
+                                             type="radio"
+                                             value="outdoors">Outdoors</label>
+            <label for="satellite-v9"><input id="satellite-v9" name="msGroup" onclick="setMapStyle(this)"
+                                             type="radio"
+                                             value="satellite">Satellite</label>
+            <label for="light-v10"><input id="light-v10" name="msGroup" onclick="setMapStyle(this)" type="radio"
+                                          value="light">Light</label>
+            <label for="dark-v10"><input id="dark-v10" name="msGroup" onclick="setMapStyle(this)" type="radio"
+                                         value="dark">Dark</label>
         </div>
     </div>
 
-    <div id="pinPanel" class="panel slide-out hidden">
+    <div class="panel slide-out hidden" id="pinPanel">
         <h3>Lng / Lat:</h3>
         <dl>
             <div>
                 <dt>Longitude:</dt>
-                <dd><input type="text" id="lngInput"></dd>
+                <dd><input id="lngInput" type="text"></dd>
                 <dd><abbr>&#176;</abbr></dd>
             </div>
             <div>
                 <dt>Latitude:</dt>
-                <dd><input type="text" id="latInput"></dd>
+                <dd><input id="latInput" type="text"></dd>
                 <dd><abbr>&#176;</abbr></dd>
             </div>
         </dl>
         <hr>
         <div class="footer">
             <p class="fill"></p>
-            <button onclick="setLngLat('current_position')" class="outline">Current pos.</button>
-            <button onclick="setLngLat('clear')" class="outline">Clear</button>
+            <button class="outline" onclick="setLngLat('current_position')">Current pos.</button>
+            <button class="outline" onclick="setLngLat('clear')">Clear</button>
             <button onclick="setLngLat('apply')"><i class="fas fa-check"></i>Apply</button>
         </div>
     </div>
