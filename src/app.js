@@ -280,8 +280,8 @@ function loadSettings() {
     let stored = JSON.parse(localStorage.getItem('grid')) || {};
 
     // Mt Rainier
-    stored.lng = parseFloat(stored.lng) || -122.43877;
-    stored.lat = parseFloat(stored.lat) || 37.75152;
+    stored.lng = parseFloat(stored.lng) || -121.75954;
+    stored.lat = parseFloat(stored.lat) || 46.85255;
 
     stored.zoom = parseFloat(stored.zoom) || 11.0;
 
