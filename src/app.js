@@ -331,14 +331,14 @@ function togglePanel(index) {
     // initial settings when each panel is opened
     switch (index) {
         case 0:
-            if (!isOpens[0]) {
-                if (prev_lng === grid.lng.toFixed(5) && prev_lat === grid.lat.toFixed(5)) {
-                    console.log('no update')
-                } else {
-                    console.log('heigtmap')
-                    getHeightmap("preview");
-                }
-            }
+            // if (!isOpens[0]) {
+            //     if (prev_lng === grid.lng.toFixed(5) && prev_lat === grid.lat.toFixed(5)) {
+            //         console.log('no update')
+            //     } else {
+            //         console.log('heigtmap')
+            //         getHeightmap("preview");
+            //     }
+            // }
             break;
         case 1:
 

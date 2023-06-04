@@ -12,8 +12,10 @@
     <link href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.css"
           rel="stylesheet"
           type="text/css"/>
+    <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+          referrerpolicy="no-referrer" rel="stylesheet"/>
     <link href="styles.css" rel="stylesheet" type="text/css">
-    <script crossorigin="anonymous" src="https://kit.fontawesome.com/9051d1b58c.js"></script>
     <script
             src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js"></script>
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.8.0/mapbox-gl.js'></script>
@@ -48,15 +50,16 @@
             <a onclick="getMapImage('map_image')" title="Download map image"><i class="fas fa-map"></i></a></li>
         <li>
             <a onclick="getHeightmap('zip')" title="Download ZIP with PNG and lng/lat informations">
-                <i class="fas fa-file-archive"></i></a>
+                <i class="fa-solid fa-file-zipper fa-lg"></i>
+            </a>
         </li>
     </ul>
-    <ul class="fill">
-        <li><a id="showHeightContours" onclick="showHeightContours(this)" title="Show height contours"><i
-                class="fas fa-mountain"></i></a></li>
-        <li><a id="showWaterContours" onclick="showWaterContours(this)" title="Show water contours"><i
-                class="fas fa-water"></i></a></li>
-    </ul>
+    <!--    <ul class="fill">-->
+    <!--        <li><a id="showHeightContours" onclick="showHeightContours(this)" title="Show height contours"><i-->
+    <!--                class="fas fa-mountain"></i></a></li>-->
+    <!--        <li><a id="showWaterContours" onclick="showWaterContours(this)" title="Show water contours"><i-->
+    <!--                class="fas fa-water"></i></a></li>-->
+    <!--    </ul>-->
     <ul class="fill" id="dcBox">
         <li><a id="deleteCaches" onclick="deleteCaches()" title="Delete caches"><i class="fas fa-database"></i><i
                 class="fas fa-times"></i></a></li>
@@ -66,7 +69,8 @@
         <li><a onclick="zoomOut()" title="Zoom out"><i class="fas fa-search-minus"></i></a></li>
     </ul>
     <ul>
-        <li><a href="" target="_blank" title="Help"><i class="far fa-question-circle"></i></a></li>
+        <li><a href="https://github.com/delebash/unreal_map_bridge" target="_blank" title="Help"><i
+                class="far fa-question-circle"></i></a></li>
         <li>
             <a href="#" onclick="getHeightmap('map_image')" title="Download tiles map (Terrain-RGB)"><i
                     class="fas fa-bug"></i></a>
@@ -75,30 +79,52 @@
 </div>
 
 <div class="fill wrapper">
-    <div class="row top-bar">
-        <div class="headerinfo">
-            <dl class="lnglat">
-                <div>
-                    <dt>Longitude:</dt>
-                    <dd class="unit" id="lng"></dd>
-                    <dd><abbr>&#176;</abbr></dd>
-                    <dt>Latitude:</dt>
-                    <dd class="unit" id="lat"></dd>
-                    <dd><abbr>&#176;</abbr></dd>
-                </div>
-            </dl>
-            <dl class="height">
-                <div>
-                    <dt>Min. height:</dt>
-                    <dd class="unit" id="minh"></dd>
-                    <dd><abbr>m</abbr></dd>
-                    <dt>Max. height:</dt>
-                    <dd class="unit" id="maxh"></dd>
-                    <dd><abbr>m</abbr></dd>
-                </div>
-            </dl>
+    <div class="topbar">
+        <div class='row'>
+            <div class="inline">
+                <div>Longitude:</div>&nbsp;
+                <div id="lng"></div>&nbsp;
+                <div><abbr>&#176;</abbr></div>&nbsp;
+                <div>Latitude:</div>&nbsp;
+                <div id="lat"></div>&nbsp;
+                <div><abbr>&#176;</abbr></div>
+            </div>
+
         </div>
-        <div class="geocoder" id="geocoder"></div>
+        <div class='row'>
+            <div class="inline">
+                <div>Min. height:</div>&nbsp;
+                <div id="minh"></div>&nbsp;m&nbsp;
+                <div>Max. height:</div>&nbsp;
+                <div id="maxh"></div>&nbsp;m
+            </div>
+            <div class="geocoder" id="geocoder"></div>
+        </div>
+        <!--        <div class="headerinfo">-->
+        <!--            <dl class="row">-->
+        <!--                <div class="col">-->
+        <!--                    <dt>Longitude:</dt>-->
+        <!--                    <dd class="unit" id="lng"></dd>-->
+        <!--                    <dd><abbr>&#176;</abbr></dd>-->
+        <!--                    &nbsp;-->
+        <!--                    &nbsp;-->
+        <!--                    <dt>Latitude:</dt>-->
+        <!--                    <dd class="unit" id="lat"></dd>-->
+        <!--                    <dd><abbr>&#176;</abbr></dd>-->
+        <!--                </div>-->
+        <!--            </dl>-->
+        <!--            <dl class="row">-->
+        <!--                <div class="col">-->
+        <!--                    <dt>Min. height:</dt>-->
+        <!--                    <dd class="unit" id="minh"></dd>-->
+        <!--                    <dd><abbr>m</abbr></dd>-->
+        <!--                    <dt>Max. height:</dt>-->
+        <!--                    <dd class="unit" id="maxh"></dd>-->
+        <!--                    <dd><abbr>m</abbr></dd>-->
+        <!--                </div>-->
+        <!--            </dl>-->
+        <!--        </div>-->
+
     </div>
 
     <div class="content" id="map"></div>
@@ -108,32 +134,32 @@
             <img alt="preview image" height="256px" id="previewImage" src="heightmap.png" width="256px">
         </div>
         <div class="infotable">
-<!--            <div class="info">-->
-<!--                <dl class="lnglat">-->
-<!--                    <div>-->
-<!--                        <dt>Longitude:</dt>-->
-<!--                        <dd class="unit" id="lng"></dd>-->
-<!--                        <dd><abbr>&#176;</abbr></dd>-->
-<!--                    </div>-->
-<!--                    <div>-->
-<!--                        <dt>Latitude:</dt>-->
-<!--                        <dd class="unit" id="lat"></dd>-->
-<!--                        <dd><abbr>&#176;</abbr></dd>-->
-<!--                    </div>-->
-<!--                </dl>-->
-<!--                <dl class="height">-->
-<!--                    <div>-->
-<!--                        <dt>Min. height:</dt>-->
-<!--                        <dd class="unit" id="minh"></dd>-->
-<!--                        <dd><abbr>m</abbr></dd>-->
-<!--                    </div>-->
-<!--                    <div>-->
-<!--                        <dt>Max. height:</dt>-->
-<!--                        <dd class="unit" id="maxh"></dd>-->
-<!--                        <dd><abbr>m</abbr></dd>-->
-<!--                    </div>-->
-<!--                </dl>-->
-<!--            </div>-->
+            <!--            <div class="info">-->
+            <!--                <dl class="lnglat">-->
+            <!--                    <div>-->
+            <!--                        <dt>Longitude:</dt>-->
+            <!--                        <dd class="unit" id="lng"></dd>-->
+            <!--                        <dd><abbr>&#176;</abbr></dd>-->
+            <!--                    </div>-->
+            <!--                    <div>-->
+            <!--                        <dt>Latitude:</dt>-->
+            <!--                        <dd class="unit" id="lat"></dd>-->
+            <!--                        <dd><abbr>&#176;</abbr></dd>-->
+            <!--                    </div>-->
+            <!--                </dl>-->
+            <!--                <dl class="height">-->
+            <!--                    <div>-->
+            <!--                        <dt>Min. height:</dt>-->
+            <!--                        <dd class="unit" id="minh"></dd>-->
+            <!--                        <dd><abbr>m</abbr></dd>-->
+            <!--                    </div>-->
+            <!--                    <div>-->
+            <!--                        <dt>Max. height:</dt>-->
+            <!--                        <dd class="unit" id="maxh"></dd>-->
+            <!--                        <dd><abbr>m</abbr></dd>-->
+            <!--                    </div>-->
+            <!--                </dl>-->
+            <!--            </div>-->
             <div class="settings">
                 <header><h4>Size and scale</h4>
                     <hr>
@@ -190,7 +216,7 @@
         <div class="footer">
             <progress id="progress" max="500" value="0"></progress>
             <!-- <p class="fill"></p> -->
-            <button onclick="getHeightmap('preview')"><i class="fas fa-sync-alt"></i>Refresh</button>
+            <button onclick="getHeightmap('preview')"><i class="fas fa-sync-alt"></i>Refresh Preview Image</button>
             <!--            <button onclick="autoSettings()"><i class="fas fa-cog"></i>Auto</button>-->
         </div>
     </div>

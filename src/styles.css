@@ -129,11 +129,12 @@ dt {
 .hidden {
     display: none;
 }
-.top-bar{
-    background: #223778;
+.topbar{
+    background:  #054e9f;
     box-shadow: 0 16px 24px 2px rgba(0,0,0,0.14), 0 6px 30px 5px rgba(0,0,0,0.12), 0 8px 10px -5px rgba(0,0,0,0.20);
     color: #dfe6ed;
-    font-size: 1.5em;
+    font-size: 1em;
+    width: 100%
 }
 .sideBar {
     background: #054e9f;
@@ -263,33 +264,29 @@ dt {
 .infotable {
     width: 100%;
 }
-.headertable {
-    width: 100%;
-}
 .unit {
-    text-align: right;
+    text-align: left;
 }
-.headerinfo {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 0.25em;
-    padding-left: 0.25em;
-}
+/*.headerinfo {*/
+/*    display: flex;*/
+/*    flex-direction: row;*/
 
-.headerinfo dl {
-    display: flex;
-    flex-direction: column;
-}
+/*}*/
 
-.headerinfo dt {
-    margin-bottom: 0.625em;
-}
+/*.headerinfo dl {*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*}*/
 
-.headerinfo dd:last-child {
-    width: 1.25em;
-}
+/*.headerinfo dt {*/
 
-.headerinfo dl div ,
+/*}*/
+
+/*.headerinfo dd:last-child {*/
+
+/*}*/
+
+/*.headerinfo dl div ,*/
 
 .info {
     display: flex;
@@ -322,30 +319,30 @@ dt {
     text-align: right;
 }
 
-.lnglat div {
-    /*width: 11.5em;*/
-}
+/*.lnglat div {*/
+/*    width: 11.5em;*/
+/*}*/
 
-.lnglat dt {
-    /*width: 4.5em;*/
-}
+/*.lnglat dt {*/
+/*    width: 4.5em;*/
+/*}*/
 
-.lnglat .unit {
-    /*width: 5.25em;*/
-}
+/*.lnglat .unit {*/
+/*    width: 5.25em;*/
+/*}*/
 
-.height div {
-    /*width: 10.25em;*/
-}
+/*.height div {*/
+/*    width: 15.25em;*/
+/*}*/
 
-.height dt {
-    /*padding-left: 0.25em;*/
-    /*width: 5.5em;*/
-}
+/*.height dt {*/
+/*    !*padding-left: 0.25em;*!*/
+/*    !*width: 5.5em;*!*/
+/*}*/
 
-.height .unit {
-    /*width: 3.5em;*/
-}
+/*.height .unit {*/
+/*    !*width: 3.5em;*!*/
+/*}*/
 
 .settings header,
 .footer {
@@ -832,4 +829,19 @@ progress::-ms-fill {
     margin: 0;
     padding: 5px 10px;
     border-radius: 3px;
+}
+.row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+
+}
+
+
+.inline{
+    display: inline-flex;
+}
+.mr{
+    margin-right: 40px;
 }
