@@ -33,14 +33,13 @@
 <div id="overlay"></div>
 
 <div class="sideBar column">
-    <ul>
+    <ul class="fill">
         <li><a onclick="togglePanel(0)" title="Info"><i class="icon fas fa-info-circle"></i></a></li>
         <li><a onclick="togglePanel(1)" title="Export Options"><i class="icon fas fa-file-export"
-                                                                  style="font-size:24px"></i></a></li>
+                                                                  ></i></a></li>
         <li><a onclick="togglePanel(2)" title="Change map style"><i class="icon fas fa-layer-group"></i></a></li>
         <li><a onclick="togglePanel(3)" title="Set lng/lat"><i class="icon fas fa-map-marker-alt"></i></a></li>
-    </ul>
-    <ul class="fill">
+
         <li>
             <a onclick="getHeightmap('raw')" title="Download RAW height map"><i class="fas fa-file-download"></i></a>
         </li>
@@ -53,22 +52,22 @@
                 <i class="fa-solid fa-file-zipper fa-lg"></i>
             </a>
         </li>
-    </ul>
+
     <!--    <ul class="fill">-->
-    <!--        <li><a id="showHeightContours" onclick="showHeightContours(this)" title="Show height contours"><i-->
-    <!--                class="fas fa-mountain"></i></a></li>-->
-    <!--        <li><a id="showWaterContours" onclick="showWaterContours(this)" title="Show water contours"><i-->
-    <!--                class="fas fa-water"></i></a></li>-->
+            <li><a id="showHeightContours" onclick="showHeightContours(this)" title="Show height contours"><i
+                    class="fas fa-mountain"></i></a></li>
+            <li><a id="showWaterContours" onclick="showWaterContours(this)" title="Show water contours"><i
+                    class="fas fa-water"></i></a></li>
     <!--    </ul>-->
-    <ul class="fill" id="dcBox">
-        <li><a id="deleteCaches" onclick="deleteCaches()" title="Delete caches"><i class="fas fa-database"></i><i
-                class="fas fa-times"></i></a></li>
-    </ul>
-    <ul>
+<!--    <ul class="" id="dcBox">-->
+<!--        <li><a id="deleteCaches" onclick="deleteCaches()" title="Delete caches"><i class="fas fa-database"></i><i-->
+<!--                class="fas fa-times"></i></a></li>-->
+<!--    </ul>-->
+
         <li><a onclick="zoomIn()" title="Zoom in"><i class="fas fa-search-plus"></i></a></li>
         <li><a onclick="zoomOut()" title="Zoom out"><i class="fas fa-search-minus"></i></a></li>
-    </ul>
-    <ul>
+
+
         <li><a href="https://github.com/delebash/unreal_map_bridge" target="_blank" title="Help"><i
                 class="far fa-question-circle"></i></a></li>
         <li>
