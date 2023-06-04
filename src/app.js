@@ -76,7 +76,7 @@ map.on('idle', function () {
     // scope can be set if bindings.js is loaded (because of docReady)
     scope.waterDepth = parseInt(grid.waterDepth) || 50;
     scope.landscapeSize = parseInt(grid.landscapeSize) || 0;
-    scope.exportType = parseInt(grid.exportType) || 'png';
+    scope.exportType = parseInt(grid.exportType) || 'pngUnreal';
     saveSettings();
 });
 
@@ -650,8 +650,8 @@ function getHeightmap(mode = "", callback) {
             console.log('complete in ', ticks * 10, ' ms');
             prev_lng = document.getElementById('lng').innerHTML
             prev_lat = document.getElementById('lat').innerHTML
-            pbElement2.style.visibility = 'hidden';
-            pbElement.style.visibility = 'hidden';
+            // pbElement2.style.visibility = 'hidden';
+            // pbElement.style.visibility = 'hidden';
             pbElement2.value = 0;
             pbElement.value = 0;
             overlayOff()
@@ -883,4 +883,14 @@ function overlayOn() {
 
 function overlayOff() {
     document.getElementById("overlay").style.display = "none";
+}
+
+function exportTypeChange(e) {
+    let ele = document.getElementById("exportType").value;
+    let unrealOptions = document.getElementById("unrealOptions");
+    if (ele.includes('Unreal')){
+        unrealOptions.style.display =''
+    }else{
+        unrealOptions.style.display ='none'
+    }
 }

@@ -206,7 +206,7 @@ dt {
 }
 
 .geocoder {
-    margin-bottom: .50em;
+    margin-bottom: .20em;
 }
 
 .mapboxgl-ctrl-geocoder {
@@ -241,7 +241,7 @@ dt {
     box-shadow: 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.20);
     height: auto;
     left: 0;
-    padding: 0.75em 0.75em 1.25em 0.75em;
+    padding: 0.25em 0.75em 0.25em 0.75em;
     position: absolute;
     top: 0;
     transform: translateX(-100%);
@@ -259,7 +259,7 @@ dt {
     width: 23.5em;
 }
 .previewImage {
-
+margin-bottom: .25em;
 }
 .infotable {
     width: 100%;
@@ -291,7 +291,7 @@ dt {
 .info {
     display: flex;
     flex-direction: row;
-    margin-bottom: 0.25em;
+    margin-bottom: 0;
     padding-left: 0.25em;
 }
 
@@ -353,11 +353,11 @@ dt {
 
 .settings header h4 {
     flex: 0 0 auto;
-    margin-bottom: 0.75em;
+    margin-bottom: 0;
 }
 
 .settings header hr {
-    margin-top: 0.5em;
+    margin-top: 0.25em;
     width: 100%;
 }
 
@@ -365,7 +365,7 @@ dt {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    margin-bottom: 0.5em;
+    margin-bottom: 0;
     padding-left: 0.25em;
     width: 100%;
 }
@@ -373,7 +373,7 @@ dt {
 .settings dt {
     height: 1.375em;
     line-height: 1.375em;
-    margin-bottom: 0.75em;
+    margin-bottom: 0.25em;
     width: 7.75em;
 }
 
@@ -844,4 +844,12 @@ progress::-ms-fill {
 }
 .mr{
     margin-right: 40px;
+}
+.refresh{
+    margin-top: .25em;
+    padding-top: 0;
+}
+.refreshprogress{
+    margin-top: .50em;
+    padding-top: 0;
 }

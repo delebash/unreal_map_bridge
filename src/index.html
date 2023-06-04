@@ -3,7 +3,7 @@
 
 <head>
     <meta charset='utf-8'/>
-    <title>Cities: Skylines map generator</title>
+    <title>Unreal Map Bridge</title>
     <meta content='initial-scale=1,maximum-scale=1,user-scalable=no' name='viewport'/>
     <link href="favicon.ico" rel="shortcut icon" type="image/x-icon">
     <link href="favicon.ico" rel="icon" type="image/x-icon">
@@ -36,7 +36,7 @@
     <ul class="fill">
         <li><a onclick="togglePanel(0)" title="Info"><i class="icon fas fa-info-circle"></i></a></li>
         <li><a onclick="togglePanel(1)" title="Export Options"><i class="icon fas fa-file-export"
-                                                                  ></i></a></li>
+        ></i></a></li>
         <li><a onclick="togglePanel(2)" title="Change map style"><i class="icon fas fa-layer-group"></i></a></li>
         <li><a onclick="togglePanel(3)" title="Set lng/lat"><i class="icon fas fa-map-marker-alt"></i></a></li>
 
@@ -53,16 +53,16 @@
             </a>
         </li>
 
-    <!--    <ul class="fill">-->
-            <li><a id="showHeightContours" onclick="showHeightContours(this)" title="Show height contours"><i
-                    class="fas fa-mountain"></i></a></li>
-            <li><a id="showWaterContours" onclick="showWaterContours(this)" title="Show water contours"><i
-                    class="fas fa-water"></i></a></li>
-    <!--    </ul>-->
-<!--    <ul class="" id="dcBox">-->
-<!--        <li><a id="deleteCaches" onclick="deleteCaches()" title="Delete caches"><i class="fas fa-database"></i><i-->
-<!--                class="fas fa-times"></i></a></li>-->
-<!--    </ul>-->
+        <!--    <ul class="fill">-->
+        <li><a id="showHeightContours" onclick="showHeightContours(this)" title="Show height contours"><i
+                class="fas fa-mountain"></i></a></li>
+        <li><a id="showWaterContours" onclick="showWaterContours(this)" title="Show water contours"><i
+                class="fas fa-water"></i></a></li>
+        <!--    </ul>-->
+        <!--    <ul class="" id="dcBox">-->
+        <!--        <li><a id="deleteCaches" onclick="deleteCaches()" title="Delete caches"><i class="fas fa-database"></i><i-->
+        <!--                class="fas fa-times"></i></a></li>-->
+        <!--    </ul>-->
 
         <li><a onclick="zoomIn()" title="Zoom in"><i class="fas fa-search-plus"></i></a></li>
         <li><a onclick="zoomOut()" title="Zoom out"><i class="fas fa-search-minus"></i></a></li>
@@ -78,26 +78,12 @@
 </div>
 
 <div class="fill wrapper">
-    <div class="topbar">
-        <div class='row'>
-            <div class="inline">
-                <div>Longitude:</div>&nbsp;
-                <div id="lng"></div>&nbsp;
-                <div><abbr>&#176;</abbr></div>&nbsp;
-                <div>Latitude:</div>&nbsp;
-                <div id="lat"></div>&nbsp;
-                <div><abbr>&#176;</abbr></div>
-            </div>
+<!--    <div class="topbar">-->
+<!--        <div class='row'>-->
+<!--
 
         </div>
-        <div class='row'>
-            <div class="inline">
-                <div>Min. height:</div>&nbsp;
-                <div id="minh"></div>&nbsp;m&nbsp;
-                <div>Max. height:</div>&nbsp;
-                <div id="maxh"></div>&nbsp;m
-            </div>
-            <div class="geocoder" id="geocoder"></div>
+
         </div>
         <!--        <div class="headerinfo">-->
         <!--            <dl class="row">-->
@@ -124,45 +110,26 @@
         <!--            </dl>-->
         <!--        </div>-->
 
-    </div>
+<!--    </div>-->
 
     <div class="content" id="map"></div>
     <div class="panel slide-out hidden" id="infoPanel">
-
+        <div class="geocoder" id="geocoder"></div>
         <div class="previewImage">
-            <img alt="preview image" height="256px" id="previewImage" src="heightmap.png" width="256px">
+            <img alt="preview image" height="512px" id="previewImage" src="heightmap.png" width="512px">
         </div>
         <div class="infotable">
-            <!--            <div class="info">-->
-            <!--                <dl class="lnglat">-->
-            <!--                    <div>-->
-            <!--                        <dt>Longitude:</dt>-->
-            <!--                        <dd class="unit" id="lng"></dd>-->
-            <!--                        <dd><abbr>&#176;</abbr></dd>-->
-            <!--                    </div>-->
-            <!--                    <div>-->
-            <!--                        <dt>Latitude:</dt>-->
-            <!--                        <dd class="unit" id="lat"></dd>-->
-            <!--                        <dd><abbr>&#176;</abbr></dd>-->
-            <!--                    </div>-->
-            <!--                </dl>-->
-            <!--                <dl class="height">-->
-            <!--                    <div>-->
-            <!--                        <dt>Min. height:</dt>-->
-            <!--                        <dd class="unit" id="minh"></dd>-->
-            <!--                        <dd><abbr>m</abbr></dd>-->
-            <!--                    </div>-->
-            <!--                    <div>-->
-            <!--                        <dt>Max. height:</dt>-->
-            <!--                        <dd class="unit" id="maxh"></dd>-->
-            <!--                        <dd><abbr>m</abbr></dd>-->
-            <!--                    </div>-->
-            <!--                </dl>-->
-            <!--            </div>-->
+            <div class="info">
+                <dl class="lnglat">
+                    <div><dt>Longitude:</dt><dd class="unit" id="lng"></dd><dd><abbr>&#176;</abbr></dd></div>
+                    <div><dt>Latitude:</dt><dd class="unit" id="lat"></dd><dd><abbr>&#176;</abbr></dd></div>
+                </dl>
+                <dl class="height">
+                    <div><dt>Min. height:</dt><dd class="unit" id="minh"></dd><dd><abbr>m</abbr></dd></div>
+                    <div><dt>Max. height:</dt><dd class="unit" id="maxh"></dd><dd><abbr>m</abbr></dd></div>
+                </dl>
+            </div>
             <div class="settings">
-                <header><h4>Size and scale</h4>
-                    <hr>
-                </header>
                 <dl>
                     <dt>Map size:</dt>
                     <dd><input data-model="mapSize" id="mapSize" max="100" min="4" onkeyup="changeMapsize(this)"
@@ -179,22 +146,10 @@
                     </dd>
                     <dd><input data-model="baseLevel" max="1023.9" min="-1023.9" step="0.1" type="number"></dd>
                     <dd><abbr>m</abbr></dd>
-                    <!--                    <dd>-->
-                    <!--                        <button class="calc" onclick="setBaseLevel()"-->
-                    <!--                                title="Set to the same value as Min. height"><i class="fas fa-calculator"></i></button>-->
-                    <!--                    </dd>-->
                     <dt>Height scale:</dt>
                     <dd><input data-model="heightScale" id="heightScale" max="250" min="0" step="1" type="range"></dd>
                     <dd><input data-model="heightScale" step="1" type="number"></dd>
                     <dd><abbr>%</abbr></dd>
-                    <!--                    <dd>-->
-                    <!--                        <button class="calc" onclick="setHeightScale()"-->
-                    <!--                                title="Set to the maximum scale possible with the current settings"><i-->
-                    <!--                                class="fas fa-calculator"></i></button>-->
-                    <!--                    </dd>-->
-                    <!--                    <dt class="withUnit">Reference height scale:</dt>-->
-                    <!--                    <dd class="unit2" id="rHeightscale">100.0</dd>-->
-                    <!--                    <dd><abbr>%</abbr></dd>-->
                 </dl>
                 <dl>
                     <dt>Water depth:</dt>
@@ -202,21 +157,12 @@
                     <dd><input data-model="waterDepth" max="60" min="0" step="1" type="number"></dd>
                     <dd><abbr>m</abbr></dd>
                 </dl>
-                <!--                <header><h4>Draw options</h4>-->
-                <!--                    <hr>-->
-                <!--                </header>-->
-
-                <!--                <header><h4>Smoothing &amp; leveling</h4>-->
-                <!--                    <hr>-->
-                <!--                </header>-->
             </div>
-        </div>
-        <hr>
-        <div class="footer">
-            <progress id="progress" max="500" value="0"></progress>
-            <!-- <p class="fill"></p> -->
-            <button onclick="getHeightmap('preview')"><i class="fas fa-sync-alt"></i>Refresh Preview Image</button>
-            <!--            <button onclick="autoSettings()"><i class="fas fa-cog"></i>Auto</button>-->
+            <div class="footer">
+                <progress class="refreshprogress"  id="progress" max="500" value="0"></progress>
+                <button class="refresh" onclick="getHeightmap('preview')"><i class="fas fa-sync-alt"></i>Refresh Preview Image</button>
+                <!--            <button onclick="autoSettings()"><i class="fas fa-cog"></i>Auto</button>-->
+            </div>
         </div>
     </div>
 
@@ -227,18 +173,24 @@
                 <dl>
                     <dt>Export Type:</dt>
                     <dd class="wsSlp wideSelect">
-                        <select data-model="exportType">
-                            <option value="png">Png Unreal</option>
-                            <option value="none">None</option>
+                        <select data-model="exportType" id="exportType" onchange="exportTypeChange()">
+                            <option value="pngUnreal">Png Unreal</option>
+                            <option value="sendToUnreal">Send To Unreal</option>
+                            <option value="mapUnreal">Map Image</option>
+                            <option value="raw">Raw</option>
+                            <option value="zip">Zip</option>
+                            <option value="none">none</option>
                         </select><i class="fas fa-chevron-down"></i>
                     </dd>
-                    <dt>Landscape Size:</dt>
-                    <dd class="wsSlp wideSelect">
-                        <select data-model="landscapeSize">
-                            <option value="2017">2017x2017</option>
-                            <option value="0">none</option>
-                        </select><i class="fas fa-chevron-down"></i>
-                    </dd>
+                    <div id="unrealOptions">
+                        <dt>Landscape Size:</dt>
+                        <dd class="wsSlp wideSelect">
+                            <select data-model="landscapeSize">
+                                <option value="2017">2017x2017</option>
+                                <option value="0">none</option>
+                            </select><i class="fas fa-chevron-down"></i>
+                        </dd>
+                    </div>
                 </dl>
             </div>
         </div>
