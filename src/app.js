@@ -3,9 +3,12 @@
 'use strict'
 
 const defaultWaterdepth = 50
-let vmapSize = 18.144;
-let mapSize = 17.28;
-let tileSize = 1.92;
+
+let mapSize = 8;
+let vmapSize = mapSize * 1.05;
+let tileSize = mapSize / 9;
+
+
 let grid = loadSettings();
 let mapCanvas, cache, bRefresh = true;
 let prev_lng, prev_lat
@@ -21,6 +24,7 @@ let Gdal
 for (let i = 0; i < panels.length; i++) {
     iconClass.push(icons[i].className);
 }
+
 
 // MapBox API token, temperate email for dev
 mapboxgl.accessToken = 'pk.eyJ1IjoiYmVydGRldm4iLCJhIjoiY2t2dXF1ZGhyMHlteTJ2bzJjZzE3M24xOCJ9.J5skknTRyh-6RoDWD4kw2w';
@@ -49,6 +53,32 @@ document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
 map.on('load', function () {
     mapCanvas = map.getCanvasContainer();
 
+
+    map.getCanvas().addEventListener(
+        'wheel',
+        (e) => {
+            const scrollDirection = e.deltaY < 0 ? 1 : -1;
+
+            e.preventDefault();
+            if (e.shiftKey) {
+                map.scrollZoom.disable();
+                let size = scope.mapSize
+                if (scrollDirection === 1) {
+                    size += 1
+                } else {
+                    size -= 1
+                }
+                if (size >= 4 && size <= 1000) {
+                    scope.mapSize = size
+                    let mapSize = document.getElementById('mapSize')
+                    changeMapsize(mapSize)
+                }
+            } else {
+                map.scrollZoom.enable();
+            }
+        }
+    );
+
     scope.mapSize = mapSize;
     scope.baseLevel = 0;
     scope.heightScale = 100;
@@ -60,7 +90,22 @@ map.on('style.load', function () {
     addLayer();
     setMouse();
 });
-
+map.on('wheel', (e) => {
+    // console.log(e)
+    // const scrollDirection = e.deltaY < 0 ? 1 : -1;
+    // console.log(scrollDirection)
+    //  let mapSize = document.getElementById('mapSize')
+//    mapSize.stepUp(10)
+//
+//     if (e.deltaY < 0){
+//         scope.mapSize = 66
+//     }else{
+//         scope.mapSize = 1
+//     }
+//    // console.log(mapSize.value)
+    //scope.mapSize = 66
+    // changeMapsize(mapSize)
+});
 map.on('click', function (e) {
     grid.lng = e.lngLat.lng;
     grid.lat = e.lngLat.lat;
@@ -75,8 +120,8 @@ map.on('click', function (e) {
 map.on('idle', function () {
     // scope can be set if bindings.js is loaded (because of docReady)
     scope.waterDepth = parseInt(grid.waterDepth) || 50;
-    scope.landscapeSize = parseInt(grid.landscapeSize) || 0;
-    scope.exportType = parseInt(grid.exportType) || 'pngUnreal';
+    scope.landscapeSize = parseInt(grid.landscapeSize) || 2017;
+    scope.exportType = parseInt(grid.exportType) || 'unrealHeightmap';
     saveSettings();
 });
 
@@ -397,6 +442,7 @@ function zoomOut() {
 }
 
 function changeMapsize(el) {
+    console.log(el.value)
     mapSize = el.value / 1;
     vmapSize = mapSize * 1.05;
     tileSize = mapSize / 9;
@@ -554,7 +600,6 @@ function getHeightmap(mode = "", callback) {
     let topDistance = turf.distance(turf.point([tileLng, tileLat]), turf.point([tileLng, extent.topleft[1]]), {units: 'kilometers'});
     let leftDistance = turf.distance(turf.point([tileLng, tileLat]), turf.point([extent.topleft[0], tileLat]), {units: 'kilometers'});
 
-
     // create the tiles empty array
     let tiles = Create2DArray(tileCnt);
 
@@ -590,9 +635,9 @@ function getHeightmap(mode = "", callback) {
             let xOffset = Math.round(leftDistance / distance * heightmap.length);
             let yOffset = Math.round(topDistance / distance * heightmap.length);
 
-            let sanatizedheightMap = sanatizeMap(heightmap, xOffset, yOffset);
+            //  let sanatizedheightMap = sanatizeMap(heightmap, xOffset, yOffset);
 
-            let heights = calcMinMaxHeight(sanatizedheightMap);
+            let heights = calcMinMaxHeight(heightmap);
             grid.minHeight = heights.min;
             grid.maxHeight = heights.max;
 
@@ -608,7 +653,7 @@ function getHeightmap(mode = "", callback) {
                     if (autoCalc === true) {
                         autoCalculateBaseHeight()
                     }
-                    convertedHeightmap = convertHeightmap(sanatizedheightMap);
+                    convertedHeightmap = convertHeightmap(heightmap);
                     png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
                     download('heightmap.png', png, false)
                     break;
@@ -617,7 +662,7 @@ function getHeightmap(mode = "", callback) {
                     if (autoCalc === true) {
                         autoCalculateBaseHeight()
                     }
-                    convertedHeightmap = convertHeightmap(sanatizedheightMap);
+                    convertedHeightmap = convertHeightmap(heightmap);
                     png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
                     imgUrl = download('heightmap.png', png, true);
                     previewImage.src = imgUrl
@@ -628,7 +673,7 @@ function getHeightmap(mode = "", callback) {
                     if (autoCalc === true) {
                         autoCalculateBaseHeight()
                     }
-                    convertedHeightmap = convertHeightmap(sanatizedheightMap);
+                    convertedHeightmap = convertHeightmap(heightmap);
                     png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
                     updateInfopanel()
                     sendToUnreal(png)
@@ -671,14 +716,14 @@ function getHeightmap(mode = "", callback) {
 async function sendToUnreal(buff) {
     let landscapeSize = scope.landscapeSize.toString()
     let exportType = scope.exportType
-    if (exportType === 'png') {
+    if (exportType.includes('unreal')) {
         let ZrangeSeaLevel = '32767'
         let maxPngValue = '65535'
         let resizeMethod = 'lanczos'
         let translateOptions = [
             '-ot', 'UInt16',
             '-of', 'PNG',
-            //'-scale', grid.minHeight.toString(), grid.maxHeight.toString(), ZrangeSeaLevel, maxPngValue,
+            '-scale', '0', '65535', '32767', '65535',
             '-outsize', landscapeSize, landscapeSize, '-r', resizeMethod
         ];
 
@@ -689,7 +734,7 @@ async function sendToUnreal(buff) {
 
 async function processGdal(buff, filename, translateOptions, file_type) {
 
-    let blob = new Blob([new Uint8Array(buff)], {type: 'image/' + file_type})
+    let blob = new Blob([buff], {type: 'image/' + file_type})
     const file = new File([blob], filename);
     const result = await Gdal.open(file);
     const dataset = result.datasets[0];
@@ -718,14 +763,18 @@ function autoCalculateBaseHeight() {
 }
 
 function toHeightmap(tiles, distance) {
+
     let tileNum = tiles.length;
     let srcMap = Create2DArray(tileNum * 512, 0);
 
     // in heightmap, each pixel is treated as vertex data, and 1081px represents 1080 faces
     // therefore, "1px = 16m" when the map size is 17.28km
     let heightmap = Create2DArray(Math.ceil(1080 * (distance / mapSize)), 0);
+
+    //  let heightmap = Create2DArray(Math.ceil(1080), 0);
     let smSize = srcMap.length;
     let hmSize = heightmap.length;
+
     let r = (hmSize - 1) / (smSize - 1);
 
     for (let i = 0; i < tileNum; i++) {
@@ -766,6 +815,17 @@ function toHeightmap(tiles, distance) {
     }
 
     return heightmap;
+}
+
+function setMapStyle(el) {
+    const layerId = el.id;
+    let styleName = map.getStyle().metadata['mapbox:origin'];
+    if (!(styleName)) {
+        styleName = 'satellite-v9';
+    }
+    if (layerId != styleName) {
+        map.setStyle('mapbox://styles/mapbox/' + layerId);
+    }
 }
 
 function convertHeightmap(heightmap_source) {
@@ -888,9 +948,9 @@ function overlayOff() {
 function exportTypeChange(e) {
     let ele = document.getElementById("exportType").value;
     let unrealOptions = document.getElementById("unrealOptions");
-    if (ele.includes('Unreal')){
-        unrealOptions.style.display =''
-    }else{
-        unrealOptions.style.display ='none'
+    if (ele.includes('unreal')) {
+        unrealOptions.style.display = 'block'
+    } else {
+        unrealOptions.style.display = 'none'
     }
 }

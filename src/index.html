@@ -40,25 +40,25 @@
         <li><a onclick="togglePanel(2)" title="Change map style"><i class="icon fas fa-layer-group"></i></a></li>
         <li><a onclick="togglePanel(3)" title="Set lng/lat"><i class="icon fas fa-map-marker-alt"></i></a></li>
 
-        <li>
-            <a onclick="getHeightmap('raw')" title="Download RAW height map"><i class="fas fa-file-download"></i></a>
-        </li>
-        <li>
-            <a onclick="getHeightmap('png')" title="Download PNG height map"><i class="fas fa-file-image"></i></a></li>
-        <li>
-            <a onclick="getMapImage('map_image')" title="Download map image"><i class="fas fa-map"></i></a></li>
-        <li>
-            <a onclick="getHeightmap('zip')" title="Download ZIP with PNG and lng/lat informations">
-                <i class="fa-solid fa-file-zipper fa-lg"></i>
-            </a>
-        </li>
+        <!--        <li>-->
+        <!--            <a onclick="getHeightmap('raw')" title="Download RAW height map"><i class="fas fa-file-download"></i></a>-->
+        <!--        </li>-->
+        <!--        <li>-->
+        <!--            <a onclick="getHeightmap('png')" title="Download PNG height map"><i class="fas fa-file-image"></i></a></li>-->
+        <!--        <li>-->
+        <!--            <a onclick="getMapImage('map_image')" title="Download map image"><i class="fas fa-map"></i></a></li>-->
+        <!--        <li>-->
+        <!--            <a onclick="getHeightmap('zip')" title="Download ZIP with PNG and lng/lat informations">-->
+        <!--                <i class="fa-solid fa-file-zipper fa-lg"></i>-->
+        <!--            </a>-->
+        <!--        </li>-->
 
         <!--    <ul class="fill">-->
-        <li><a id="showHeightContours" onclick="showHeightContours(this)" title="Show height contours"><i
-                class="fas fa-mountain"></i></a></li>
-        <li><a id="showWaterContours" onclick="showWaterContours(this)" title="Show water contours"><i
-                class="fas fa-water"></i></a></li>
-        <!--    </ul>-->
+        <!--        <li><a id="showHeightContours" onclick="showHeightContours(this)" title="Show height contours"><i-->
+        <!--                class="fas fa-mountain"></i></a></li>-->
+        <!--        <li><a id="showWaterContours" onclick="showWaterContours(this)" title="Show water contours"><i-->
+        <!--                class="fas fa-water"></i></a></li>-->
+        <!--        &lt;!&ndash;    </ul>&ndash;&gt;-->
         <!--    <ul class="" id="dcBox">-->
         <!--        <li><a id="deleteCaches" onclick="deleteCaches()" title="Delete caches"><i class="fas fa-database"></i><i-->
         <!--                class="fas fa-times"></i></a></li>-->
@@ -70,47 +70,47 @@
 
         <li><a href="https://github.com/delebash/unreal_map_bridge" target="_blank" title="Help"><i
                 class="far fa-question-circle"></i></a></li>
-        <li>
-            <a href="#" onclick="getHeightmap('map_image')" title="Download tiles map (Terrain-RGB)"><i
-                    class="fas fa-bug"></i></a>
-        </li>
+        <!--        <li>-->
+        <!--            <a href="#" onclick="getHeightmap('map_image')" title="Download tiles map (Terrain-RGB)"><i-->
+        <!--                    class="fas fa-bug"></i></a>-->
+        <!--        </li>-->
     </ul>
 </div>
 
 <div class="fill wrapper">
-<!--    <div class="topbar">-->
-<!--        <div class='row'>-->
-<!--
+    <!--    <div class="topbar">-->
+    <!--        <div class='row'>-->
+    <!--
 
-        </div>
+            </div>
 
-        </div>
-        <!--        <div class="headerinfo">-->
-        <!--            <dl class="row">-->
-        <!--                <div class="col">-->
-        <!--                    <dt>Longitude:</dt>-->
-        <!--                    <dd class="unit" id="lng"></dd>-->
-        <!--                    <dd><abbr>&#176;</abbr></dd>-->
-        <!--                    &nbsp;-->
-        <!--                    &nbsp;-->
-        <!--                    <dt>Latitude:</dt>-->
-        <!--                    <dd class="unit" id="lat"></dd>-->
-        <!--                    <dd><abbr>&#176;</abbr></dd>-->
-        <!--                </div>-->
-        <!--            </dl>-->
-        <!--            <dl class="row">-->
-        <!--                <div class="col">-->
-        <!--                    <dt>Min. height:</dt>-->
-        <!--                    <dd class="unit" id="minh"></dd>-->
-        <!--                    <dd><abbr>m</abbr></dd>-->
-        <!--                    <dt>Max. height:</dt>-->
-        <!--                    <dd class="unit" id="maxh"></dd>-->
-        <!--                    <dd><abbr>m</abbr></dd>-->
-        <!--                </div>-->
-        <!--            </dl>-->
-        <!--        </div>-->
+            </div>
+            <!--        <div class="headerinfo">-->
+    <!--            <dl class="row">-->
+    <!--                <div class="col">-->
+    <!--                    <dt>Longitude:</dt>-->
+    <!--                    <dd class="unit" id="lng"></dd>-->
+    <!--                    <dd><abbr>&#176;</abbr></dd>-->
+    <!--                    &nbsp;-->
+    <!--                    &nbsp;-->
+    <!--                    <dt>Latitude:</dt>-->
+    <!--                    <dd class="unit" id="lat"></dd>-->
+    <!--                    <dd><abbr>&#176;</abbr></dd>-->
+    <!--                </div>-->
+    <!--            </dl>-->
+    <!--            <dl class="row">-->
+    <!--                <div class="col">-->
+    <!--                    <dt>Min. height:</dt>-->
+    <!--                    <dd class="unit" id="minh"></dd>-->
+    <!--                    <dd><abbr>m</abbr></dd>-->
+    <!--                    <dt>Max. height:</dt>-->
+    <!--                    <dd class="unit" id="maxh"></dd>-->
+    <!--                    <dd><abbr>m</abbr></dd>-->
+    <!--                </div>-->
+    <!--            </dl>-->
+    <!--        </div>-->
 
-<!--    </div>-->
+    <!--    </div>-->
 
     <div class="content" id="map"></div>
     <div class="panel slide-out hidden" id="infoPanel">
@@ -121,18 +121,34 @@
         <div class="infotable">
             <div class="info">
                 <dl class="lnglat">
-                    <div><dt>Longitude:</dt><dd class="unit" id="lng"></dd><dd><abbr>&#176;</abbr></dd></div>
-                    <div><dt>Latitude:</dt><dd class="unit" id="lat"></dd><dd><abbr>&#176;</abbr></dd></div>
+                    <div>
+                        <dt>Longitude:</dt>
+                        <dd class="unit" id="lng"></dd>
+                        <dd><abbr>&#176;</abbr></dd>
+                    </div>
+                    <div>
+                        <dt>Latitude:</dt>
+                        <dd class="unit" id="lat"></dd>
+                        <dd><abbr>&#176;</abbr></dd>
+                    </div>
                 </dl>
                 <dl class="height">
-                    <div><dt>Min. height:</dt><dd class="unit" id="minh"></dd><dd><abbr>m</abbr></dd></div>
-                    <div><dt>Max. height:</dt><dd class="unit" id="maxh"></dd><dd><abbr>m</abbr></dd></div>
+                    <div>
+                        <dt>Min. height:</dt>
+                        <dd class="unit" id="minh"></dd>
+                        <dd><abbr>m</abbr></dd>
+                    </div>
+                    <div>
+                        <dt>Max. height:</dt>
+                        <dd class="unit" id="maxh"></dd>
+                        <dd><abbr>m</abbr></dd>
+                    </div>
                 </dl>
             </div>
             <div class="settings">
                 <dl>
                     <dt>Map size:</dt>
-                    <dd><input data-model="mapSize" id="mapSize" max="100" min="4" onkeyup="changeMapsize(this)"
+                    <dd><input data-model="mapSize" id="mapSize" max="1000" min="4" onkeyup="changeMapsize(this)"
                                onmouseup="changeMapsize(this)"
                                step="0.01" type="range"></dd>
                     <dd><input data-model="mapSize" max="69.12" min="17.28" onkeyup="changeMapsize(this)"
@@ -159,42 +175,69 @@
                 </dl>
             </div>
             <div class="footer">
-                <progress class="refreshprogress"  id="progress" max="500" value="0"></progress>
-                <button class="refresh" onclick="getHeightmap('preview')"><i class="fas fa-sync-alt"></i>Refresh Preview Image</button>
+                <progress class="refreshprogress" id="progress" max="500" value="0"></progress>
+                <button class="refresh" onclick="getHeightmap('preview')"><i class="fas fa-sync-alt"></i>Refresh Preview
+                                                                                                         Image
+                </button>
                 <!--            <button onclick="autoSettings()"><i class="fas fa-cog"></i>Auto</button>-->
             </div>
         </div>
     </div>
 
     <div class="panel slide-out hidden" id="settingsPanel">
-        <h3>Export Options:</h3>
-        <div id="exportoptions">
-            <div class="row">
-                <dl>
-                    <dt>Export Type:</dt>
-                    <dd class="wsSlp wideSelect">
-                        <select data-model="exportType" id="exportType" onchange="exportTypeChange()">
-                            <option value="pngUnreal">Png Unreal</option>
-                            <option value="sendToUnreal">Send To Unreal</option>
-                            <option value="mapUnreal">Map Image</option>
-                            <option value="raw">Raw</option>
-                            <option value="zip">Zip</option>
-                            <option value="none">none</option>
-                        </select><i class="fas fa-chevron-down"></i>
-                    </dd>
-                    <div id="unrealOptions">
+
+        <div class="infotable">
+            <div class="settings">
+                <header><h4>Export Options:</h4>
+                    <hr>
+                </header>
+                <div class="row">
+                    <dl>
+                        <dt>Export Type:</dt>
+                        <dd class="wsSlp wideSelect">
+                            <select data-model="exportType" id="exportType" onchange="exportTypeChange()">
+                                <option value="unrealHeightmap">Unreal Heightmap</option>
+                                <option value="unrealTMagicPluginEarthLandscapeClip">Unreal Terrain Magic Plugin --
+                                                                                     EarthLandscape Clip
+                                </option>
+                                <option value="unrealTMagicPluginHeightmapLandscapeClip">Unreal Terrain Magic Plugin --
+                                                                                         HeightmapLandscape Clip
+                                </option>
+                                <option value="unrealStampBrushPlugin">Unreal Stamp Brush Plugin</option>
+                                <option value="unrealLandmassEffectBrushPlugin">Unreal Landmass Effect Brush Plugin
+                                </option>
+                                <option value="geojsonOnly">Geojson Only</option>
+                                <option value="unrealMapImage">Image of map only</option>
+                                <option value="zip">Zip</option>
+                                <option value="raw">Raw</option>
+                                <option value="none">none</option>
+                            </select><i class="fas fa-chevron-down"></i>
+                        </dd>
+                        <dd>&nbsp;</dd>
+                    </dl>
+                </div>
+                <div class="row" id="unrealOptions">
+                    <dl>
                         <dt>Landscape Size:</dt>
                         <dd class="wsSlp wideSelect">
-                            <select data-model="landscapeSize">
+                            <select data-model="landscapeSize">-->
+                                <option value="8129">8129x8129</option>
+                                <option value="6097">6097x6097</option>
+                                <option value="4033">4033x4033</option>
+                                <option value="3025">3025x3025</option>
                                 <option value="2017">2017x2017</option>
+                                <option value="1513">1513x1513</option>
+                                <option value="1009">1009x1009</option>
+                                <option value="512">512x512 -- Native Resolution</option>
+                                <option value="505">505x505</option>
                                 <option value="0">none</option>
                             </select><i class="fas fa-chevron-down"></i>
                         </dd>
-                    </div>
-                </dl>
+                        <dd>&nbsp;</dd>
+                    </dl>
+                </div>
             </div>
         </div>
-        <hr>
         <div class="footer">
             <progress id="progress2" max="500" value="0"></progress>
             <button onclick="getHeightmap('unreal')"><i class="fas fa-sync-alt"></i>Export</button>
