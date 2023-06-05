@@ -155,8 +155,9 @@
                                onmouseup="changeMapsize(this)"
                                step="0.01" type="number"></dd>
                     <dd><abbr>km</abbr></dd>
-                    <dt class="withUnit">Auto calculate Base & Height:</dt>
-                    <dd><input checked id="autoCalcBaseHeight" type="checkbox"></dd>
+                    <dt class="withUnit withCb2">Auto calculate Base & Height:</dt>
+                    <dd><input checked id="autoCalcBaseHeight" type="checkbox"><i class="fas fa-check"></i></dd>
+                    </dd>
                     <dt>Base level:</dt>
                     <dd><input data-model="baseLevel" id="baseLevel" max="1023.9" min="-1023.9" step="0.1" type="range">
                     </dd>
@@ -176,19 +177,16 @@
             </div>
             <div class="footer">
                 <progress class="refreshprogress" id="progress" max="500" value="0"></progress>
-                <button class="refresh" onclick="getHeightmap('preview')"><i class="fas fa-sync-alt"></i>Refresh Preview
-                                                                                                         Image
+                <button class="refresh" onclick="getHeightmap('preview')"><i class="fas fa-sync-alt"></i>Refresh Preview Image
                 </button>
-                <!--            <button onclick="autoSettings()"><i class="fas fa-cog"></i>Auto</button>-->
             </div>
         </div>
     </div>
 
     <div class="panel slide-out hidden" id="settingsPanel">
-
         <div class="infotable">
             <div class="settings">
-                <header><h4>Export Options:</h4>
+                <header><h4>Export Settings:</h4>
                     <hr>
                 </header>
                 <div class="row">
@@ -197,11 +195,9 @@
                         <dd class="wsSlp wideSelect">
                             <select data-model="exportType" id="exportType" onchange="exportTypeChange()">
                                 <option value="unrealHeightmap">Unreal Heightmap</option>
-                                <option value="unrealTMagicPluginEarthLandscapeClip">Unreal Terrain Magic Plugin --
-                                                                                     EarthLandscape Clip
+                                <option value="unrealTMagicPluginEarthLandscapeClip">Unreal Terrain Magic Plugin -- EarthLandscape Clip
                                 </option>
-                                <option value="unrealTMagicPluginHeightmapLandscapeClip">Unreal Terrain Magic Plugin --
-                                                                                         HeightmapLandscape Clip
+                                <option value="unrealTMagicPluginHeightmapLandscapeClip">Unreal Terrain Magic Plugin -- HeightmapLandscape Clip
                                 </option>
                                 <option value="unrealStampBrushPlugin">Unreal Stamp Brush Plugin</option>
                                 <option value="unrealLandmassEffectBrushPlugin">Unreal Landmass Effect Brush Plugin
@@ -235,7 +231,33 @@
                         </dd>
                         <dd>&nbsp;</dd>
                     </dl>
+
                 </div>
+                <header><h4>Export options</h4><hr></header>
+                <dl>
+                    <dt class="withCb">Satellite: </dt>
+                    <dd><input type="checkbox" id="satellite"><i class="fas fa-check"></i></dd>
+                    &nbsp;
+                    &nbsp;
+                    <dt class="withCb">Sea Level: </dt>
+                    <dd><input type="checkbox" checked id="sealevel"><i class="fas fa-check"></i></dd>
+                    &nbsp;
+                    &nbsp;
+                    <dt class="withCb">FlipX: </dt>
+                    <dd><input type="checkbox" id="flipx"><i class="fas fa-check"></i></dd>
+                    &nbsp;
+                    &nbsp;
+                    <dt class="withCb">FlipY: </dt>
+                    <dd><input type="checkbox" id="flipy"><i class="fas fa-check"></i></dd>
+                    &nbsp;
+                    &nbsp;
+                    <dt class="withCb">Geojson: </dt>
+                    <dd><input type="checkbox" id="geojson"><i class="fas fa-check"></i></dd>
+                    &nbsp;
+                    &nbsp;
+                    <dt class="withCb">Weightmap:</dt>
+                    <dd><input type="checkbox" id="weightmap"><i class="fas fa-check"></i></dd>
+                </dl>
             </div>
         </div>
         <div class="footer">

@@ -53,7 +53,6 @@ document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
 map.on('load', function () {
     mapCanvas = map.getCanvasContainer();
 
-
     map.getCanvas().addEventListener(
         'wheel',
         (e) => {
@@ -714,18 +713,29 @@ function getHeightmap(mode = "", callback) {
 }
 
 async function sendToUnreal(buff) {
+    let sealevel = document.getElementById('sealevel').checked
     let landscapeSize = scope.landscapeSize.toString()
     let exportType = scope.exportType
+
     if (exportType.includes('unreal')) {
         let ZrangeSeaLevel = '32767'
         let maxPngValue = '65535'
-        let resizeMethod = 'lanczos'
-        let translateOptions = [
-            '-ot', 'UInt16',
-            '-of', 'PNG',
-            '-scale', '0', '65535', '32767', '65535',
-            '-outsize', landscapeSize, landscapeSize, '-r', resizeMethod
-        ];
+        let resizeMethod = 'bilinear'
+        let translateOptions = []
+        if (sealevel) {
+            translateOptions = [
+                '-ot', 'UInt16',
+                '-of', 'PNG',
+                '-scale', '0', '65535', '32767', '65535',
+                '-outsize', landscapeSize, landscapeSize, '-r', resizeMethod
+            ];
+        } else {
+            translateOptions = [
+                '-ot', 'UInt16',
+                '-of', 'PNG',
+                '-outsize', landscapeSize, landscapeSize, '-r', resizeMethod
+            ];
+        }
 
         await processGdal(buff, 'heightmap.png', translateOptions, "png");
 

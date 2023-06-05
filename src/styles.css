@@ -598,7 +598,9 @@ input[type="range"]::-moz-focus-outer {
 .withCb + dd {
     position: relative;
 }
-
+.withCb2 + dd {
+    position: relative;
+}
 input[type="checkbox"] {
     appearance: none;
     background-color: #fff;
