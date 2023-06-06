@@ -261,7 +261,7 @@ dt {
     position: absolute;
     top: 3.375rem;
     transform: translateX(-100%);
-    width: 25em;
+    width: 38em;
 }
 
 
@@ -366,9 +366,15 @@ dt {
     width: 5em;
 }
 
-
 .exportOptions dd:last-child {
-    width: 1.5em;
+
+}
+.exportOptions .withCb + dd {
+    position: relative;
+}
+
+.exportOptions .wideSelect select {
+    width: 24em;
 }
 
 .exportOptions header hr {
@@ -547,7 +553,17 @@ input[type="number"] {
     white-space: nowrap;
     width: 15.25em;
 }
+input[type="text"] {
+    background: #fff;
 
+    border-radius: 3px;
+
+    cursor: pointer;
+    height: 1.375em;
+    margin: 0.25em 0.75em 0 0;
+    outline: none;
+    width: 15em;
+}
 input[type="range"] {
     background: #fff;
     border: 1px solid #afb5ba;

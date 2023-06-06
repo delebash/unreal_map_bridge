@@ -25,9 +25,10 @@ for (let i = 0; i < panels.length; i++) {
     iconClass.push(icons[i].className);
 }
 
-
 // MapBox API token, temperate email for dev
+//mapboxgl.accessToken = 'pk.eyJ1IjoiZGVsZWJhc2giLCJhIjoiY2t1YWxkODF0MGh2NjJxcXA4czBpdXlmdyJ9.D_ngzR7j4vU1CILtpNLg4Q'
 mapboxgl.accessToken = 'pk.eyJ1IjoiYmVydGRldm4iLCJhIjoiY2t2dXF1ZGhyMHlteTJ2bzJjZzE3M24xOCJ9.J5skknTRyh-6RoDWD4kw2w';
+
 
 let map = new mapboxgl.Map({
     container: 'map',                               // Specify the container ID
@@ -43,8 +44,8 @@ let geocoder = new MapboxGeocoder({
     mapboxgl: mapboxgl,
     marker: false
 });
-const pbElement2 = document.getElementById('progress2');
 
+const pbElement2 = document.getElementById('progress2');
 const pbElement = document.getElementById('progress');
 const previewImage = document.getElementById("previewImage");
 
@@ -89,22 +90,7 @@ map.on('style.load', function () {
     addLayer();
     setMouse();
 });
-map.on('wheel', (e) => {
-    // console.log(e)
-    // const scrollDirection = e.deltaY < 0 ? 1 : -1;
-    // console.log(scrollDirection)
-    //  let mapSize = document.getElementById('mapSize')
-//    mapSize.stepUp(10)
-//
-//     if (e.deltaY < 0){
-//         scope.mapSize = 66
-//     }else{
-//         scope.mapSize = 1
-//     }
-//    // console.log(mapSize.value)
-    //scope.mapSize = 66
-    // changeMapsize(mapSize)
-});
+
 map.on('click', function (e) {
     grid.lng = e.lngLat.lng;
     grid.lat = e.lngLat.lat;
@@ -113,7 +99,6 @@ map.on('click', function (e) {
     map.panTo(new mapboxgl.LngLat(grid.lng, grid.lat));
     saveSettings();
     updateInfopanel();
-    // }
 });
 
 map.on('idle', function () {
@@ -228,15 +213,11 @@ function addLayer() {
 
 function setMouse() {
     map.on('mouseenter', 'startsquare', function () {
-        // map.setPaintProperty('startsquare', 'fill-opacity', 0.3);
-        // map.setPaintProperty('startsquare', 'fill-color', 'blue');
         mapCanvas.style.cursor = 'move';
-
     });
 
     map.on('mouseleave', 'startsquare', function () {
-        // map.setPaintProperty('startsquare', 'fill-color', 'blue');
-        // map.setPaintProperty('startsquare', 'fill-opacity', 0.3);
+        ;
         mapCanvas.style.cursor = '';
         saveSettings();
     });
@@ -244,24 +225,19 @@ function setMouse() {
     map.on('mousedown', 'startsquare', function (e) {
         // Prevent the default map drag behavior.
         e.preventDefault();
-
         mapCanvas.style.cursor = 'grab';
-
         map.on('mousemove', onMove);
         map.once('mouseup', onUp);
     });
 
     map.on('touchstart', 'startsquare', function (e) {
         if (e.points.length !== 1) return;
-
         // Prevent the default map drag behavior.
         e.preventDefault();
-
         map.on('touchmove', onMove);
         map.once('touchend', onUp);
     });
 }
-
 
 function deleteCaches() {
     if (confirm('Delete the caches.\nIs that okay?')) {
@@ -299,7 +275,6 @@ function setLngLat(mode) {
     }
 }
 
-
 function setGrid(lng, lat, size) {
     map.getSource('grid').setData(getGrid(lng, lat, size));
     map.getSource('start').setData(getGrid(lng, lat, size / 9));
@@ -326,12 +301,9 @@ function loadSettings() {
     // Mt Rainier
     stored.lng = parseFloat(stored.lng) || -121.75954;
     stored.lat = parseFloat(stored.lat) || 46.85255;
-
     stored.zoom = parseFloat(stored.zoom) || 11.0;
-
     stored.minHeight = parseFloat(stored.minHeight) || 0;
     stored.maxHeight = parseFloat(stored.maxHeight) || 0;
-
     stored.heightContours = stored.heightContours || false;
     stored.waterContours = stored.waterContours || false;
 
@@ -375,17 +347,8 @@ function togglePanel(index) {
     // initial settings when each panel is opened
     switch (index) {
         case 0:
-            // if (!isOpens[0]) {
-            //     if (prev_lng === grid.lng.toFixed(5) && prev_lat === grid.lat.toFixed(5)) {
-            //         console.log('no update')
-            //     } else {
-            //         console.log('heigtmap')
-            //         getHeightmap("preview");
-            //     }
-            // }
             break;
         case 1:
-
             break;
         case 2:
             if (!isOpens[2]) {
@@ -451,26 +414,6 @@ function changeMapsize(el) {
     grid.maxHeight = null;
     updateInfopanel();
 }
-
-// function autoSettings(withMap = true) {
-//     // scope.mapSize = 17.28;
-//     // scope.waterDepth = defaultWaterdepth;
-//     //
-//     // mapSize = scope.mapSize / 1;
-//     // vmapSize = mapSize * 1.05;
-//     // tileSize = mapSize / 9;
-//
-//     if (withMap) {
-//         new Promise((resolve) => {
-//             getHeightmap("preview", resolve);
-//         }).then(() => {
-//             scope.baseLevel = grid.minHeight;
-//             scope.heightScale = Math.min(250, Math.floor((1024 - scope.waterDepth) / (grid.maxHeight - scope.baseLevel) * 100));
-//         });
-//     }
-//
-//     setGrid(grid.lng, grid.lat, vmapSize);
-// }
 
 function setBaseLevel() {
     if (grid.minHeight === null) {
@@ -551,7 +494,10 @@ function getHeightmap(mode = "", callback) {
     let zoom = 14;
 
     incPb(pbElement);
-    incPb(pbElement2);
+    if (mode === 'export') {
+        incPb(pbElement2);
+    }
+
     // get a tile that covers the top left and bottom right (for the tile count calculation)
     let x = long2tile(extent.topleft[0], zoom);
     let y = lat2tile(extent.topleft[1], zoom);
@@ -565,7 +511,9 @@ function getHeightmap(mode = "", callback) {
     // because Terrain RGB tile distance depends on latitude
     // don't need too many tiles
     incPb(pbElement);
-    incPb(pbElement2);
+    if (mode === 'export') {
+        incPb(pbElement2);
+    }
     if (tileCnt > 6) {
         let z = zoom;
         let tx, ty, tx2, ty2, tc;
@@ -577,7 +525,9 @@ function getHeightmap(mode = "", callback) {
             ty2 = lat2tile(extent.bottomright[1], z);
             tc = Math.max(tx2 - tx + 1, ty2 - ty + 1);
             incPb(pbElement);
-            incPb(pbElement2);
+            if (mode === 'export') {
+                incPb(pbElement2);
+            }
         } while (tc > 6);
         // reflect the fixed result
         x = tx;
@@ -607,20 +557,22 @@ function getHeightmap(mode = "", callback) {
     for (let i = 0; i < tileCnt; i++) {
         for (let j = 0; j < tileCnt; j++) {
             incPb(pbElement);
-            incPb(pbElement2);
+            if (mode === 'export') {
+                incPb(pbElement2);
+            }
             let url = 'https://api.mapbox.com/v4/mapbox.terrain-rgb/' + zoom + '/' + (x + j) + '/' + (y + i) + '@2x.pngraw?access_token=' + mapboxgl.accessToken;
             let woQUrl = 'https://api.mapbox.com/v4/mapbox.terrain-rgb/' + zoom + '/' + (x + j) + '/' + (y + i) + '@2x.pngraw';
             downloadPngToTile(url, woQUrl).then((png) => tiles[i][j] = png);
         }
     }
-
-
     // wait for the download to complete
     let ticks = 0;
     let timer = window.setInterval(function () {
         ticks++;
         incPb(pbElement);
-        incPb(pbElement2);
+        if (mode === 'export') {
+            incPb(pbElement2);
+        }
 
         if (isDownloadComplete(tiles)) {
             console.log('download ok');
@@ -631,8 +583,8 @@ function getHeightmap(mode = "", callback) {
             let heightmap = toHeightmap(tiles, distance);
 
             // heightmap edge to map edge distance
-            let xOffset = Math.round(leftDistance / distance * heightmap.length);
-            let yOffset = Math.round(topDistance / distance * heightmap.length);
+            // let xOffset = Math.round(leftDistance / distance * heightmap.length);
+            // let yOffset = Math.round(topDistance / distance * heightmap.length);
 
             //  let sanatizedheightMap = sanatizeMap(heightmap, xOffset, yOffset);
 
@@ -641,22 +593,12 @@ function getHeightmap(mode = "", callback) {
             grid.maxHeight = heights.max;
 
             pbElement.value = 500;
-            pbElement2.value = 500;
+
             // callback after height calculation is completed
             if (typeof callback === 'function') callback();
 
             let imgUrl
             switch (mode) {
-
-                case "png":
-                    if (autoCalc === true) {
-                        autoCalculateBaseHeight()
-                    }
-                    convertedHeightmap = convertHeightmap(heightmap);
-                    png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
-                    download('heightmap.png', png, false)
-                    break;
-
                 case "preview": //Set auto level and scale
                     if (autoCalc === true) {
                         autoCalculateBaseHeight()
@@ -666,43 +608,30 @@ function getHeightmap(mode = "", callback) {
                     imgUrl = download('heightmap.png', png, true);
                     previewImage.src = imgUrl
                     updateInfopanel()
+                    pbElement.value = 0;
+                    overlayOff()
                     break;
 
-                case "unreal": //Set auto level and scale
+                case "export": //Set auto level and scale
                     if (autoCalc === true) {
                         autoCalculateBaseHeight()
                     }
                     convertedHeightmap = convertHeightmap(heightmap);
                     png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
                     updateInfopanel()
-                    sendToUnreal(png)
+                    exportMap(png)
                     break;
-
-                // case "refresh": // Don't set auto level and scale
-                //     if (autoCalc === true) {
-                //         console.log('test')
-                //         autoCalculateBaseHeight()
-                //     }
-                //     convertedHeightmap = convertHeightmap(sanatizedheightMap);
-                //     png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
-                //     imgUrl = download('heightmap.png', png, true);
-                //     previewImage.src = imgUrl
-                //     updateInfopanel()
-                //     break;
-
             }
             console.log('complete in ', ticks * 10, ' ms');
             prev_lng = document.getElementById('lng').innerHTML
             prev_lat = document.getElementById('lat').innerHTML
             // pbElement2.style.visibility = 'hidden';
             // pbElement.style.visibility = 'hidden';
-            pbElement2.value = 0;
-            pbElement.value = 0;
-            overlayOff()
+
         }
 
         // timeout!
-        if (ticks >= 4096) {
+        if (ticks >= 8096) {
             clearInterval(timer);
             console.error('timeout!');
             pbElement.value = 0;
@@ -712,21 +641,94 @@ function getHeightmap(mode = "", callback) {
     }, 10);
 }
 
-async function sendToUnreal(buff) {
-    let sealevel = document.getElementById('sealevel').checked
-    let landscapeSize = scope.landscapeSize.toString()
-    let exportType = scope.exportType
+async function exportMap(buff) {
 
-    if (exportType.includes('unreal')) {
-        let ZrangeSeaLevel = '32767'
-        let maxPngValue = '65535'
-        let resizeMethod = 'bilinear'
-        let translateOptions = []
+    let weightmap = document.getElementById('weightmap').checked
+    let satellite = document.getElementById('satellite').checked
+    let geojson = document.getElementById('geojson').checked
+    let worldpartiongridsize = document.getElementById('worldpartiongridsize').value
+    let heightmapblurradius = document.getElementById('blurradius').value
+    let weightmapblurradius = document.getElementById('weightmapblurradius').value
+    let exportType = scope.exportType
+    let exportBuff
+
+    //Process heightmap
+    exportBuff = await manipulateImage(buff, heightmapblurradius)
+    download('heightmap.png', exportBuff, false)
+
+    //Process satellite
+    if (satellite === true) {
+        //download sat
+        exportBuff = await manipulateImage(buff, 0)
+        download('sat.png', exportBuff, false)
+    }
+    //Process Weightmap
+    if (weightmap === true) {
+        //download weight
+        exportBuff = await manipulateImage(buff, weightmapblurradius)
+        download('weight.png', exportBuff, false)
+    }
+
+    //  console.log(image)
+
+    // switch (exportType) {
+    //     case "unrealHeightmap":
+    //
+    //         break;
+    //
+    //     case "unrealHeightmap":
+    //
+    //         break;
+    // }
+   // pbElement2.value = 500;
+    pbElement.value = 0;
+    pbElement2.value = 0;
+    overlayOff()
+
+}
+
+async function manipulateImage(buff, blurradius) {
+
+    let ZrangeSeaLevel = '32767'
+    let maxPngValue = '65535'
+    let minPngValue = '0'
+    let resizeMethod = 'bilinear'
+    let translateOptions = []
+
+    let sealevel = document.getElementById('sealevel').checked
+    let flipx = document.getElementById('flipx').checked
+    let flipy = document.getElementById('flipy').checked
+    let exportBuffer
+
+    let landscapeSize = scope.landscapeSize.toString()
+
+   // let heightimage = await Jimp.read(buff);
+
+    let heightimage = await IJS.Image.load(buff);
+
+    //Manipulate image
+    if (flipx === true) {
+        heightimage = await heightimage.flipX()
+    }
+
+    if (flipy === true) {
+        heightimage = await heightimage.flipY()
+    }
+    if (blurradius > 0) {
+        heightimage = await heightimage.blurFilter(blurradius)
+    }
+
+   // exportBuffer = await image.getBufferAsync(Jimp.MIME_PNG);
+
+    exportBuffer = await heightimage.toBuffer()
+
+    //Resample and scale
+    if (landscapeSize !== '0' || landscapeSize !== '1081') {
         if (sealevel) {
             translateOptions = [
                 '-ot', 'UInt16',
                 '-of', 'PNG',
-                '-scale', '0', '65535', '32767', '65535',
+                '-scale', minPngValue, maxPngValue, ZrangeSeaLevel, maxPngValue,
                 '-outsize', landscapeSize, landscapeSize, '-r', resizeMethod
             ];
         } else {
@@ -736,10 +738,9 @@ async function sendToUnreal(buff) {
                 '-outsize', landscapeSize, landscapeSize, '-r', resizeMethod
             ];
         }
-
-        await processGdal(buff, 'heightmap.png', translateOptions, "png");
-
+        exportBuffer = await processGdal(exportBuffer, 'heightmap.png', translateOptions, "png");
     }
+    return exportBuffer
 }
 
 async function processGdal(buff, filename, translateOptions, file_type) {
@@ -750,12 +751,12 @@ async function processGdal(buff, filename, translateOptions, file_type) {
     const dataset = result.datasets[0];
     const filePath = await Gdal.gdal_translate(dataset, translateOptions);
     const fileBytes = await Gdal.getFileBytes(filePath);
-    download(filename, fileBytes, false)
+
     //  await this.saveImage(fileBytes, filename, file_type)
 
     Gdal.close(dataset);
+    return fileBytes
 }
-
 
 function isDownloadComplete(tiles) {
     let tileNum = tiles.length;
@@ -830,11 +831,15 @@ function toHeightmap(tiles, distance) {
 function setMapStyle(el) {
     const layerId = el.id;
     let styleName = map.getStyle().metadata['mapbox:origin'];
-    if (!(styleName)) {
-        styleName = 'satellite-v9';
-    }
-    if (layerId != styleName) {
-        map.setStyle('mapbox://styles/mapbox/' + layerId);
+    if (layerId !== 'weightmap') {
+        if (!(styleName)) {
+            styleName = 'satellite-v9';
+        }
+        if (layerId != styleName) {
+            map.setStyle('mapbox://styles/mapbox/' + layerId);
+        }
+    } else {
+        map.setStyle('mapbox://styles/delebash/clfzz7dot000001qilz330eyt');
     }
 }
 
@@ -933,19 +938,19 @@ async function downloadPngToTile(url, withoutQueryUrl = url) {
 }
 
 
-function getInfo(fileName) {
-    return 'Heightmap name: ' + fileName + '\n' +
-        '\n' +
-        '/* Generated by height: Skylines online heightmap generator (https://cs.heightmap.skydark.pl) (https://github.com/sysoppl/height-Skylines-heightmap-generator) */\n' +
-        '\n' +
-        'Longitude: ' + grid.lng.toFixed(5) + '\n' +
-        'Latitude: ' + grid.lat.toFixed(5) + '\n' +
-        'Min Height: ' + grid.minHeight + '\n' +
-        'Max Height: ' + grid.maxHeight + '\n' +
-        'Water contours: ' + grid.waterContours + '\n' +
-        'Height contours: ' + grid.heightContours + '\n' +
-        'Zoom: ' + grid.zoom + '\n';
-}
+// function getInfo(fileName) {
+//     return 'Heightmap name: ' + fileName + '\n' +
+//         '\n' +
+//         '/* Generated by height: Skylines online heightmap generator (https://cs.heightmap.skydark.pl) (https://github.com/sysoppl/height-Skylines-heightmap-generator) */\n' +
+//         '\n' +
+//         'Longitude: ' + grid.lng.toFixed(5) + '\n' +
+//         'Latitude: ' + grid.lat.toFixed(5) + '\n' +
+//         'Min Height: ' + grid.minHeight + '\n' +
+//         'Max Height: ' + grid.maxHeight + '\n' +
+//         'Water contours: ' + grid.waterContours + '\n' +
+//         'Height contours: ' + grid.heightContours + '\n' +
+//         'Zoom: ' + grid.zoom + '\n';
+// }
 
 function overlayOn() {
     document.getElementById("overlay").style.display = "block";
@@ -956,11 +961,11 @@ function overlayOff() {
 }
 
 function exportTypeChange(e) {
-    let ele = document.getElementById("exportType").value;
-    let unrealOptions = document.getElementById("unrealOptions");
-    if (ele.includes('unreal')) {
-        unrealOptions.style.display = 'block'
-    } else {
-        unrealOptions.style.display = 'none'
-    }
+    // let ele = document.getElementById("exportType").value;
+    // let unrealOptions = document.getElementById("unrealOptions");
+    // if (ele.includes('unreal')) {
+    //     unrealOptions.style.display = 'block'
+    // } else {
+    //     unrealOptions.style.display = 'none'
+    // }
 }

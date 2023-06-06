@@ -8,5 +8,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="image" level="application" />
+    <orderEntry type="library" name="jimp" level="application" />
   </component>
 </module>

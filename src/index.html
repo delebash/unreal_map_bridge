@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset='utf-8'/>
@@ -27,11 +27,14 @@
             type="text/javascript"
     ></script>
 
+<!--    <script src="https://cdn.jsdelivr.net/npm/jimp@0.22.7/browser/lib/jimp.min.js"></script>-->
+    <script src="https://www.lactame.com/lib/image-js/0.21.2/image.min.js"></script>
+
+
 </head>
 
 <body class="row">
 <div id="overlay"></div>
-
 <div class="sideBar column">
     <ul class="fill">
         <li><a onclick="togglePanel(0)" title="Info"><i class="icon fas fa-info-circle"></i></a></li>
@@ -39,79 +42,14 @@
         ></i></a></li>
         <li><a onclick="togglePanel(2)" title="Change map style"><i class="icon fas fa-layer-group"></i></a></li>
         <li><a onclick="togglePanel(3)" title="Set lng/lat"><i class="icon fas fa-map-marker-alt"></i></a></li>
-
-        <!--        <li>-->
-        <!--            <a onclick="getHeightmap('raw')" title="Download RAW height map"><i class="fas fa-file-download"></i></a>-->
-        <!--        </li>-->
-        <!--        <li>-->
-        <!--            <a onclick="getHeightmap('png')" title="Download PNG height map"><i class="fas fa-file-image"></i></a></li>-->
-        <!--        <li>-->
-        <!--            <a onclick="getMapImage('map_image')" title="Download map image"><i class="fas fa-map"></i></a></li>-->
-        <!--        <li>-->
-        <!--            <a onclick="getHeightmap('zip')" title="Download ZIP with PNG and lng/lat informations">-->
-        <!--                <i class="fa-solid fa-file-zipper fa-lg"></i>-->
-        <!--            </a>-->
-        <!--        </li>-->
-
-        <!--    <ul class="fill">-->
-        <!--        <li><a id="showHeightContours" onclick="showHeightContours(this)" title="Show height contours"><i-->
-        <!--                class="fas fa-mountain"></i></a></li>-->
-        <!--        <li><a id="showWaterContours" onclick="showWaterContours(this)" title="Show water contours"><i-->
-        <!--                class="fas fa-water"></i></a></li>-->
-        <!--        &lt;!&ndash;    </ul>&ndash;&gt;-->
-        <!--    <ul class="" id="dcBox">-->
-        <!--        <li><a id="deleteCaches" onclick="deleteCaches()" title="Delete caches"><i class="fas fa-database"></i><i-->
-        <!--                class="fas fa-times"></i></a></li>-->
-        <!--    </ul>-->
-
         <li><a onclick="zoomIn()" title="Zoom in"><i class="fas fa-search-plus"></i></a></li>
         <li><a onclick="zoomOut()" title="Zoom out"><i class="fas fa-search-minus"></i></a></li>
-
-
         <li><a href="https://github.com/delebash/unreal_map_bridge" target="_blank" title="Help"><i
                 class="far fa-question-circle"></i></a></li>
-        <!--        <li>-->
-        <!--            <a href="#" onclick="getHeightmap('map_image')" title="Download tiles map (Terrain-RGB)"><i-->
-        <!--                    class="fas fa-bug"></i></a>-->
-        <!--        </li>-->
     </ul>
 </div>
 
 <div class="fill wrapper">
-    <!--    <div class="topbar">-->
-    <!--        <div class='row'>-->
-    <!--
-
-            </div>
-
-            </div>
-            <!--        <div class="headerinfo">-->
-    <!--            <dl class="row">-->
-    <!--                <div class="col">-->
-    <!--                    <dt>Longitude:</dt>-->
-    <!--                    <dd class="unit" id="lng"></dd>-->
-    <!--                    <dd><abbr>&#176;</abbr></dd>-->
-    <!--                    &nbsp;-->
-    <!--                    &nbsp;-->
-    <!--                    <dt>Latitude:</dt>-->
-    <!--                    <dd class="unit" id="lat"></dd>-->
-    <!--                    <dd><abbr>&#176;</abbr></dd>-->
-    <!--                </div>-->
-    <!--            </dl>-->
-    <!--            <dl class="row">-->
-    <!--                <div class="col">-->
-    <!--                    <dt>Min. height:</dt>-->
-    <!--                    <dd class="unit" id="minh"></dd>-->
-    <!--                    <dd><abbr>m</abbr></dd>-->
-    <!--                    <dt>Max. height:</dt>-->
-    <!--                    <dd class="unit" id="maxh"></dd>-->
-    <!--                    <dd><abbr>m</abbr></dd>-->
-    <!--                </div>-->
-    <!--            </dl>-->
-    <!--        </div>-->
-
-    <!--    </div>-->
-
     <div class="content" id="map"></div>
     <div class="panel slide-out hidden" id="infoPanel">
         <div class="geocoder" id="geocoder"></div>
@@ -159,12 +97,14 @@
                     <dd><input checked id="autoCalcBaseHeight" type="checkbox"><i class="fas fa-check"></i></dd>
                     </dd>
                     <dt>Base level:</dt>
-                    <dd><input data-model="baseLevel" id="baseLevel" max="1023.9" min="-1023.9" step="0.1" type="range">
+                    <dd><input data-model="baseLevel" id="baseLevel" max="1023.9" min="-1023.9" step="0.1"
+                               type="range">
                     </dd>
                     <dd><input data-model="baseLevel" max="1023.9" min="-1023.9" step="0.1" type="number"></dd>
                     <dd><abbr>m</abbr></dd>
                     <dt>Height scale:</dt>
-                    <dd><input data-model="heightScale" id="heightScale" max="250" min="0" step="1" type="range"></dd>
+                    <dd><input data-model="heightScale" id="heightScale" max="250" min="0" step="1" type="range">
+                    </dd>
                     <dd><input data-model="heightScale" step="1" type="number"></dd>
                     <dd><abbr>%</abbr></dd>
                 </dl>
@@ -177,7 +117,9 @@
             </div>
             <div class="footer">
                 <progress class="refreshprogress" id="progress" max="500" value="0"></progress>
-                <button class="refresh" onclick="getHeightmap('preview')"><i class="fas fa-sync-alt"></i>Refresh Preview Image
+                <button class="refresh" onclick="getHeightmap('preview')"><i class="fas fa-sync-alt"></i>Refresh
+                                                                                                         Preview
+                                                                                                         Image
                 </button>
             </div>
         </div>
@@ -185,8 +127,8 @@
 
     <div class="panel slide-out hidden" id="settingsPanel">
         <div class="infotable">
-            <div class="settings">
-                <header><h4>Export Settings:</h4>
+            <div class="exportOptions">
+                <header><h4>Export Settings</h4>
                     <hr>
                 </header>
                 <div class="row">
@@ -194,10 +136,13 @@
                         <dt>Export Type:</dt>
                         <dd class="wsSlp wideSelect">
                             <select data-model="exportType" id="exportType" onchange="exportTypeChange()">
-                                <option value="unrealHeightmap">Unreal Heightmap</option>
-                                <option value="unrealTMagicPluginEarthLandscapeClip">Unreal Terrain Magic Plugin -- EarthLandscape Clip
+                                <option value="unrealHeightmap">Unreal Heightmap Download png</option>
+                                <option value="unrealSend">Import Heightmap into Unreal (Requires Plugin)</option>
+                                <option value="unrealTMagicPluginEarthLandscapeClip">Unreal Terrain Magic Plugin --
+                                                                                     EarthLandscape Clip
                                 </option>
-                                <option value="unrealTMagicPluginHeightmapLandscapeClip">Unreal Terrain Magic Plugin -- HeightmapLandscape Clip
+                                <option value="unrealTMagicPluginHeightmapLandscapeClip">Unreal Terrain Magic Plugin
+                                                                                         --HeightmapLandscape Clip
                                 </option>
                                 <option value="unrealStampBrushPlugin">Unreal Stamp Brush Plugin</option>
                                 <option value="unrealLandmassEffectBrushPlugin">Unreal Landmass Effect Brush Plugin
@@ -206,13 +151,12 @@
                                 <option value="unrealMapImage">Image of map only</option>
                                 <option value="zip">Zip</option>
                                 <option value="raw">Raw</option>
-                                <option value="none">none</option>
                             </select><i class="fas fa-chevron-down"></i>
                         </dd>
                         <dd>&nbsp;</dd>
                     </dl>
                 </div>
-                <div class="row" id="unrealOptions">
+                <div id="unrealOptions">
                     <dl>
                         <dt>Landscape Size:</dt>
                         <dd class="wsSlp wideSelect">
@@ -224,51 +168,77 @@
                                 <option value="2017">2017x2017</option>
                                 <option value="1513">1513x1513</option>
                                 <option value="1009">1009x1009</option>
-                                <option value="512">512x512 -- Native Resolution</option>
+                                <option value="1081">1081x1081 -- Default Resolution</option>
                                 <option value="505">505x505</option>
                                 <option value="0">none</option>
                             </select><i class="fas fa-chevron-down"></i>
                         </dd>
                         <dd>&nbsp;</dd>
                     </dl>
-
                 </div>
-                <header><h4>Export options</h4><hr></header>
+                <header><h4>Export Options</h4>
+                    <hr>
+                </header>
                 <dl>
-                    <dt class="withCb">Satellite: </dt>
-                    <dd><input type="checkbox" id="satellite"><i class="fas fa-check"></i></dd>
-                    &nbsp;
-                    &nbsp;
-                    <dt class="withCb">Sea Level: </dt>
-                    <dd><input type="checkbox" checked id="sealevel"><i class="fas fa-check"></i></dd>
-                    &nbsp;
-                    &nbsp;
-                    <dt class="withCb">FlipX: </dt>
-                    <dd><input type="checkbox" id="flipx"><i class="fas fa-check"></i></dd>
-                    &nbsp;
-                    &nbsp;
-                    <dt class="withCb">FlipY: </dt>
-                    <dd><input type="checkbox" id="flipy"><i class="fas fa-check"></i></dd>
-                    &nbsp;
-                    &nbsp;
-                    <dt class="withCb">Geojson: </dt>
-                    <dd><input type="checkbox" id="geojson"><i class="fas fa-check"></i></dd>
-                    &nbsp;
-                    &nbsp;
+                    <dt class="withCb">Satellite:</dt>
+                    <dd><input id="satellite" type="checkbox"><i class="fas fa-check"></i></dd>
+
+                    <dt class="withCb">Sea Level:</dt>
+                    <dd><input checked id="sealevel" type="checkbox"><i class="fas fa-check"></i></dd>
+
+                    <dt class="withCb">FlipX:</dt>
+                    <dd><input id="flipx" type="checkbox"><i class="fas fa-check"></i></dd>
+
+                    <dt class="withCb">FlipY:</dt>
+                    <dd><input id="flipy" type="checkbox"><i class="fas fa-check"></i></dd>
+
+                    <dt class="withCb">Geojson:</dt>
+                    <dd><input id="geojson" type="checkbox"><i class="fas fa-check"></i></dd>
+
                     <dt class="withCb">Weightmap:</dt>
-                    <dd><input type="checkbox" id="weightmap"><i class="fas fa-check"></i></dd>
+
+                    <dd><input id="weightmap" type="checkbox"><i class="fas fa-check"></i></dd>
+
+                    <dt class="withCb">Weightmap:</dt>
+                    <dd><input id="weightmap" type="checkbox"><i class="fas fa-check"></i></dd>
+                </dl>
+                <header><h4>Other Settings</h4>
+                    <hr>
+                </header>
+                <dl>
+                    <dt class="withCb">World Part:</dt>
+                    <dd><input id="satellite" type="checkbox"><i class="fas fa-check"></i></dd>
+                </dl>
+                <dl>
+                    <dt>Grid Size:</dt>
+                    <dd><input data-model="worldpartiongridsize" id="worldpartiongridsize" type="number"></dd>
+                </dl>
+
+                <dl>
+                    <dt>Blur Radius:</dt>
+                    <dd><input data-model="blurradius" id="blurradius" type="number"></dd>
+                </dl>
+                <dl>
+                    <dt>Weightmap Blur:</dt>
+                    <dd><input data-model="weightmapblurradius" id="weightmapblurradius" type="number"></dd>
+                </dl>
+                <dl>
+                    <dt>Lan Name:</dt>
+                    <dd><input data-model="landscapename" id="landscapename" type="text"></dd>
                 </dl>
             </div>
         </div>
         <div class="footer">
             <progress id="progress2" max="500" value="0"></progress>
-            <button onclick="getHeightmap('unreal')"><i class="fas fa-sync-alt"></i>Export</button>
+            <button onclick="getHeightmap('export')"><i class="fas fa-sync-alt"></i>Export</button>
         </div>
     </div>
 
     <div class="panel slide-out hidden" id="stylePanel">
         <h3>Map style:</h3>
         <div id="mapstyle">
+            <label for="weightmap"><input id="weightmap" name="msGroup" onclick="setMapStyle(this)" type="radio"
+                                          value="weightmap">Weightmap</label>
             <label for="streets-v11"><input id="streets-v11" name="msGroup" onclick="setMapStyle(this)" type="radio"
                                             value="streets">Streets</label>
             <label for="outdoors-v11"><input id="outdoors-v11" name="msGroup" onclick="setMapStyle(this)"
@@ -307,6 +277,7 @@
         </div>
     </div>
 </div>
+
 
 <script src="lib.js"></script>
 <script src="jszip.js"></script>
