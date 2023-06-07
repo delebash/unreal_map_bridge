@@ -33,8 +33,8 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYmVydGRldm4iLCJhIjoiY2t2dXF1ZGhyMHlteTJ2bzJjZ
 
 let map = new mapboxgl.Map({
     container: 'map',                               // Specify the container ID
-    style: 'mapbox://styles/mapbox/outdoors-v11',   // Specify which map style to use
-    //style: 'mapbox://styles/mapbox/streets-v11',  // Specify which map style to use
+   // style: 'mapbox://styles/mapbox/outdoors-v11',   // Specify which map style to use
+    style: 'mapbox://styles/mapbox/streets-v11',  // Specify which map style to use
     center: [grid.lng, grid.lat],                   // Specify the starting position [lng, lat]
     zoom: grid.zoom,                                // Specify the starting zoom
     preserveDrawingBuffer: true
@@ -153,10 +153,10 @@ function addSource() {
         url: 'mapbox://mapbox.mapbox-streets-v8'
     });
 
-    map.addSource('contours', {
-        type: 'vector',
-        url: 'mapbox://mapbox.mapbox-terrain-v2'
-    });
+    // map.addSource('contours', {
+    //     type: 'vector',
+    //     url: 'mapbox://mapbox.mapbox-terrain-v2'
+    // });
 }
 
 function addLayer() {
@@ -182,33 +182,33 @@ function addLayer() {
             'fill-opacity': 0.3
         }
     });
+    //
+    // map.addLayer({
+    //     'id': 'contours',
+    //     'type': 'line',
+    //     'source': 'contours',
+    //     'source-layer': 'contour',
+    //     'layout': {
+    //         'visibility': 'visible',
+    //         'line-join': 'round',
+    //         'line-cap': 'round'
+    //     },
+    //     'paint': {
+    //         'line-color': '#877b59',
+    //         'line-width': 0.25
+    //     }
+    // });
 
-    map.addLayer({
-        'id': 'contours',
-        'type': 'line',
-        'source': 'contours',
-        'source-layer': 'contour',
-        'layout': {
-            'visibility': 'visible',
-            'line-join': 'round',
-            'line-cap': 'round'
-        },
-        'paint': {
-            'line-color': '#877b59',
-            'line-width': 0.25
-        }
-    });
-
-    map.addLayer({
-        'id': 'water-streets',
-        'source': 'mapbox-streets',
-        'source-layer': 'water',
-        'type': 'fill',
-        'paint': {
-            'fill-color': 'rgba(66,100,225, 0.3)',
-            'fill-outline-color': 'rgba(33,33,255, 1)'
-        }
-    });
+    // map.addLayer({
+    //     'id': 'water-streets',
+    //     'source': 'mapbox-streets',
+    //     'source-layer': 'water',
+    //     'type': 'fill',
+    //     'paint': {
+    //         'fill-color': 'rgba(66,100,225, 0.3)',
+    //         'fill-outline-color': 'rgba(33,33,255, 1)'
+    //     }
+    // });
 }
 
 
@@ -305,8 +305,8 @@ function loadSettings() {
     stored.zoom = parseFloat(stored.zoom) || 11.0;
     stored.minHeight = parseFloat(stored.minHeight) || 0;
     stored.maxHeight = parseFloat(stored.maxHeight) || 0;
-    stored.heightContours = stored.heightContours || false;
-    stored.waterContours = stored.waterContours || false;
+    // stored.heightContours = stored.heightContours || false;
+    // stored.waterContours = stored.waterContours || false;
 
     // TODO: do not set global lets!
     document.getElementById('waterDepth').value = parseInt(stored.waterDepth) || defaultWaterdepth;
