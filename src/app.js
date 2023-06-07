@@ -505,18 +505,20 @@ async function getHeightmap() {
 
         // create the tiles empty array
         let tiles = Create2DArray(tileCnt);
-      //  let k = 0
+        const promiseArray = [];
+       let k = 0
       //  console.log(zoom)
         // download the tiles
         for (let i = 0; i < tileCnt; i++) {
             for (let j = 0; j < tileCnt; j++) {
-          //      k++
+               k++
                 let url = 'https://api.mapbox.com/v4/mapbox.terrain-rgb/' + zoom + '/' + (x + j) + '/' + (y + i) + '@2x.pngraw?access_token=' + mapboxgl.accessToken;
                 let woQUrl = 'https://api.mapbox.com/v4/mapbox.terrain-rgb/' + zoom + '/' + (x + j) + '/' + (y + i) + '@2x.pngraw';
-                await downloadPngToTile(url, woQUrl).then((png) => tiles[i][j] = png);
+                promiseArray.push(downloadPngToTile(url, woQUrl).then((png) => tiles[i][j] = png));
             }
         }
-        //console.log(k)
+        await Promise.all(promiseArray);
+        console.log(k)
         let heightmap = toHeightmap(tiles, distance);
 
         let heights = calcMinMaxHeight(heightmap);
