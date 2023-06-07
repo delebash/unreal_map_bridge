@@ -29,6 +29,7 @@
 
 <!--    <script src="https://cdn.jsdelivr.net/npm/jimp@0.22.7/browser/lib/jimp.min.js"></script>-->
     <script src="https://www.lactame.com/lib/image-js/0.21.2/image.min.js"></script>
+<!--    <script src="https://cdn.jsdelivr.net/npm/set-interval-async"></script>-->
 
 
 </head>
@@ -116,11 +117,9 @@
                 </dl>
             </div>
             <div class="footer">
-                <progress class="refreshprogress" id="progress" max="500" value="0"></progress>
-                <button class="refresh" onclick="getHeightmap('preview')"><i class="fas fa-sync-alt"></i>Refresh
-                                                                                                         Preview
-                                                                                                         Image
-                </button>
+                <progress class="refreshprogress" id="progress" max="1000" value="0"></progress>
+                <button class="refresh" onclick="selectProcessMethod('preview')"><i class="fas fa-sync-alt"></i>Refresh
+
             </div>
         </div>
     </div>
@@ -229,8 +228,8 @@
             </div>
         </div>
         <div class="footer">
-            <progress id="progress2" max="500" value="0"></progress>
-            <button onclick="getHeightmap('export')"><i class="fas fa-sync-alt"></i>Export</button>
+            <progress id="progress2" max="1000" value="0"></progress>
+            <button onclick="selectProcessMethod('export')"><i class="fas fa-sync-alt"></i>Export</button>
         </div>
     </div>
 

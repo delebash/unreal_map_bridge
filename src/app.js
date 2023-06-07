@@ -4,10 +4,11 @@
 
 const defaultWaterdepth = 50
 
-let mapSize = 8;
+let mapSize = 50;
 let vmapSize = mapSize * 1.05;
 let tileSize = mapSize / 9;
-
+let timer
+let ticks = 0
 
 let grid = loadSettings();
 let mapCanvas, cache, bRefresh = true;
@@ -443,248 +444,190 @@ function setHeightScale() {
 
 function incPb(el, value = 1) {
     let v = el.value + value;
-    el.value = v;
+    if(el.value === el.max){
+        el.value = 0
+    }else{
+        el.value = v;
+    }
 }
 
-function sanatizeMap(heightmap, xOffset, yOffset) {
-    const heightmapSize = 1081;
-    let sanatizedheightMap = Create2DArray(heightmapSize, 0);
+async function getHeightmap() {
+    return new Promise(async (resolve, reject) => {
 
-    let lowestPositve = 100000;
+        // get the extent of the current map
+        // in heightmap, each pixel is treated as vertex data, and 1081px represents 1080 faces
+        // therefore, "1px = 16m" when the map size is 17.28km
+        let extent = getExtent(grid.lng, grid.lat, mapSize / 1080 * 1081);
 
-    // pass 1: normalize the map, and determine the lowestPositve
-    for (let y = yOffset; y < yOffset + heightmapSize; y++) {
-        for (let x = xOffset; x < xOffset + heightmapSize; x++) {
-            let h = heightmap[y][x];
-            if (h >= 0 && h < lowestPositve) {
-                lowestPositve = h;
-            }
-            sanatizedheightMap[y - yOffset][x - xOffset] = h;
+        // zoom is 14 in principle
+        let zoom = 14;
+
+        // get a tile that covers the top left and bottom right (for the tile count calculation)
+        let x = long2tile(extent.topleft[0], zoom);
+        let y = lat2tile(extent.topleft[1], zoom);
+        let x2 = long2tile(extent.bottomright[0], zoom);
+        let y2 = lat2tile(extent.bottomright[1], zoom);
+
+        // get the required tile count in Zoom 13
+        let tileCnt = Math.max(x2 - x + 1, y2 - y + 1);
+
+        // fixed in high latitudes: adjusted the tile count to 6 or less
+        // because Terrain RGB tile distance depends on latitude
+        // don't need too many tiles
+        console.log(tileCnt)
+        if (tileCnt > 6) {
+            let z = zoom;
+            let tx, ty, tx2, ty2, tc;
+            do {
+                z--;
+                tx = long2tile(extent.topleft[0], z);
+                ty = lat2tile(extent.topleft[1], z);
+                tx2 = long2tile(extent.bottomright[0], z);
+                ty2 = lat2tile(extent.bottomright[1], z);
+                tc = Math.max(tx2 - tx + 1, ty2 - ty + 1);
+
+            } while (tc > 6);
+            // reflect the fixed result
+            x = tx;
+            y = ty;
+            zoom = z;
+            tileCnt = tc;
         }
-    }
 
-    // pass 2: fix negative heights artifact in mapbox maps
-    for (let y = 0; y < heightmapSize; y++) {
-        for (let x = 0; x < heightmapSize; x++) {
-            let h = sanatizedheightMap[y][x];
-            if (h < 0) {
-                sanatizedheightMap[y][x] = lowestPositve;
+        let tileLng = tile2long(x, zoom);
+        let tileLat = tile2lat(y, zoom);
+
+        let tileLng2 = tile2long(x + tileCnt, zoom);
+        let tileLat2 = tile2lat(y + tileCnt, zoom);
+
+        // get the length of one side of the tiles extent
+        let distance = turf.distance(turf.point([tileLng, tileLat]), turf.point([tileLng2, tileLat2]), {units: 'kilometers'}) / Math.SQRT2;
+
+        // create the tiles empty array
+        let tiles = Create2DArray(tileCnt);
+      //  let k = 0
+      //  console.log(zoom)
+        // download the tiles
+        for (let i = 0; i < tileCnt; i++) {
+            for (let j = 0; j < tileCnt; j++) {
+          //      k++
+                let url = 'https://api.mapbox.com/v4/mapbox.terrain-rgb/' + zoom + '/' + (x + j) + '/' + (y + i) + '@2x.pngraw?access_token=' + mapboxgl.accessToken;
+                let woQUrl = 'https://api.mapbox.com/v4/mapbox.terrain-rgb/' + zoom + '/' + (x + j) + '/' + (y + i) + '@2x.pngraw';
+                await downloadPngToTile(url, woQUrl).then((png) => tiles[i][j] = png);
             }
         }
-    }
+        //console.log(k)
+        let heightmap = toHeightmap(tiles, distance);
 
-    return sanatizedheightMap;
+        let heights = calcMinMaxHeight(heightmap);
+        grid.minHeight = heights.min;
+        grid.maxHeight = heights.max;
+        // console.log('complete in ', ticks * 10, ' ms');
+        prev_lng = document.getElementById('lng').innerHTML
+        prev_lat = document.getElementById('lat').innerHTML
+        heightmap ? resolve(heightmap) : reject('timout');
+    });
 }
 
-function getHeightmap(mode = "", callback) {
-    overlayOn()
-    pbElement.value = 0;
-    pbElement2.value = 0;
-    pbElement2.style.visibility = 'visible';
-    pbElement.style.visibility = 'visible';
-    let autoCalc = document.getElementById("autoCalcBaseHeight").checked
-    // saveSettings(false);
 
-    // get the extent of the current map
-    // in heightmap, each pixel is treated as vertex data, and 1081px represents 1080 faces
-    // therefore, "1px = 16m" when the map size is 17.28km
-    let extent = getExtent(grid.lng, grid.lat, mapSize / 1080 * 1081);
+function stopTimer() {
+    clearTimeout(timer);
+    pbElement.value = 0
+    pbElement2.value = 0
+    console.log('complete in ', ticks * 10, ' ms');
+    ticks = 0
+}
 
-    // zoom is 13 in principle
-    let zoom = 14;
-
-    incPb(pbElement);
-    if (mode === 'export') {
-        incPb(pbElement2);
-    }
-
-    // get a tile that covers the top left and bottom right (for the tile count calculation)
-    let x = long2tile(extent.topleft[0], zoom);
-    let y = lat2tile(extent.topleft[1], zoom);
-    let x2 = long2tile(extent.bottomright[0], zoom);
-    let y2 = lat2tile(extent.bottomright[1], zoom);
-
-    // get the required tile count in Zoom 13
-    let tileCnt = Math.max(x2 - x + 1, y2 - y + 1);
-
-    // fixed in high latitudes: adjusted the tile count to 6 or less
-    // because Terrain RGB tile distance depends on latitude
-    // don't need too many tiles
-    incPb(pbElement);
-    if (mode === 'export') {
-        incPb(pbElement2);
-    }
-    if (tileCnt > 6) {
-        let z = zoom;
-        let tx, ty, tx2, ty2, tc;
-        do {
-            z--;
-            tx = long2tile(extent.topleft[0], z);
-            ty = lat2tile(extent.topleft[1], z);
-            tx2 = long2tile(extent.bottomright[0], z);
-            ty2 = lat2tile(extent.bottomright[1], z);
-            tc = Math.max(tx2 - tx + 1, ty2 - ty + 1);
-            incPb(pbElement);
-            if (mode === 'export') {
-                incPb(pbElement2);
-            }
-        } while (tc > 6);
-        // reflect the fixed result
-        x = tx;
-        y = ty;
-        zoom = z;
-        tileCnt = tc;
-    }
-
-    let tileLng = tile2long(x, zoom);
-    let tileLat = tile2lat(y, zoom);
-
-    let tileLng2 = tile2long(x + tileCnt, zoom);
-    let tileLat2 = tile2lat(y + tileCnt, zoom);
-
-    // get the length of one side of the tiles extent
-    let distance = turf.distance(turf.point([tileLng, tileLat]), turf.point([tileLng2, tileLat2]), {units: 'kilometers'}) / Math.SQRT2;
-
-    // find out the center position of the area we want inside the tiles
-    let topDistance = turf.distance(turf.point([tileLng, tileLat]), turf.point([tileLng, extent.topleft[1]]), {units: 'kilometers'});
-    let leftDistance = turf.distance(turf.point([tileLng, tileLat]), turf.point([extent.topleft[0], tileLat]), {units: 'kilometers'});
-
-    // create the tiles empty array
-    let tiles = Create2DArray(tileCnt);
-
-
-    // download the tiles
-    for (let i = 0; i < tileCnt; i++) {
-        for (let j = 0; j < tileCnt; j++) {
-            incPb(pbElement);
-            if (mode === 'export') {
-                incPb(pbElement2);
-            }
-            let url = 'https://api.mapbox.com/v4/mapbox.terrain-rgb/' + zoom + '/' + (x + j) + '/' + (y + i) + '@2x.pngraw?access_token=' + mapboxgl.accessToken;
-            let woQUrl = 'https://api.mapbox.com/v4/mapbox.terrain-rgb/' + zoom + '/' + (x + j) + '/' + (y + i) + '@2x.pngraw';
-            downloadPngToTile(url, woQUrl).then((png) => tiles[i][j] = png);
-        }
-    }
-    // wait for the download to complete
-    let ticks = 0;
-    let timer = window.setInterval(function () {
+function startTimer() {
+    timer = setTimeout(function () {
         ticks++;
-        incPb(pbElement);
-        if (mode === 'export') {
-            incPb(pbElement2);
-        }
-
-        if (isDownloadComplete(tiles)) {
-            console.log('download ok');
-            clearInterval(timer);
-            let convertedHeightmap, png, canvas, url;
-
-            // heightmap size corresponds to 1081px map size
-            let heightmap = toHeightmap(tiles, distance);
-
-            // heightmap edge to map edge distance
-            // let xOffset = Math.round(leftDistance / distance * heightmap.length);
-            // let yOffset = Math.round(topDistance / distance * heightmap.length);
-
-            //  let sanatizedheightMap = sanatizeMap(heightmap, xOffset, yOffset);
-
-            let heights = calcMinMaxHeight(heightmap);
-            grid.minHeight = heights.min;
-            grid.maxHeight = heights.max;
-
-            pbElement.value = 500;
-
-            // callback after height calculation is completed
-            if (typeof callback === 'function') callback();
-
-            let imgUrl
-            switch (mode) {
-                case "preview": //Set auto level and scale
-                    if (autoCalc === true) {
-                        autoCalculateBaseHeight()
-                    }
-                    convertedHeightmap = convertHeightmap(heightmap);
-                    png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
-                    imgUrl = download('heightmap.png', png, true);
-                    previewImage.src = imgUrl
-                    updateInfopanel()
-                    pbElement.value = 0;
-                    overlayOff()
-                    break;
-
-                case "export": //Set auto level and scale
-                    if (autoCalc === true) {
-                        autoCalculateBaseHeight()
-                    }
-                    convertedHeightmap = convertHeightmap(heightmap);
-                    png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
-                    updateInfopanel()
-                    exportMap(png)
-                    break;
-            }
-            console.log('complete in ', ticks * 10, ' ms');
-            prev_lng = document.getElementById('lng').innerHTML
-            prev_lat = document.getElementById('lat').innerHTML
-            // pbElement2.style.visibility = 'hidden';
-            // pbElement.style.visibility = 'hidden';
-
-        }
-
-        // timeout!
-        if (ticks >= 8096) {
-            clearInterval(timer);
-            console.error('timeout!');
-            pbElement.value = 0;
-            pbElement2.value = 0;
-            overlayOff()
-        }
+        incPb(pbElement)
+        incPb(pbElement2)
+        startTimer();
     }, 10);
 }
 
-async function exportMap(buff) {
+async function selectProcessMethod(mode) {
+    startTimer()
+    let convertedHeightmap, png, canvas, url, heightmap, imgUrl;
+    let autoCalc = document.getElementById("autoCalcBaseHeight").checked
 
-    let weightmap = document.getElementById('weightmap').checked
-    let satellite = document.getElementById('satellite').checked
-    let geojson = document.getElementById('geojson').checked
-    let worldpartiongridsize = document.getElementById('worldpartiongridsize').value
-    let heightmapblurradius = document.getElementById('blurradius').value
-    let weightmapblurradius = document.getElementById('weightmapblurradius').value
-    let exportType = scope.exportType
-    let exportBuff
+    switch (mode) {
+        case "preview": //Set auto level and scale
+            heightmap = await getHeightmap(mode)
+            if (autoCalc === true) {
+                autoCalculateBaseHeight()
+            }
+            convertedHeightmap = convertHeightmap(heightmap);
+            png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
+            imgUrl = download('heightmap.png', png, true);
+            previewImage.src = imgUrl
+            updateInfopanel()
+            break;
 
-    //Process heightmap
-    exportBuff = await manipulateImage(buff, heightmapblurradius)
-    download('heightmap.png', exportBuff, false)
-
-    //Process satellite
-    if (satellite === true) {
-        //download sat
-        exportBuff = await manipulateImage(buff, 0)
-        download('sat.png', exportBuff, false)
+        case "export": //Set auto level and scale
+            heightmap = await getHeightmap(mode)
+            if (autoCalc === true) {
+                autoCalculateBaseHeight()
+            }
+            convertedHeightmap = convertHeightmap(heightmap);
+            png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
+            console.log('test1')
+            png = await exportMap(png)
+            console.log('test2')
+            download('heightmap.png', png, false);
+            updateInfopanel()
+            break;
     }
-    //Process Weightmap
-    if (weightmap === true) {
-        //download weight
-        exportBuff = await manipulateImage(buff, weightmapblurradius)
-        download('weight.png', exportBuff, false)
-    }
-
-    //  console.log(image)
-
-    // switch (exportType) {
-    //     case "unrealHeightmap":
-    //
-    //         break;
-    //
-    //     case "unrealHeightmap":
-    //
-    //         break;
-    // }
-   // pbElement2.value = 500;
-    pbElement.value = 0;
-    pbElement2.value = 0;
     overlayOff()
+    stopTimer()
+    // let exportType = scope.exportType
 
+}
+
+async function exportMap(buff) {
+    return new Promise(async (resolve, reject) => {
+
+        let weightmap = document.getElementById('weightmap').checked
+        let satellite = document.getElementById('satellite').checked
+        let geojson = document.getElementById('geojson').checked
+        let worldpartiongridsize = document.getElementById('worldpartiongridsize').value
+        let heightmapblurradius = document.getElementById('blurradius').value
+        let weightmapblurradius = document.getElementById('weightmapblurradius').value
+
+        let exportBuff
+
+        //Process heightmap
+        exportBuff = await manipulateImage(buff, heightmapblurradius)
+
+        //Process satellite
+        if (satellite === true) {
+            //download sat
+            exportBuff = await manipulateImage(buff, 0)
+        }
+        //Process Weightmap
+        if (weightmap === true) {
+            //download weight
+            exportBuff = await manipulateImage(buff, weightmapblurradius)
+
+        }
+        exportBuff ? resolve(exportBuff) : reject('timout');
+
+        //  console.log(image)
+
+        // switch (exportType) {
+        //     case "unrealHeightmap":
+        //
+        //         break;
+        //
+        //     case "unrealHeightmap":
+        //
+        //         break;
+        // }
+        // pbElement2.value = 500;
+
+
+    })
 }
 
 async function manipulateImage(buff, blurradius) {
@@ -702,7 +645,7 @@ async function manipulateImage(buff, blurradius) {
 
     let landscapeSize = scope.landscapeSize.toString()
 
-   // let heightimage = await Jimp.read(buff);
+    // let heightimage = await Jimp.read(buff);
 
     let heightimage = await IJS.Image.load(buff);
 
@@ -718,7 +661,7 @@ async function manipulateImage(buff, blurradius) {
         heightimage = await heightimage.blurFilter(blurradius)
     }
 
-   // exportBuffer = await image.getBufferAsync(Jimp.MIME_PNG);
+    // exportBuffer = await image.getBufferAsync(Jimp.MIME_PNG);
 
     exportBuffer = await heightimage.toBuffer()
 
@@ -758,15 +701,15 @@ async function processGdal(buff, filename, translateOptions, file_type) {
     return fileBytes
 }
 
-function isDownloadComplete(tiles) {
-    let tileNum = tiles.length;
-    for (let i = 0; i < tileNum; i++) {
-        for (let j = 0; j < tileNum; j++) {
-            if (!(tiles[i][j])) return false;
-        }
-    }
-    return true;
-}
+// function isDownloadComplete(tiles) {
+//     let tileNum = tiles.length;
+//     for (let i = 0; i < tileNum; i++) {
+//         for (let j = 0; j < tileNum; j++) {
+//             if (!(tiles[i][j])) return false;
+//         }
+//     }
+//     return true;
+// }
 
 function autoCalculateBaseHeight() {
     setBaseLevel()
