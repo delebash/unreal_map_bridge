@@ -29,14 +29,20 @@
 
     <!--    <script src="https://cdn.jsdelivr.net/npm/jimp@0.22.7/browser/lib/jimp.min.js"></script>-->
     <script src="https://www.lactame.com/lib/image-js/0.21.2/image.min.js"></script>
-    <!--    <script src="https://cdn.jsdelivr.net/npm/set-interval-async"></script>-->
+        <script src="https://cdn.jsdelivr.net/npm/set-interval-async"></script>
 
 
 </head>
 
 <body class="row">
+
 <div id="overlay">
-    <div class="center"><span class="progressMsg" id="progressMsg"></span>
+     <div class="center" id="progressBusyArea" aria-busy="true" aria-describedby="progressBusy" style="display: none">
+         <span class="progressMsg" id="progressMsg2"></span>
+         <progress id="progressBusy" aria-label="Content loading…"  class="refreshprogress"></progress>
+     </div>
+    <div class="center" id="progressArea" style="display: none">
+        <span class="progressMsg" id="progressMsg"></span>
         <progress class="refreshprogress" id="progress" max="1000" value="0"></progress>
     </div>
 </div>

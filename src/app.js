@@ -17,6 +17,8 @@ let panels = document.getElementsByClassName('panel');
 let icons = document.getElementsByClassName('icon');
 let iconClass = [];
 let Gdal
+let setIntervalAsync = SetIntervalAsync.setIntervalAsync;
+let clearIntervalAsync = SetIntervalAsync.clearIntervalAsync;
 
 (async function () {
     Gdal = await initGdalJs({path: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.4.0/dist/package', useWorker: false})
@@ -49,6 +51,9 @@ let geocoder = new MapboxGeocoder({
 const pbElement = document.getElementById('progress');
 const previewImage = document.getElementById("previewImage");
 const progressMsg = document.getElementById('progressMsg')
+const progressMsg2 = document.getElementById('progressMsg2')
+const progressBusyArea = document.getElementById('progressBusyArea')
+const progressArea = document.getElementById('progressArea')
 
 document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
 
@@ -516,13 +521,14 @@ async function getHeightmap() {
                 promiseArray.push(downloadPngToTile(url, woQUrl).then((png) => tiles[i][j] = png));
             }
         }
+
         await Promise.all(promiseArray);
         let heightmap = toHeightmap(tiles, distance);
 
         let heights = calcMinMaxHeight(heightmap);
         grid.minHeight = heights.min;
         grid.maxHeight = heights.max;
-        // console.log('complete in ', ticks * 10, ' ms');
+        console.log('complete in ', ticks * 10, ' ms');
         prev_lng = document.getElementById('lng').innerHTML
         prev_lat = document.getElementById('lat').innerHTML
         heightmap ? resolve(heightmap) : reject('timout');
@@ -530,33 +536,42 @@ async function getHeightmap() {
 }
 
 
+function startTimer(msg) {
+    overlayOn()
+    progressArea.style.display = 'block'
+    progressMsg.innerHTML = msg
+    timer = setIntervalAsync(async () => {
+        ticks++;
+        incPb(pbElement)
+    }, 10);
+}
+
 function stopTimer() {
-    clearTimeout(timer);
+    clearIntervalAsync(timer);
     pbElement.value = 0
     console.log('complete in ', ticks * 10, ' ms');
     ticks = 0
     progressMsg.innerHTML = ''
+    progressArea.style.display = 'none'
     overlayOff()
 }
 
-function startTimer(msg) {
-    console.log(msg)
+function startFakeTimer(msg) {
     overlayOn()
-    progressMsg.innerHTML = msg
-    timer = setTimeout(function () {
-        ticks++;
-        incPb(pbElement)
-        startTimer(msg);
-    }, 10);
+    progressBusyArea.style.display = 'block'
+    progressMsg2.innerHTML = msg
+}
+
+function stopFakeTimer() {
+    progressBusyArea.style.display = 'none'
+    progressMsg2.innerHTML = ''
+    overlayOff()
 }
 
 async function previewHeightmap() {
-
     startTimer('Processing heightmap')
     let convertedHeightmap, png, canvas, url, heightmap, imgUrl;
     let autoCalc = document.getElementById("autoCalcBaseHeight").checked
-
-
     heightmap = await getHeightmap()
     if (autoCalc === true) {
         autoCalculateBaseHeight()
@@ -588,42 +603,45 @@ async function exportMap(buff) {
             autoCalculateBaseHeight()
         }
         convertedHeightmap = convertHeightmap(heightmap);
-        updateInfopanel()
         png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
+        updateInfopanel()
         stopTimer()
 
         //Resample rescale
-        startTimer('Adjusting and scaling image')
-        //Manipulate image
+        //Timer does not work with gdal so fake it
+        startFakeTimer('Resizing and adjusting image')
         exportBuff = await manipulateImage(png, heightmapblurradius)
         download('heightmap.png', exportBuff, false);
-        stopTimer()
+        stopFakeTimer()
+
     } else if (scope.exportType === 'geojsonOnly') {
 
     } else if (scope.exportType === 'unrealMapImage') {
 
     }
 
-    //Process satellite
-    if (satellite === true) {
-        startTimer('Downloading satellite')
-        //download sat
-        //exportBuff = await manipulateImage(buff, 0)
-        stopTimer()
-    }
-    //Process Weightmap
-    if (weightmap === true) {
-        startTimer('Weightmap')
-        //download weight
-      //  exportBuff = await manipulateImage(buff, weightmapblurradius)
-        stopTimer()
-    }
+    // //Process satellite
+    // if (satellite === true) {
+    //     startTimer('Downloading satellite')
+    //     //download sat
+    //     //exportBuff = await manipulateImage(buff, 0)
+    //     stopTimer()
+    // }
+    // //Process Weightmap
+    // if (weightmap === true) {
+    //     startTimer('Weightmap')
+    //     //download weight
+    //     //  exportBuff = await manipulateImage(buff, weightmapblurradius)
+    //     stopTimer()
+    // }
+}
 
-
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 async function manipulateImage(buff, blurradius) {
-
+    //  await sleep('3000')
     let ZrangeSeaLevel = '32767'
     let maxPngValue = '65535'
     let minPngValue = '0'
@@ -652,7 +670,7 @@ async function manipulateImage(buff, blurradius) {
     }
     exportBuffer = await heightimage.toBuffer()
 
-    //Resample and scale
+    // Resample and scale
     if (landscapeSize !== '0' || landscapeSize !== '1081') {
         if (sealevel) {
             translateOptions = [
@@ -670,22 +688,19 @@ async function manipulateImage(buff, blurradius) {
         }
         exportBuffer = await processGdal(exportBuffer, 'heightmap.png', translateOptions, "png");
     }
+
     return exportBuffer
 }
 
 async function processGdal(buff, filename, translateOptions, file_type) {
-
     let blob = new Blob([buff], {type: 'image/' + file_type})
     const file = new File([blob], filename);
     const result = await Gdal.open(file);
     const dataset = result.datasets[0];
     const filePath = await Gdal.gdal_translate(dataset, translateOptions);
     const fileBytes = await Gdal.getFileBytes(filePath);
-
-    //  await this.saveImage(fileBytes, filename, file_type)
-
     Gdal.close(dataset);
-    return fileBytes
+    return fileBytes;
 }
 
 // function isDownloadComplete(tiles) {

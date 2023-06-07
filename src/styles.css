@@ -821,9 +821,9 @@ dd.wsSlp {
 }
 
 progress {
-    background-color: #fff;
-    border: 0;
-    border-radius: 4px;
+    /*background-color: #fff;*/
+    /*border: 0;*/
+    /*border-radius: 4px;*/
     height: 12px;
     width: 100%;
 }
