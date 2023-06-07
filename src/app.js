@@ -444,9 +444,9 @@ function setHeightScale() {
 
 function incPb(el, value = 1) {
     let v = el.value + value;
-    if(el.value === el.max){
+    if (el.value === el.max) {
         el.value = 0
-    }else{
+    } else {
         el.value = v;
     }
 }
@@ -474,7 +474,6 @@ async function getHeightmap() {
         // fixed in high latitudes: adjusted the tile count to 6 or less
         // because Terrain RGB tile distance depends on latitude
         // don't need too many tiles
-        console.log(tileCnt)
         if (tileCnt > 6) {
             let z = zoom;
             let tx, ty, tx2, ty2, tc;
@@ -493,7 +492,7 @@ async function getHeightmap() {
             zoom = z;
             tileCnt = tc;
         }
-
+        document.getElementById('zoomlevel').innerHTML  = zoom
         let tileLng = tile2long(x, zoom);
         let tileLat = tile2lat(y, zoom);
 
@@ -506,19 +505,16 @@ async function getHeightmap() {
         // create the tiles empty array
         let tiles = Create2DArray(tileCnt);
         const promiseArray = [];
-       let k = 0
-      //  console.log(zoom)
+
         // download the tiles
         for (let i = 0; i < tileCnt; i++) {
             for (let j = 0; j < tileCnt; j++) {
-               k++
                 let url = 'https://api.mapbox.com/v4/mapbox.terrain-rgb/' + zoom + '/' + (x + j) + '/' + (y + i) + '@2x.pngraw?access_token=' + mapboxgl.accessToken;
                 let woQUrl = 'https://api.mapbox.com/v4/mapbox.terrain-rgb/' + zoom + '/' + (x + j) + '/' + (y + i) + '@2x.pngraw';
                 promiseArray.push(downloadPngToTile(url, woQUrl).then((png) => tiles[i][j] = png));
             }
         }
         await Promise.all(promiseArray);
-        console.log(k)
         let heightmap = toHeightmap(tiles, distance);
 
         let heights = calcMinMaxHeight(heightmap);
