@@ -27,15 +27,19 @@
             type="text/javascript"
     ></script>
 
-<!--    <script src="https://cdn.jsdelivr.net/npm/jimp@0.22.7/browser/lib/jimp.min.js"></script>-->
+    <!--    <script src="https://cdn.jsdelivr.net/npm/jimp@0.22.7/browser/lib/jimp.min.js"></script>-->
     <script src="https://www.lactame.com/lib/image-js/0.21.2/image.min.js"></script>
-<!--    <script src="https://cdn.jsdelivr.net/npm/set-interval-async"></script>-->
+    <!--    <script src="https://cdn.jsdelivr.net/npm/set-interval-async"></script>-->
 
 
 </head>
 
 <body class="row">
-<div id="overlay"></div>
+<div id="overlay">
+    <div class="center"><span class="progressMsg" id="progressMsg"></span>
+        <progress class="refreshprogress" id="progress" max="1000" value="0"></progress>
+    </div>
+</div>
 <div class="sideBar column">
     <ul class="fill">
         <li><a onclick="togglePanel(0)" title="Info"><i class="icon fas fa-info-circle"></i></a></li>
@@ -118,9 +122,7 @@
                 </dl>
             </div>
             <div class="footer">
-                <progress class="refreshprogress" id="progress" max="1000" value="0"></progress>
-                <button class="refresh" onclick="selectProcessMethod('preview')"><i class="fas fa-sync-alt"></i>Refresh
-
+                <button class="refresh" onclick="previewHeightmap()"><i class="fas fa-sync-alt"></i>Refresh
             </div>
         </div>
     </div>
@@ -138,19 +140,19 @@
                             <select data-model="exportType" id="exportType" onchange="exportTypeChange()">
                                 <option value="unrealHeightmap">Unreal Heightmap Download png</option>
                                 <option value="unrealSend">Import Heightmap into Unreal (Requires Plugin)</option>
-                                <option value="unrealTMagicPluginEarthLandscapeClip">Unreal Terrain Magic Plugin --
-                                                                                     EarthLandscape Clip
-                                </option>
-                                <option value="unrealTMagicPluginHeightmapLandscapeClip">Unreal Terrain Magic Plugin
-                                                                                         --HeightmapLandscape Clip
-                                </option>
-                                <option value="unrealStampBrushPlugin">Unreal Stamp Brush Plugin</option>
-                                <option value="unrealLandmassEffectBrushPlugin">Unreal Landmass Effect Brush Plugin
-                                </option>
+                                <!--                                <option value="unrealTMagicPluginEarthLandscapeClip">Unreal Terrain Magic Plugin &#45;&#45;-->
+                                <!--                                                                                     EarthLandscape Clip-->
+                                <!--                                </option>-->
+                                <!--                                <option value="unrealTMagicPluginHeightmapLandscapeClip">Unreal Terrain Magic Plugin-->
+                                <!--                                                                                         &#45;&#45;HeightmapLandscape Clip-->
+                                <!--                                </option>-->
+                                <!--                                <option value="unrealStampBrushPlugin">Unreal Stamp Brush Plugin</option>-->
+                                <!--                                <option value="unrealLandmassEffectBrushPlugin">Unreal Landmass Effect Brush Plugin-->
+                                <!--                                </option>-->
                                 <option value="geojsonOnly">Geojson Only</option>
                                 <option value="unrealMapImage">Image of map only</option>
-                                <option value="zip">Zip</option>
-                                <option value="raw">Raw</option>
+                                <!--                                <option value="zip">Zip</option>-->
+                                <!--                                <option value="raw">Raw</option>-->
                             </select><i class="fas fa-chevron-down"></i>
                         </dd>
                         <dd>&nbsp;</dd>
@@ -229,8 +231,8 @@
             </div>
         </div>
         <div class="footer">
-            <progress id="progress2" max="1000" value="0"></progress>
-            <button onclick="selectProcessMethod('export')"><i class="fas fa-sync-alt"></i>Export</button>
+            <!--            <progress id="progress2" max="1000" value="0"></progress>-->
+            <button onclick="exportMap()"><i class="fas fa-sync-alt"></i>Export</button>
         </div>
     </div>
 

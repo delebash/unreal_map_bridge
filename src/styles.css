@@ -46,7 +46,16 @@ hr {
     border-bottom: 1px solid #fff;
     border-top: 1px solid #676a6e;
 }
-
+.center {
+    /*border: 5px solid;*/
+    border-radius: 4px;
+    margin: auto;
+    color: black;
+    background-color: white;
+    width: 50%;
+    padding: 10px;
+    margin-top: 2px;
+}
 #overlay {
     position: fixed; /* Sit on top of the page content */
     display: none; /* Hidden by default */
@@ -816,7 +825,6 @@ progress {
     border: 0;
     border-radius: 4px;
     height: 12px;
-    margin-top: 1.5rem;
     width: 100%;
 }
 
@@ -885,8 +893,10 @@ progress::-ms-fill {
     margin-top: .25em;
     padding-top: 0;
 }
-
-.refreshprogress {
-    margin-top: .50em;
-    padding-top: 0;
+.progressMsg {
+    font-size: 1.5em
 }
+/*.refreshprogress {*/
+/*    margin-top: .50em;*/
+/*    padding-top: 0;*/
+/*}*/

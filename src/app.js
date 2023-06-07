@@ -33,7 +33,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYmVydGRldm4iLCJhIjoiY2t2dXF1ZGhyMHlteTJ2bzJjZ
 
 let map = new mapboxgl.Map({
     container: 'map',                               // Specify the container ID
-   // style: 'mapbox://styles/mapbox/outdoors-v11',   // Specify which map style to use
+    // style: 'mapbox://styles/mapbox/outdoors-v11',   // Specify which map style to use
     style: 'mapbox://styles/mapbox/streets-v11',  // Specify which map style to use
     center: [grid.lng, grid.lat],                   // Specify the starting position [lng, lat]
     zoom: grid.zoom,                                // Specify the starting zoom
@@ -46,9 +46,9 @@ let geocoder = new MapboxGeocoder({
     marker: false
 });
 
-const pbElement2 = document.getElementById('progress2');
 const pbElement = document.getElementById('progress');
 const previewImage = document.getElementById("previewImage");
+const progressMsg = document.getElementById('progressMsg')
 
 document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
 
@@ -405,7 +405,7 @@ function zoomOut() {
 }
 
 function changeMapsize(el) {
-    if(el.value < 4){
+    if (el.value < 4) {
         el.value = 4
     }
     mapSize = el.value / 1;
@@ -494,7 +494,7 @@ async function getHeightmap() {
             zoom = z;
             tileCnt = tc;
         }
-        document.getElementById('zoomlevel').innerHTML  = zoom
+        document.getElementById('zoomlevel').innerHTML = zoom
         let tileLng = tile2long(x, zoom);
         let tileLat = tile2lat(y, zoom);
 
@@ -533,101 +533,93 @@ async function getHeightmap() {
 function stopTimer() {
     clearTimeout(timer);
     pbElement.value = 0
-    pbElement2.value = 0
     console.log('complete in ', ticks * 10, ' ms');
     ticks = 0
+    progressMsg.innerHTML = ''
+    overlayOff()
 }
 
-function startTimer() {
+function startTimer(msg) {
+    console.log(msg)
+    overlayOn()
+    progressMsg.innerHTML = msg
     timer = setTimeout(function () {
         ticks++;
         incPb(pbElement)
-        incPb(pbElement2)
-        startTimer();
+        startTimer(msg);
     }, 10);
 }
 
-async function selectProcessMethod(mode) {
-    startTimer()
+async function previewHeightmap() {
+
+    startTimer('Processing heightmap')
     let convertedHeightmap, png, canvas, url, heightmap, imgUrl;
     let autoCalc = document.getElementById("autoCalcBaseHeight").checked
 
-    switch (mode) {
-        case "preview": //Set auto level and scale
-            heightmap = await getHeightmap(mode)
-            if (autoCalc === true) {
-                autoCalculateBaseHeight()
-            }
-            convertedHeightmap = convertHeightmap(heightmap);
-            png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
-            imgUrl = download('heightmap.png', png, true);
-            previewImage.src = imgUrl
-            updateInfopanel()
-            break;
 
-        case "export": //Set auto level and scale
-            heightmap = await getHeightmap(mode)
-            if (autoCalc === true) {
-                autoCalculateBaseHeight()
-            }
-            convertedHeightmap = convertHeightmap(heightmap);
-            png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
-            console.log('test1')
-            png = await exportMap(png)
-            console.log('test2')
-            download('heightmap.png', png, false);
-            updateInfopanel()
-            break;
+    heightmap = await getHeightmap()
+    if (autoCalc === true) {
+        autoCalculateBaseHeight()
     }
-    overlayOff()
+    convertedHeightmap = convertHeightmap(heightmap);
+    png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
+    imgUrl = download('heightmap.png', png, true);
+    previewImage.src = imgUrl
+    updateInfopanel()
     stopTimer()
-    // let exportType = scope.exportType
-
 }
 
 async function exportMap(buff) {
-    return new Promise(async (resolve, reject) => {
 
-        let weightmap = document.getElementById('weightmap').checked
-        let satellite = document.getElementById('satellite').checked
-        let geojson = document.getElementById('geojson').checked
-        let worldpartiongridsize = document.getElementById('worldpartiongridsize').value
-        let heightmapblurradius = document.getElementById('blurradius').value
-        let weightmapblurradius = document.getElementById('weightmapblurradius').value
+    let convertedHeightmap, png, heightmap;
+    let autoCalc = document.getElementById("autoCalcBaseHeight").checked
+    let weightmap = document.getElementById('weightmap').checked
+    let satellite = document.getElementById('satellite').checked
+    let geojson = document.getElementById('geojson').checked
+    let worldpartiongridsize = document.getElementById('worldpartiongridsize').value
+    let heightmapblurradius = document.getElementById('blurradius').value
+    let weightmapblurradius = document.getElementById('weightmapblurradius').value
+    let exportBuff
 
-        let exportBuff
-
-        //Process heightmap
-        exportBuff = await manipulateImage(buff, heightmapblurradius)
-
-        //Process satellite
-        if (satellite === true) {
-            //download sat
-            exportBuff = await manipulateImage(buff, 0)
+    if (scope.exportType === 'unrealHeightmap' || scope.exportType === 'unrealSend') {
+        startTimer('Processing heightmap')
+        heightmap = await getHeightmap()
+        if (autoCalc === true) {
+            autoCalculateBaseHeight()
         }
-        //Process Weightmap
-        if (weightmap === true) {
-            //download weight
-            exportBuff = await manipulateImage(buff, weightmapblurradius)
+        convertedHeightmap = convertHeightmap(heightmap);
+        updateInfopanel()
+        png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
+        stopTimer()
 
-        }
-        exportBuff ? resolve(exportBuff) : reject('timout');
+        //Resample rescale
+        startTimer('Adjusting and scaling image')
+        //Manipulate image
+        exportBuff = await manipulateImage(png, heightmapblurradius)
+        download('heightmap.png', exportBuff, false);
+        stopTimer()
+    } else if (scope.exportType === 'geojsonOnly') {
 
-        //  console.log(image)
+    } else if (scope.exportType === 'unrealMapImage') {
 
-        // switch (exportType) {
-        //     case "unrealHeightmap":
-        //
-        //         break;
-        //
-        //     case "unrealHeightmap":
-        //
-        //         break;
-        // }
-        // pbElement2.value = 500;
+    }
+
+    //Process satellite
+    if (satellite === true) {
+        startTimer('Downloading satellite')
+        //download sat
+        //exportBuff = await manipulateImage(buff, 0)
+        stopTimer()
+    }
+    //Process Weightmap
+    if (weightmap === true) {
+        startTimer('Weightmap')
+        //download weight
+      //  exportBuff = await manipulateImage(buff, weightmapblurradius)
+        stopTimer()
+    }
 
 
-    })
 }
 
 async function manipulateImage(buff, blurradius) {
@@ -645,8 +637,6 @@ async function manipulateImage(buff, blurradius) {
 
     let landscapeSize = scope.landscapeSize.toString()
 
-    // let heightimage = await Jimp.read(buff);
-
     let heightimage = await IJS.Image.load(buff);
 
     //Manipulate image
@@ -660,9 +650,6 @@ async function manipulateImage(buff, blurradius) {
     if (blurradius > 0) {
         heightimage = await heightimage.blurFilter(blurradius)
     }
-
-    // exportBuffer = await image.getBufferAsync(Jimp.MIME_PNG);
-
     exportBuffer = await heightimage.toBuffer()
 
     //Resample and scale
