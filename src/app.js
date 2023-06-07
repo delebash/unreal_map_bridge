@@ -405,7 +405,9 @@ function zoomOut() {
 }
 
 function changeMapsize(el) {
-    console.log(el.value)
+    if(el.value < 4){
+        el.value = 4
+    }
     mapSize = el.value / 1;
     vmapSize = mapSize * 1.05;
     tileSize = mapSize / 9;
