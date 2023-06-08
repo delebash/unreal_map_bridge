@@ -2,27 +2,36 @@
 
 'use strict'
 
+import idbKeyval from "./javascript/idb-keyval-iife.js";
+import fileUtils from "./javascript/fs-helpers.js"
+import "./javascript/lib.js";
+import "./javascript/jszip.js";
+import "./javascript/pako.min.js";
+import "./javascript/upng.js";
+import "./javascript/tiles.js";
+
 const defaultWaterdepth = 50
+const setIntervalAsync = SetIntervalAsync.setIntervalAsync;
+const clearIntervalAsync = SetIntervalAsync.clearIntervalAsync;
+const pbElement = document.getElementById('progress');
+const previewImage = document.getElementById("previewImage");
+const progressMsg = document.getElementById('progressMsg')
+const progressMsg2 = document.getElementById('progressMsg2')
+const progressBusyArea = document.getElementById('progressBusyArea')
+const progressArea = document.getElementById('progressArea')
 
 let mapSize = 50;
 let vmapSize = mapSize * 1.05;
 let tileSize = mapSize / 9;
-let timer
-let ticks = 0
-
-let grid = loadSettings();
-let mapCanvas, cache, bRefresh = true;
-let prev_lng, prev_lat
+let timer, ticks = 0, prev_lng, prev_lat, mapCanvas, cache
 let panels = document.getElementsByClassName('panel');
 let icons = document.getElementsByClassName('icon');
 let iconClass = [];
-let Gdal
-let setIntervalAsync = SetIntervalAsync.setIntervalAsync;
-let clearIntervalAsync = SetIntervalAsync.clearIntervalAsync;
 
-(async function () {
-    Gdal = await initGdalJs({path: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.4.0/dist/package', useWorker: false})
-})();
+let userSettings = await loadUserSettings()
+let grid = await loadSettings();
+let Gdal = await initGdalJs({path: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.4.0/dist/package', useWorker: false})
+
 
 for (let i = 0; i < panels.length; i++) {
     iconClass.push(icons[i].className);
@@ -43,47 +52,35 @@ let map = new mapboxgl.Map({
 });
 
 let geocoder = new MapboxGeocoder({
-    accessToken: mapboxgl.accessToken,
-    mapboxgl: mapboxgl,
-    marker: false
+    accessToken: mapboxgl.accessToken, mapboxgl: mapboxgl, marker: false
 });
-
-const pbElement = document.getElementById('progress');
-const previewImage = document.getElementById("previewImage");
-const progressMsg = document.getElementById('progressMsg')
-const progressMsg2 = document.getElementById('progressMsg2')
-const progressBusyArea = document.getElementById('progressBusyArea')
-const progressArea = document.getElementById('progressArea')
 
 document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
 
 map.on('load', function () {
     mapCanvas = map.getCanvasContainer();
 
-    map.getCanvas().addEventListener(
-        'wheel',
-        (e) => {
-            const scrollDirection = e.deltaY < 0 ? 1 : -1;
+    map.getCanvas().addEventListener('wheel', (e) => {
+        const scrollDirection = e.deltaY < 0 ? 1 : -1;
 
-            e.preventDefault();
-            if (e.shiftKey) {
-                map.scrollZoom.disable();
-                let size = scope.mapSize
-                if (scrollDirection === 1) {
-                    size += 1
-                } else {
-                    size -= 1
-                }
-                if (size >= 4 && size <= 1000) {
-                    scope.mapSize = size
-                    let mapSize = document.getElementById('mapSize')
-                    changeMapsize(mapSize)
-                }
+        e.preventDefault();
+        if (e.shiftKey) {
+            map.scrollZoom.disable();
+            let size = scope.mapSize
+            if (scrollDirection === 1) {
+                size += 1
             } else {
-                map.scrollZoom.enable();
+                size -= 1
             }
+            if (size >= 4 && size <= 1000) {
+                scope.mapSize = size
+                let mapSize = document.getElementById('mapSize')
+                changeMapsize(mapSize)
+            }
+        } else {
+            map.scrollZoom.enable();
         }
-    );
+    });
 
     scope.mapSize = mapSize;
     scope.baseLevel = 0;
@@ -144,18 +141,15 @@ function onUp(e) {
 
 function addSource() {
     map.addSource('grid', {
-        'type': 'geojson',
-        'data': getGrid(grid.lng, grid.lat, vmapSize)
+        'type': 'geojson', 'data': getGrid(grid.lng, grid.lat, vmapSize)
     });
 
     map.addSource('start', {
-        'type': 'geojson',
-        'data': getGrid(grid.lng, grid.lat, vmapSize / 9)
+        'type': 'geojson', 'data': getGrid(grid.lng, grid.lat, vmapSize / 9)
     });
 
     map.addSource('mapbox-streets', {
-        type: 'vector',
-        url: 'mapbox://mapbox.mapbox-streets-v8'
+        type: 'vector', url: 'mapbox://mapbox.mapbox-streets-v8'
     });
 
     // map.addSource('contours', {
@@ -167,24 +161,14 @@ function addSource() {
 function addLayer() {
     // Add styles to the map
     map.addLayer({
-        'id': 'gridlines',
-        'type': 'fill',
-        'source': 'grid',
-        'paint': {
-            'fill-color': 'blue',
-            'fill-outline-color': 'blue',
-            'fill-opacity': 0.25
+        'id': 'gridlines', 'type': 'fill', 'source': 'grid', 'paint': {
+            'fill-color': 'blue', 'fill-outline-color': 'blue', 'fill-opacity': 0.25
         }
     });
 
     map.addLayer({
-        'id': 'startsquare',
-        'type': 'fill',
-        'source': 'start',
-        'paint': {
-            'fill-color': 'blue',
-            'fill-outline-color': 'blue',
-            'fill-opacity': 0.3
+        'id': 'startsquare', 'type': 'fill', 'source': 'start', 'paint': {
+            'fill-color': 'blue', 'fill-outline-color': 'blue', 'fill-opacity': 0.3
         }
     });
     //
@@ -223,8 +207,7 @@ function setMouse() {
     });
 
     map.on('mouseleave', 'startsquare', function () {
-        ;
-        mapCanvas.style.cursor = '';
+        ;mapCanvas.style.cursor = '';
         saveSettings();
     });
 
@@ -301,8 +284,26 @@ function getGrid(lng, lat, size) {
     return poly
 }
 
-function loadSettings() {
-    let stored = JSON.parse(localStorage.getItem('grid')) || {};
+async function loadUserSettings() {
+    let userSettings = await idbKeyval.get('userSettings') || {};
+    let dirName
+    if (userSettings.dirHandle) {
+        dirName = userSettings.dirHandle.name
+    } else {
+        dirName = ''
+    }
+    document.getElementById('downloadDirectory').value = dirName
+    document.getElementById('apiKey').value = userSettings.mapboxApiKey || ''
+    return userSettings
+}
+
+function saveUserSettings() {
+    userSettings.mapboxApiKey = document.getElementById('apiKey').value || ''
+    idbKeyval.set('userSettings', userSettings)
+}
+
+async function loadSettings() {
+    let stored = await idbKeyval.get('grid') || {};
 
     // Mt Rainier
     stored.lng = parseFloat(stored.lng) || -121.75954;
@@ -323,7 +324,7 @@ function saveSettings() {
     grid.waterDepth = parseInt(document.getElementById('waterDepth').value);
     grid.landscapeSize = scope.landscapeSize;
     grid.exportType = scope.exportType;
-    localStorage.setItem('grid', JSON.stringify(grid));
+    idbKeyval.set('grid', grid);
 }
 
 function Create2DArray(rows, def = null) {
@@ -335,7 +336,6 @@ function Create2DArray(rows, def = null) {
 }
 
 function togglePanel(index) {
-
     let isOpens = [];
     for (let i = 0; i < panels.length; i++) {
         isOpens.push(panels[i].classList.contains('slide-in'));
@@ -366,6 +366,9 @@ function togglePanel(index) {
             }
             break;
         case 3:
+            // none
+            break;
+        case 4:
             // none
             break;
     }
@@ -673,18 +676,9 @@ async function manipulateImage(buff, blurradius) {
     // Resample and scale
     if (landscapeSize !== '0' || landscapeSize !== '1081') {
         if (sealevel) {
-            translateOptions = [
-                '-ot', 'UInt16',
-                '-of', 'PNG',
-                '-scale', minPngValue, maxPngValue, ZrangeSeaLevel, maxPngValue,
-                '-outsize', landscapeSize, landscapeSize, '-r', resizeMethod
-            ];
+            translateOptions = ['-ot', 'UInt16', '-of', 'PNG', '-scale', minPngValue, maxPngValue, ZrangeSeaLevel, maxPngValue, '-outsize', landscapeSize, landscapeSize, '-r', resizeMethod];
         } else {
-            translateOptions = [
-                '-ot', 'UInt16',
-                '-of', 'PNG',
-                '-outsize', landscapeSize, landscapeSize, '-r', resizeMethod
-            ];
+            translateOptions = ['-ot', 'UInt16', '-of', 'PNG', '-outsize', landscapeSize, landscapeSize, '-r', resizeMethod];
         }
         exportBuffer = await processGdal(exportBuffer, 'heightmap.png', translateOptions, "png");
     }
@@ -914,3 +908,27 @@ function exportTypeChange(e) {
     //     unrealOptions.style.display = 'none'
     // }
 }
+
+async function openDirectory() {
+
+    try {
+        userSettings.dirHandle = await fileUtils.getDirHandle();
+    } catch (ex) {
+        if (ex.name === 'AbortError') {
+            return;
+        }
+        const msg = 'An error occured trying to open the file.';
+        console.error(msg, ex);
+    }
+
+    if (!userSettings.dirHandle) {
+        console.log('error dirhandle');
+    } else {
+        document.getElementById('downloadDirectory').value = userSettings.dirHandle.name
+        idbKeyval.set('userSettings', userSettings)
+    }
+
+}
+window.togglePanel = togglePanel
+window.openDirectory = openDirectory
+window.saveUserSettings  = saveUserSettings
