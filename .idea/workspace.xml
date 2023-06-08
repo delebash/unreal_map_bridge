@@ -87,6 +87,7 @@
       <workItem from="1686237154080" duration="8105000" />
       <workItem from="1686249245281" duration="1204000" />
       <workItem from="1686250574209" duration="6182000" />
+      <workItem from="1686257712638" duration="55000" />
     </task>
     <task id="LOCAL-00001" summary="rework download">
       <option name="closed" value="true" />
@@ -144,7 +145,14 @@
       <option name="project" value="LOCAL" />
       <updated>1686163453824</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="fake timer for gdal locking ui">
+      <created>1686257759335</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1686257759335</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
