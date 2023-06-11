@@ -5,6 +5,9 @@
     <meta charset='utf-8'/>
     <title>Unreal Map Bridge</title>
     <meta content='initial-scale=1,maximum-scale=1,user-scalable=no' name='viewport'/>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon">
     <link href="images/favicon.ico" rel="icon" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/destyle.css@1.0.15/destyle.css" rel="stylesheet"/>
@@ -16,21 +19,15 @@
           integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
           referrerpolicy="no-referrer" rel="stylesheet"/>
     <link href="styles.css" rel="stylesheet" type="text/css">
-    <script
-            src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js"></script>
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.8.0/mapbox-gl.js'></script>
-    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
-
-    <script crossorigin="anonymous"
-            integrity="sha384-XlqVvSG4V8zz8Kdw95OpRdsWyJnWE5QUZy++BeAIEVb+f2n5RM7jdbZh5lm0pHWk"
-            src="https://cdn.jsdelivr.net/npm/gdal3.js@2.4.0/dist/package/gdal3.js"
-            type="text/javascript"
-    ></script>
-    <script src="https://www.lactame.com/lib/image-js/0.21.2/image.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/set-interval-async"></script>
 </head>
 
 <body class="row">
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <span class="close-button" id="close-button" onclick="toggleModal('close','')">×</span>
+        <span class="progressMsg" id="modalMsg"></span>
+    </div>
+</div>
 <div id="overlay">
     <div aria-busy="true" aria-describedby="progressBusy" class="center" id="progressBusyArea" style="display: none">
         <span class="progressMsg" id="progressMsg2"></span>
@@ -140,7 +137,7 @@
                     <dl>
                         <dt>Export Type:</dt>
                         <dd class="wsSlp wideSelect">
-                            <select data-model="exportType" id="exportType" onchange="exportTypeChange()">
+                            <select data-model="exportType" id="exportType" onchange="exportTypeChange(this)">
                                 <option value="unrealHeightmap">Unreal Heightmap Download png</option>
                                 <option value="unrealSend">Import Heightmap into Unreal (Requires Plugin)</option>
                                 <!--                                <option value="unrealTMagicPluginEarthLandscapeClip">Unreal Terrain Magic Plugin ---->
@@ -165,7 +162,7 @@
                     <dl>
                         <dt>Landscape Size:</dt>
                         <dd class="wsSlp wideSelect">
-                            <select data-model="landscapeSize">-->
+                            <select data-model="landscapeSize" onchange="landscapeSizeChange(this)">
                                 <option value="8129">8129x8129</option>
                                 <option value="6097">6097x6097</option>
                                 <option value="4033">4033x4033</option>
@@ -204,15 +201,13 @@
 
                     <dd><input id="weightmap" type="checkbox"><i class="fas fa-check"></i></dd>
 
-                    <dt class="withCb">Weightmap:</dt>
-                    <dd><input id="weightmap" type="checkbox"><i class="fas fa-check"></i></dd>
                 </dl>
                 <header><h4>Other Settings</h4>
                     <hr>
                 </header>
                 <dl>
                     <dt class="withCb">World Part:</dt>
-                    <dd><input id="satellite" type="checkbox"><i class="fas fa-check"></i></dd>
+                    <dd><input id="worldpart" type="checkbox"><i class="fas fa-check"></i></dd>
                 </dl>
                 <dl>
                     <dt>Grid Size:</dt>
@@ -228,7 +223,7 @@
                     <dd><input data-model="weightmapblurradius" id="weightmapblurradius" type="number"></dd>
                 </dl>
                 <dl>
-                    <dt>Lan Name:</dt>
+                    <dt>Landscape Name:</dt>
                     <dd><input data-model="landscapename" id="landscapename" type="text"></dd>
                 </dl>
             </div>
@@ -282,14 +277,46 @@
     </div>
     <div class="panel slide-out hidden" id="settingsPanel">
         <div class="table">
-            <h3>Settings:</h3>
+            <h3>User Settings:</h3>
+            <div class="row">
+                <dl>
+                    <dt>Export Type:</dt>
+                    <dd class="wsSlp">
+                        <select data-model="serverType" id="serverType" onchange="serverTypeChange(this)">
+                            <option value="mapbox">Mapbox</option>
+                            <option value="maptiler">Maptiler</option>
+                        </select><i class="fas fa-chevron-down"></i>
+                    </dd>
+                    <dd>&nbsp;</dd>
+                </dl>
+            </div>
             <dl>
                 <dt>Api key:</dt>
-                <dd><input id="apiKey" type="text"></dd>
+                <dd><input data-model="apiKey" type="text"></dd>
+            </dl>
+            <dl>
+                <dt>Terrain Url:</dt>
+                <dd><input data-model="terrianUrl" type="text"></dd>
+            </dl>
+            <dl>
+                <dt>Styles Url:</dt>
+                <dd><input data-model="stylesUrl" type="text"></dd>
+            </dl>
+            <dl>
+                <dt>Weightmap Url:</dt>
+                <dd><input data-model="weightMapUrl" type="text"></dd>
+            </dl>
+            <dl>
+                <dt>Satellite Url:</dt>
+                <dd><input data-model="satelliteMapUrl" type="text"></dd>
+            </dl>
+            <dl>
+                <dt>Map Url:</dt>
+                <dd><input data-model="mmapboxWeightMapUrlapUrl" type="text"></dd>
             </dl>
             <dl>
                 <dt>Download directory:</dt>
-                <dd><input id="downloadDirectory" type="text">
+                <dd><input data-model="downloadDirectory" type="text">
                     <button onclick="openDirectory()">Select Directory</button>
                 </dd>
             </dl>
@@ -299,6 +326,24 @@
         </div>
     </div>
 </div>
+
+<script
+        src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js"></script>
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.8.0/mapbox-gl.js'></script>
+<script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+
+<script crossorigin="anonymous"
+        integrity="sha384-XlqVvSG4V8zz8Kdw95OpRdsWyJnWE5QUZy++BeAIEVb+f2n5RM7jdbZh5lm0pHWk"
+        src="https://cdn.jsdelivr.net/npm/gdal3.js@2.4.0/dist/package/gdal3.js"
+        type="text/javascript"
+></script>
+<script src="https://www.lactame.com/lib/image-js/0.21.2/image.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/set-interval-async"></script>
+
+
+<script src="libs/UPNG.js"></script>
+<script src="libs/jszip.js"></script>
+<script src="libs/pako.js"></script>
 
 <script src="javascript/binding.js"></script>
 <script type="module" src="app.js">

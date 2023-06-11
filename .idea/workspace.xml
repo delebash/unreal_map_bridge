@@ -4,7 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4b8f9fa1-1fbc-4842-a539-bbc139a05f50" name="Changes" comment="" />
+    <list default="true" id="4b8f9fa1-1fbc-4842-a539-bbc139a05f50" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/libs/UPNG.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/libs/jszip.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/libs/pako.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/javascript/jszip.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/javascript/lib.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/javascript/pako.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/javascript/tiles.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/javascript/tiles.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/javascript/upng.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles2.css" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -36,7 +50,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;F:/3DProjects/github/DansProjects/unreal_map_bridge/src&quot;,
+    &quot;last_opened_file_path&quot;: &quot;F:/3DProjects/github/DansProjects/unreal_map_bridgeb&quot;,
     &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -49,9 +63,12 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\3DProjects\github\DansProjects\unreal_map_bridge\src\libs" />
+      <recent name="F:\3DProjects\github\DansProjects\unreal_map_bridge\src\javascript" />
       <recent name="F:\3DProjects\github\DansProjects\unreal_map_bridge\src" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\3DProjects\github\DansProjects\unreal_map_bridge\src\libs" />
       <recent name="F:\3DProjects\github\DansProjects\unreal_map_bridge\src\images" />
       <recent name="F:\3DProjects\github\DansProjects\unreal_map_bridge\src" />
       <recent name="F:\3DProjects\github\DansProjects\unreal_map_bridge\src\javascript" />
@@ -88,6 +105,13 @@
       <workItem from="1686249245281" duration="1204000" />
       <workItem from="1686250574209" duration="6182000" />
       <workItem from="1686257712638" duration="55000" />
+      <workItem from="1686257780804" duration="9364000" />
+      <workItem from="1686271949247" duration="2228000" />
+      <workItem from="1686286560940" duration="132000" />
+      <workItem from="1686286736614" duration="17003000" />
+      <workItem from="1686355757536" duration="4977000" />
+      <workItem from="1686433249033" duration="2497000" />
+      <workItem from="1686498196035" duration="2389000" />
     </task>
     <task id="LOCAL-00001" summary="rework download">
       <option name="closed" value="true" />
@@ -152,7 +176,14 @@
       <option name="project" value="LOCAL" />
       <updated>1686257759335</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="fake timer for gdal locking ui">
+      <created>1686257796155</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1686257796155</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
