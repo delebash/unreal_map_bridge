@@ -34,7 +34,7 @@
         <progress aria-label="Content loading…" class="refreshprogress" id="progressBusy"></progress>
     </div>
     <div class="center" id="progressArea" style="display: none">
-        <span class="progressMsg" id="progressMsg"></span>
+        <span class="progressMsg" id="progressMsg"></span>&nbsp;&nbsp;<span class="progressMsg" id="downloadCount"></span>
         <progress class="refreshprogress" id="progress" max="1000" value="0"></progress>
     </div>
 </div>
@@ -49,6 +49,9 @@
         <li><a onclick="zoomOut()" title="Zoom out"><i class="fas fa-search-minus"></i></a></li>
         <li><a onclick="togglePanel(4)" title="Settings"><i class="icon fas fa-gear"></i></a></li>
 
+        <li>
+            <div class="small-text" id="zoom"></div>
+        </li>
         <li><a href="https://github.com/delebash/unreal_map_bridge" target="_blank" title="Help"><i
                 class="far fa-question-circle"></i></a></li>
     </ul>
@@ -182,6 +185,23 @@
                     <hr>
                 </header>
                 <dl>
+                    <div class="withCb">Override Satellite Zoom Level:</div>
+                    &nbsp;&nbsp;
+                    <dd><input id="satellitezoom" type="checkbox"><i class="fas fa-check"></i></dd>
+                    &nbsp;&nbsp;
+                    <div>Zoom:</div>
+                    &nbsp;&nbsp;
+                    <div><input type="number" max="22" min="0" step="1" data-model="satzoomval" id="satzoomval"
+                                onchange="overrideSatChange(this.value)"></div>
+                    &nbsp;&nbsp;
+                    <div>Tile Count:</div>
+                    &nbsp;&nbsp;
+                    <div id="tilecount"></div>
+
+                </dl>
+                <br>
+                <dl>
+
                     <dt class="withCb">Satellite:</dt>
                     <dd><input id="satellite" type="checkbox"><i class="fas fa-check"></i></dd>
 
@@ -239,7 +259,7 @@
             <label for="weightmap"><input id="weightmap" name="msGroup" onclick="setMapStyle(this)" type="radio"
                                           value="weightmap">Weightmap</label>
             <label for="streets-v11"><input id="streets-v11" name="msGroup" onclick="setMapStyle(this)" type="radio"
-                                            value="streets">Streets</label>
+                                            value="streets" checked>Streets</label>
             <label for="outdoors-v11"><input id="outdoors-v11" name="msGroup" onclick="setMapStyle(this)"
                                              type="radio"
                                              value="outdoors">Outdoors</label>
@@ -277,10 +297,10 @@
     </div>
     <div class="panel slide-out hidden" id="settingsPanel">
         <div class="table">
-            <h3>User Settings:</h3>
+            <h3>User Settings: Create a free <a href="https://www.mapbox.com/">mapbox</a> or <a href="https://www.maptiler.com/">maptiler</a> account and get an Api key </h3>
             <div class="row">
                 <dl>
-                    <dt>Export Type:</dt>
+                    <dt>Server Type:</dt>
                     <dd class="wsSlp">
                         <select data-model="serverType" id="serverType" onchange="serverTypeChange(this)">
                             <option value="mapbox">Mapbox</option>
@@ -327,24 +347,18 @@
     </div>
 </div>
 
-<script
-        src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js"></script>
-<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.8.0/mapbox-gl.js'></script>
-<script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
 
-<script crossorigin="anonymous"
-        integrity="sha384-XlqVvSG4V8zz8Kdw95OpRdsWyJnWE5QUZy++BeAIEVb+f2n5RM7jdbZh5lm0pHWk"
-        src="https://cdn.jsdelivr.net/npm/gdal3.js@2.4.0/dist/package/gdal3.js"
-        type="text/javascript"
-></script>
-<script src="https://www.lactame.com/lib/image-js/0.21.2/image.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/set-interval-async"></script>
-
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jimp/0.22.8/jimp.min.js"
+        integrity="sha512-35IpHDqZJRT/3FJlRl03MG3FSyg9CdLKLNgbUR15MgxKF/8WcUxB7tQ5vROtr0ClQ5ij5MaQXd8UOU+8doXbwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!--<script type="text/javascript"-->
+<!--        src="https://cdn.jsdelivr.net/npm/gdal3.js@2.4.0/dist/package/gdal3.js"-->
+<!--        integrity="sha384-XlqVvSG4V8zz8Kdw95OpRdsWyJnWE5QUZy++BeAIEVb+f2n5RM7jdbZh5lm0pHWk"-->
+<!--        crossorigin="anonymous"-->
+<!--&gt;</script>-->
 <script src="libs/UPNG.js"></script>
 <script src="libs/jszip.js"></script>
 <script src="libs/pako.js"></script>
-
 <script src="javascript/binding.js"></script>
 <script type="module" src="app.js">
 </script>

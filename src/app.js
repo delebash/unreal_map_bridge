@@ -1,15 +1,21 @@
-// <reference path='https://api.tiles.mapbox.com/mapbox-gl-js/v1.8.0/mapbox-gl.js' />
-
 'use strict'
 
+import mapboxgl from 'mapbox-gl';
+import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
+import * as maptilersdk from "@maptiler/sdk";
+import {GeocodingControl} from "@maptiler/geocoding-control/maptilersdk";
+import "@maptiler/sdk/dist/maptiler-sdk.css";
+import "@maptiler/geocoding-control/style.css";
+import * as turf from '@turf/turf'
 import idbKeyval from "./javascript/idb-keyval-iife.js";
 import fileUtils from "./javascript/fs-helpers.js"
-import tile from './javascript/tiles.js'
+import mapUtils from './javascript/map-utils.js'
+import {combineTilesJimp} from "./javascript/combine-tiles-jimp.js";
+import {setIntervalAsync, clearIntervalAsync} from 'set-interval-async';
+import imageUtils from "./javascript/image-utiles.js";
 
 
 const defaultWaterdepth = 50
-const setIntervalAsync = SetIntervalAsync.setIntervalAsync;
-const clearIntervalAsync = SetIntervalAsync.clearIntervalAsync;
 const pbElement = document.getElementById('progress');
 const previewImage = document.getElementById("previewImage");
 const progressMsg = document.getElementById('progressMsg')
@@ -19,20 +25,20 @@ const progressArea = document.getElementById('progressArea');
 
 const modal = document.getElementById("modal");
 const modalMsg = document.getElementById("modalMsg");
+const zoom = document.getElementById("zoom");
 
-
+let distance, urlKey, urlType, map, geocoder
+let promiseArray = [];
 let mapSize = 50;
 let vmapSize = mapSize * 1.05;
 let tileSize = mapSize / 9;
-let timer, ticks = 0, prev_lng, prev_lat, mapCanvas, cache, tilesUrl
+let timer, ticks = 0, prev_lng, prev_lat, mapCanvas
 let panels = document.getElementsByClassName('panel');
 let icons = document.getElementsByClassName('icon');
 let iconClass = [];
 
 let userSettings = await loadUserSettings()
 let grid = await loadSettings();
-let Gdal = await initGdalJs({path: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.4.0/dist/package', useWorker: false})
-let map, geocoder
 
 for (let i = 0; i < panels.length; i++) {
     iconClass.push(icons[i].className);
@@ -42,39 +48,74 @@ initMap()
 
 function initMap() {
     try {
+
+        console.log('init')
+        let geoCtrl = document.getElementsByClassName('mapboxgl-ctrl-geocoder')
+
         if (scope.apiKey.length > 0) {
-// MapBox API token, temperate email for dev
-//mapboxgl.accessToken = 'pk.eyJ1IjoiZGVsZWJhc2giLCJhIjoiY2t1YWxkODF0MGh2NjJxcXA4czBpdXlmdyJ9.D_ngzR7j4vU1CILtpNLg4Q'
-            // mapboxgl.accessToken = 'pk.eyJ1IjoiYmVydGRldm4iLCJhIjoiY2t2dXF1ZGhyMHlteTJ2bzJjZzE3M24xOCJ9.J5skknTRyh-6RoDWD4kw2w';
-            mapboxgl.accessToken = scope.apiKey
+            if (scope.serverType === 'mapbox') {
+                mapboxgl.accessToken = scope.apiKey
+                urlKey = 'access_token='
+                urlType = '@2x.png'
+                map = new mapboxgl.Map({
+                    container: 'map',                               // Specify the container ID
+                    // style: 'mapbox://styles/mapbox/outdoors-v11',   // Specify which map style to use
+                    style: scope.stylesUrl + 'outdoors-v11',  // Specify which map style to use
+                    center: [grid.lng, grid.lat],                   // Specify the starting position [lng, lat]
+                    zoom: grid.zoom,                                // Specify the starting zoom
+                    preserveDrawingBuffer: true
+                });
 
-            map = new mapboxgl.Map({
-                container: 'map',                               // Specify the container ID
-                // style: 'mapbox://styles/mapbox/outdoors-v11',   // Specify which map style to use
-                style: scope.stylesUrl + 'streets-v11',  // Specify which map style to use
-                center: [grid.lng, grid.lat],                   // Specify the starting position [lng, lat]
-                zoom: grid.zoom,                                // Specify the starting zoom
-                preserveDrawingBuffer: true
-            });
+                geocoder = new MapboxGeocoder({
+                    accessToken: mapboxgl.accessToken, mapboxgl: mapboxgl, marker: false
+                });
+                //Add control once even on reload
+                if (geoCtrl.length === 0) {
+                    document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
+                }
+            } else {
+                maptilersdk.config.apiKey = scope.apiKey;
+                urlKey = 'key='
+                urlType = '.webp'
+                map = new maptilersdk.Map({
+                    container: 'map', // container's id or the HTML element to render the map
+                    style: maptilersdk.MapStyle.OUTDOOR,
+                    center: [grid.lng, grid.lat],
+                    zoom: grid.zoom,                                // Specify the starting zoom
+                    preserveDrawingBuffer: true,
+                    navigationControl: false,
+                    geolocateControl: false,
+                });
 
-            geocoder = new MapboxGeocoder({
-                accessToken: mapboxgl.accessToken, mapboxgl: mapboxgl, marker: false
-            });
+                geocoder = new GeocodingControl({
+                    apiKey: maptilersdk.config.apiKey,
+                    class: 'geocoder',
+                    showResultsWhileTyping: true,
+                    placeholder: 'Try: Lng , Lat or Name',
 
-            //Add control once even on reload
-            let geoCtrl = document.getElementsByClassName('mapboxgl-ctrl-geocoder')
-            if (geoCtrl.length === 0) {
-                document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
+                });
+                document.getElementById('outdoors-v11').check = true
+                //Add control once even on reload
+                if (geoCtrl.length === 0) {
+                    document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
+                }
             }
 
+            map.on('zoomend', () => {
+                let z = Math.round(map.getZoom())
+                zoom.innerHTML = z.toString()
+                // let tiles = getTileCount(z)
+                // let count = tiles.length
+            });
             map.on('error', function (e) {
                 toggleModal('open', `Mapbox error: ${e.error.message} Please check your api key and other map settings in the settings panel`)
                 console.log(e)
                 togglePanel(4)
             })
             map.on('load', function () {
+                console.log('load')
                 mapCanvas = map.getCanvasContainer();
-
+                zoom.innerHTML = Math.round(grid.zoom).toString()
                 map.getCanvas().addEventListener('wheel', (e) => {
                     const scrollDirection = e.deltaY < 0 ? 1 : -1;
 
@@ -100,10 +141,9 @@ function initMap() {
                 scope.mapSize = mapSize;
                 scope.baseLevel = 0;
                 scope.heightScale = 100;
-                caches.open('tiles').then((data) => cache = data);
             });
 
-            map.on('style.load', function () {
+            map.on('style.load', function (e) {
                 addSource();
                 addLayer();
                 setMouse();
@@ -116,6 +156,7 @@ function initMap() {
                 setGrid(grid.lng, grid.lat, vmapSize);
                 map.panTo(new mapboxgl.LngLat(grid.lng, grid.lat));
                 saveSettings();
+                zoom.innerHTML = Math.round(grid.zoom).toString()
                 updateInfopanel();
             });
 
@@ -127,15 +168,28 @@ function initMap() {
                 saveSettings();
             });
 
-            geocoder.on('result', function (query) {
-                grid.lng = query.result.center[0];
-                grid.lat = query.result.center[1];
+            if (scope.serverType === 'mapbox') {
+                geocoder.on('result', function (query) {
+                    grid.lng = query.result.center[0];
+                    grid.lat = query.result.center[1];
 
-                setGrid(grid.lng, grid.lat, vmapSize);
-                map.panTo(new mapboxgl.LngLat(grid.lng, grid.lat));
-                saveSettings();
-                updateInfopanel();
-            });
+                    setGrid(grid.lng, grid.lat, vmapSize);
+                    map.panTo(new mapboxgl.LngLat(grid.lng, grid.lat));
+                    saveSettings();
+                    updateInfopanel();
+                });
+            } else {
+                // geocoder.addEventListener("pick", (e) => {
+                //    //console.log(e)
+                //     // grid.lng = query.result.center[0];
+                //     // grid.lat = query.result.center[1];
+                //     //
+                //     // setGrid(grid.lng, grid.lat, vmapSize);
+                //     // map.panTo(new mapboxgl.LngLat(grid.lng, grid.lat));
+                //     // saveSettings();
+                //     // updateInfopanel()
+                // });
+            }
         } else {
             toggleModal('open', `Please check your api key and other map settings in the settings panel`)
             togglePanel(4)
@@ -172,20 +226,15 @@ function addSource() {
         'type': 'geojson', 'data': getGrid(grid.lng, grid.lat, vmapSize / 9)
     });
 
-    map.addSource('mapbox-streets', {
-        type: 'vector', url: 'mapbox://mapbox.mapbox-streets-v8'
-    });
-
-    // map.addSource('contours', {
-    //     type: 'vector',
-    //     url: 'mapbox://mapbox.mapbox-terrain-v2'
+    // map.addSource('mapbox-streets', {
+    //     type: 'vector', url: 'mapbox://mapbox.mapbox-streets-v8'
     // });
 }
 
 function addLayer() {
     // Add styles to the map
     map.addLayer({
-        'id': 'gridlines', 'type': 'fill', 'source': 'grid', 'paint': {
+        'id': 'grid', 'type': 'fill', 'source': 'grid', 'paint': {
             'fill-color': 'blue', 'fill-outline-color': 'blue', 'fill-opacity': 0.25
         }
     });
@@ -195,33 +244,6 @@ function addLayer() {
             'fill-color': 'blue', 'fill-outline-color': 'blue', 'fill-opacity': 0.3
         }
     });
-    //
-    // map.addLayer({
-    //     'id': 'contours',
-    //     'type': 'line',
-    //     'source': 'contours',
-    //     'source-layer': 'contour',
-    //     'layout': {
-    //         'visibility': 'visible',
-    //         'line-join': 'round',
-    //         'line-cap': 'round'
-    //     },
-    //     'paint': {
-    //         'line-color': '#877b59',
-    //         'line-width': 0.25
-    //     }
-    // });
-
-    // map.addLayer({
-    //     'id': 'water-streets',
-    //     'source': 'mapbox-streets',
-    //     'source-layer': 'water',
-    //     'type': 'fill',
-    //     'paint': {
-    //         'fill-color': 'rgba(66,100,225, 0.3)',
-    //         'fill-outline-color': 'rgba(33,33,255, 1)'
-    //     }
-    // });
 }
 
 
@@ -231,7 +253,7 @@ function setMouse() {
     });
 
     map.on('mouseleave', 'startsquare', function () {
-        ;mapCanvas.style.cursor = '';
+        mapCanvas.style.cursor = '';
         saveSettings();
     });
 
@@ -250,14 +272,6 @@ function setMouse() {
         map.on('touchmove', onMove);
         map.once('touchend', onUp);
     });
-}
-
-function deleteCaches() {
-    if (confirm('Delete the caches.\nIs that okay?')) {
-        caches.delete('tiles').then(() => {
-            caches.open('tiles').then((data) => cache = data);
-        });
-    }
 }
 
 function setLngLat(mode) {
@@ -316,7 +330,10 @@ async function loadUserSettings() {
         scope.downloadDirectory = ''
     }
 
-    scope.serverType = userSettings.serverType || 'mapbox'
+    if (!scope.serverType) {
+        scope.serverType = userSettings.serverType || 'mapbox'
+    }
+
     if (scope.serverType === 'mapbox') {
         scope.apiKey = userSettings.mapboxApiKey || ''
         scope.terrianUrl = userSettings.mapboxTerrianUrl || 'https://api.mapbox.com/v4/mapbox.terrain-rgb/'
@@ -325,12 +342,17 @@ async function loadUserSettings() {
         scope.satelliteMapUrl = userSettings.mapboxSatelliteMapUrl || 'https://api.mapbox.com/v4/mapbox.satellite/'
         scope.mapUrl = userSettings.mapboxMapUrl || ''
     } else {
-        scope.apiKey = userSettings.mapTilerApiKey || ''
+        scope.apiKey = userSettings.maptilerApiKey || ''
+        scope.terrianUrl = userSettings.maptilerTerrianUrl || 'https://api.maptiler.com/tiles/terrain-rgb-v2/'
+        scope.stylesUrl = userSettings.maptilerStylesUrl || 'https://api.maptiler.com/maps/outdoor/style.json'
+        scope.weightMapUrl = userSettings.maptilerWeightMapUrl || ''
+        scope.satelliteMapUrl = userSettings.maptilerSatelliteMapUrl || 'https://api.maptiler.com/tiles/satellite-v2'
+        scope.mapUrl = userSettings.maptilerMapUrl || ''
     }
     return userSettings
 }
 
-function saveUserSettings() {
+async function saveUserSettings() {
     userSettings.serverType = scope.serverType
     if (scope.serverType === 'mapbox') {
         userSettings.mapboxApiKey = scope.apiKey
@@ -339,11 +361,17 @@ function saveUserSettings() {
         userSettings.mapboxWeightMapUrl = scope.weightMapUrl
         userSettings.mapboxSatelliteMapUrl = scope.satelliteMapUrl
         userSettings.mapboxMapUrl = scope.mapUrl
-
     } else {
-        userSettings.mapTilerApiKey = scope.apiKey
+        userSettings.maptilerApiKey = scope.apiKey
+        userSettings.maptilerTerrianUrl = scope.terrianUrl
+        userSettings.maptilerStylesUrl = scope.stylesUrl
+        userSettings.maptilerWeightMapUrl = scope.weightMapUrl
+        userSettings.maptilerSatelliteMapUrl = scope.satelliteMapUrl
+        userSettings.maptilerMapUrl = scope.mapUrl
     }
     idbKeyval.set('userSettings', userSettings)
+    await loadUserSettings()
+    map.remove();
     initMap()
     togglePanel(4)
 }
@@ -373,13 +401,6 @@ function saveSettings() {
     idbKeyval.set('grid', grid);
 }
 
-function Create2DArray(rows, def = null) {
-    let arr = new Array(rows);
-    for (let i = 0; i < rows; i++) {
-        arr[i] = new Array(rows).fill(def);
-    }
-    return arr;
-}
 
 function togglePanel(index) {
     let isOpens = [];
@@ -404,11 +425,20 @@ function togglePanel(index) {
             break;
         case 2:
             if (!isOpens[2]) {
-                let styleName = map.getStyle().metadata['mapbox:origin'];
-                if (!(styleName)) {
-                    styleName = 'satellite-v9';
+                let styleName, objStyle
+                if (scope.serverType === 'mapbox') {
+                    styleName = map.getStyle().metadata['mapbox:origin'];
+                } else {
+                    styleName = map.getStyle().name
+                    objStyle = mapUtils.convertMapboxMaptilerStyles('maptiler', styleName.toUpperCase())
+                    if (objStyle.length === 0) {
+                        objStyle = mapUtils.convertMapboxMaptilerStyles('maptilerAltName', styleName)
+                    }
+                    if (objStyle.length > 0) {
+                        styleName = objStyle[0].mapbox
+                        document.getElementById(styleName).checked = true;
+                    }
                 }
-                document.getElementById(styleName).checked = true;
             }
             break;
         case 3:
@@ -420,25 +450,6 @@ function togglePanel(index) {
     }
 }
 
-function calcMinMaxHeight(heightmap) {
-    const maxY = heightmap.length;
-    const maxX = heightmap[0].length;
-
-    const heights = {min: 100000, max: -100000}
-
-    for (let y = 0; y < maxY; y++) {
-        for (let x = 0; x < maxX; x++) {
-            let h = heightmap[y][x];
-            if (h > heights.max) heights.max = h;
-            if (h < heights.min) heights.min = h;
-        }
-    }
-
-    heights.min = heights.min / 10;
-    heights.max = heights.max / 10;
-
-    return heights;
-}
 
 function updateInfopanel() {
     let rhs = 17.28 / mapSize * 100;
@@ -474,7 +485,7 @@ function changeMapsize(el) {
 
 async function setBaseLevel() {
     if (grid.minHeight === null) {
-        await getTiles();
+        await getHeightmap();
         scope.baseLevel = grid.minHeight;
     } else {
         scope.baseLevel = grid.minHeight;
@@ -484,7 +495,7 @@ async function setBaseLevel() {
 
 async function setHeightScale() {
     if (grid.maxHeight === null) {
-        await getTiles();
+        await getHeightmap();
         scope.heightScale = Math.min(250, Math.floor((1024 - scope.waterDepth) / (grid.maxHeight - scope.baseLevel) * 100));
     } else {
         scope.heightScale = Math.min(250, Math.floor((1024 - scope.waterDepth) / (grid.maxHeight - scope.baseLevel) * 100));
@@ -500,156 +511,24 @@ function incPb(el, value = 1) {
         el.value = v;
     }
 }
-async function getTiles2() {
-    return new Promise(async (resolve, reject) => {
 
-        // get the extent of the current map
-        // in heightmap, each pixel is treated as vertex data, and 1081px represents 1080 faces
-        // therefore, "1px = 16m" when the map size is 17.28km
-        let extent = getExtent(grid.lng, grid.lat, mapSize / 1080 * 1081);
-
-        // zoom is 14 in principle
-        let zoom = 14;
-
-        // get a tile that covers the top left and bottom right (for the tile count calculation)
-        let x = tile.long2tile(extent.topleft[0], zoom);
-        let y = tile.lat2tile(extent.topleft[1], zoom);
-        let x2 = tile.long2tile(extent.bottomright[0], zoom);
-        let y2 = tile.lat2tile(extent.bottomright[1], zoom);
-
-        // get the required tile count in Zoom 13
-        let tileCnt = Math.max(x2 - x + 1, y2 - y + 1);
-
-        // fixed in high latitudes: adjusted the tile count to 6 or less
-        // because Terrain RGB tile distance depends on latitude
-        // don't need too many tiles
-        if (tileCnt > 6) {
-            let z = zoom;
-            let tx, ty, tx2, ty2, tc;
-            do {
-                z--;
-                tx = tile.long2tile(extent.topleft[0], z);
-                ty = tile.lat2tile(extent.topleft[1], z);
-                tx2 = tile.long2tile(extent.bottomright[0], z);
-                ty2 = tile.lat2tile(extent.bottomright[1], z);
-                tc = Math.max(tx2 - tx + 1, ty2 - ty + 1);
-
-            } while (tc > 6);
-            // reflect the fixed result
-            x = tx;
-            y = ty;
-            zoom = z;
-            tileCnt = tc;
-        }
-        document.getElementById('zoomlevel').innerHTML = zoom
-        let tileLng = tile.tile2long(x, zoom);
-        let tileLat = tile.tile2lat(y, zoom);
-
-        let tileLng2 = tile.tile2long(x + tileCnt, zoom);
-        let tileLat2 = tile.tile2lat(y + tileCnt, zoom);
-
-        // get the length of one side of the tiles extent
-        let distance = turf.distance(turf.point([tileLng, tileLat]), turf.point([tileLng2, tileLat2]), {units: 'kilometers'}) / Math.SQRT2;
-
-        // create the tiles empty array
-        let tiles = Create2DArray(tileCnt);
-        const promiseArray = [];
-        // download the tiles
-        for (let i = 0; i < tileCnt; i++) {
-            for (let j = 0; j < tileCnt; j++) {
-                let url = tilesUrl + zoom + '/' + (x + j) + '/' + (y + i) + '@2x.pngraw?access_token=' + mapboxgl.accessToken;
-                let woQUrl = tilesUrl + zoom + '/' + (x + j) + '/' + (y + i) + '@2x.pngraw';
-                promiseArray.push(downloadPngToTile2(url, woQUrl).then((png) => tiles[i][j] = png));
+function setMapStyle(el) {
+    const layerId = el.id;
+    if (scope.serverType === 'mapbox') {
+        map.setStyle(scope.stylesUrl + layerId);
+    } else {
+        let objStyle = mapUtils.convertMapboxMaptilerStyles('mapbox', layerId)
+        if (objStyle.length > 0) {
+            const style_code = objStyle[0].maptiler.split(".");
+            let style
+            if (style_code.length === 2) {
+                style = maptilersdk.MapStyle[style_code[0]][style_code[1]]
+            } else {
+                style = maptilersdk.MapStyle[style_code[0]]
             }
+            map.setStyle(style, {diff: objStyle[0].diff})
         }
-
-        await Promise.all(promiseArray);
-       // console.log(tiles)
-       // let heightmap = toHeightmap2(tiles, distance);
-
-        // let heights = calcMinMaxHeight(heightmap);
-        // grid.minHeight = heights.min;
-        // grid.maxHeight = heights.max;
-        // console.log('complete in ', ticks * 10, ' ms');
-        // prev_lng = document.getElementById('lng').innerHTML
-        // prev_lat = document.getElementById('lat').innerHTML
-        tiles ? resolve(tiles) : reject('timout');
-    });
-}
-async function getTiles() {
-    return new Promise(async (resolve, reject) => {
-
-        // get the extent of the current map
-        // in heightmap, each pixel is treated as vertex data, and 1081px represents 1080 faces
-        // therefore, "1px = 16m" when the map size is 17.28km
-        let extent = getExtent(grid.lng, grid.lat, mapSize / 1080 * 1081);
-
-        // zoom is 14 in principle
-        let zoom = 14;
-
-        // get a tile that covers the top left and bottom right (for the tile count calculation)
-        let x = tile.long2tile(extent.topleft[0], zoom);
-        let y = tile.lat2tile(extent.topleft[1], zoom);
-        let x2 = tile.long2tile(extent.bottomright[0], zoom);
-        let y2 = tile.lat2tile(extent.bottomright[1], zoom);
-
-        // get the required tile count in Zoom 13
-        let tileCnt = Math.max(x2 - x + 1, y2 - y + 1);
-
-        // fixed in high latitudes: adjusted the tile count to 6 or less
-        // because Terrain RGB tile distance depends on latitude
-        // don't need too many tiles
-        if (tileCnt > 6) {
-            let z = zoom;
-            let tx, ty, tx2, ty2, tc;
-            do {
-                z--;
-                tx = tile.long2tile(extent.topleft[0], z);
-                ty = tile.lat2tile(extent.topleft[1], z);
-                tx2 = tile.long2tile(extent.bottomright[0], z);
-                ty2 = tile.lat2tile(extent.bottomright[1], z);
-                tc = Math.max(tx2 - tx + 1, ty2 - ty + 1);
-
-            } while (tc > 6);
-            // reflect the fixed result
-            x = tx;
-            y = ty;
-            zoom = z;
-            tileCnt = tc;
-        }
-        document.getElementById('zoomlevel').innerHTML = zoom
-        let tileLng = tile.tile2long(x, zoom);
-        let tileLat = tile.tile2lat(y, zoom);
-
-        let tileLng2 = tile.tile2long(x + tileCnt, zoom);
-        let tileLat2 = tile.tile2lat(y + tileCnt, zoom);
-
-        // get the length of one side of the tiles extent
-        let distance = turf.distance(turf.point([tileLng, tileLat]), turf.point([tileLng2, tileLat2]), {units: 'kilometers'}) / Math.SQRT2;
-
-        // create the tiles empty array
-        let tiles = Create2DArray(tileCnt);
-        const promiseArray = [];
-        // download the tiles
-        for (let i = 0; i < tileCnt; i++) {
-            for (let j = 0; j < tileCnt; j++) {
-                let url = tilesUrl + zoom + '/' + (x + j) + '/' + (y + i) + '@2x.pngraw?access_token=' + mapboxgl.accessToken;
-                let woQUrl = tilesUrl + zoom + '/' + (x + j) + '/' + (y + i) + '@2x.pngraw';
-                promiseArray.push(downloadPngToTile(url, woQUrl).then((png) => tiles[i][j] = png));
-            }
-        }
-
-        await Promise.all(promiseArray);
-        let heightmap = toHeightmap(tiles, distance);
-
-        let heights = calcMinMaxHeight(heightmap);
-        grid.minHeight = heights.min;
-        grid.maxHeight = heights.max;
-        console.log('complete in ', ticks * 10, ' ms');
-        prev_lng = document.getElementById('lng').innerHTML
-        prev_lat = document.getElementById('lat').innerHTML
-        heightmap ? resolve(heightmap) : reject('timout');
-    });
+    }
 }
 
 
@@ -685,14 +564,107 @@ function stopFakeTimer() {
     overlayOff()
 }
 
+
+async function getHeightmap(z = 14, override = false) {
+    return new Promise(async (resolve, reject) => {
+
+        let obj = await downloadTiles(scope.terrianUrl, true, z, override)
+        let heightmap = mapUtils.toHeightmap(obj.tiles, obj.distance, mapSize);
+        let heights = mapUtils.calcMinMaxHeight(heightmap);
+        grid.minHeight = heights.min;
+        grid.maxHeight = heights.max;
+        prev_lng = document.getElementById('lng').innerHTML
+        prev_lat = document.getElementById('lat').innerHTML
+        heightmap ? resolve(heightmap) : reject('timout');
+    })
+}
+
+async function downloadTiles(tilesUrl, isHeightmap = true, z = 14, override = false) {
+    return new Promise(async (resolve, reject) => {
+        let extent = getExtent(grid.lng, grid.lat, mapSize / 1080 * 1081);
+
+        let objTileCnt = mapUtils.getTileCountAdjusted(z, extent, override)
+        let x = objTileCnt.x
+        let y = objTileCnt.y
+        let zoom = objTileCnt.zoom
+        let tileCnt = objTileCnt.tileCnt
+        let objTiles = {}
+
+
+        document.getElementById('satzoomval').value = zoom
+        document.getElementById('tilecount').innerHTML = mapUtils.getTileCount(zoom, extent).length.toString()
+
+
+        let tileLng = mapUtils.tile2long(x, zoom);
+        let tileLat = mapUtils.tile2lat(y, zoom);
+
+        let tileLng2 = mapUtils.tile2long(x + tileCnt, zoom);
+        let tileLat2 = mapUtils.tile2lat(y + tileCnt, zoom);
+        let tiles
+        // get the length of one side of the tiles extent
+        distance = turf.distance(turf.point([tileLng, tileLat]), turf.point([tileLng2, tileLat2]), {units: 'kilometers'}) / Math.SQRT2;
+        if (isHeightmap === true) {
+            // create the tiles empty array
+            tiles = mapUtils.Create2DArray(tileCnt);
+        } else {
+            tiles = []
+        }
+        promiseArray = [];
+        let count = 0
+        progress(count);
+        // download the tiles
+        for (let i = 0; i < tileCnt; i++) {
+            for (let j = 0; j < tileCnt; j++) {
+                let url = tilesUrl + zoom + '/' + (x + j) + '/' + (y + i) + urlType + '?' + urlKey + scope.apiKey;
+                let woQUrl = tilesUrl + zoom + '/' + (x + j) + '/' + (y + i) + urlType;
+                if (isHeightmap === true) {
+                    promiseArray.push(mapUtils.downloadToTile(true, url, woQUrl).then((png) => {
+                        tiles[i][j] = png
+                        progress(count++);
+                    }));
+                } else {
+                    promiseArray.push(mapUtils.downloadToTile(false, url, woQUrl, (x + j), (y + i)).then((tile) => {
+                        tiles.push(tile)
+                        progress(count++);
+                    }));
+                }
+            }
+        }
+        await Promise.all(promiseArray);
+        objTiles.tiles = tiles
+        objTiles.distance = distance
+        objTiles ? resolve(objTiles) : reject('timout');
+    });
+}
+
+function progress(count) {
+    let ele = document.getElementById('downloadCount')
+    ele.innerHTML = `downloading ${count} of ${promiseArray.length}`
+    // console.log(count / promiseArray.length);
+}
+
+function setUrlInfo(val) {
+    if (scope.serverType === 'mapbox') {
+        if (val === 'height') {
+            urlType = '@2x.png'
+        }
+    } else {
+        if (val === 'height') {
+            urlType = '.webp'
+        } else {
+            urlType = '.jpg'
+        }
+    }
+}
+
 async function previewHeightmap() {
     startTimer('Processing heightmap')
     let convertedHeightmap, png, heightmap, imgUrl;
+    setUrlInfo('height')
     let autoCalc = document.getElementById("autoCalcBaseHeight").checked
-    tilesUrl = scope.terrianUrl
-    heightmap = await getTiles()
+    heightmap = await getHeightmap()
     if (autoCalc === true) {
-        autoCalculateBaseHeight()
+        await autoCalculateBaseHeight()
     }
     convertedHeightmap = convertHeightmap(heightmap);
     png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
@@ -702,8 +674,7 @@ async function previewHeightmap() {
     stopTimer()
 }
 
-async function exportMap(buff) {
-
+async function exportMap() {
     let convertedHeightmap, png, heightmap;
     let autoCalc = document.getElementById("autoCalcBaseHeight").checked
     let weightmap = document.getElementById('weightmap').checked
@@ -712,25 +683,32 @@ async function exportMap(buff) {
     let worldpartiongridsize = document.getElementById('worldpartiongridsize').value
     let heightmapblurradius = document.getElementById('blurradius').value
     let weightmapblurradius = document.getElementById('weightmapblurradius').value
+    let sealevel = document.getElementById('sealevel').checked
+    let flipx = document.getElementById('flipx').checked
+    let flipy = document.getElementById('flipy').checked
+    let override = document.getElementById('satellitezoom').checked
+    let eleZoom = document.getElementById('satzoomval').value
+    let landscapeSize = scope.landscapeSize.toString()
     let exportBuff
-    tilesUrl = scope.terrianUrl
+
     if (scope.exportType === 'unrealHeightmap' || scope.exportType === 'unrealSend') {
-        // startTimer('Processing heightmap')
-        // heightmap = await getTiles()
-        // if (autoCalc === true) {
-        //     autoCalculateBaseHeight()
-        // }
-        // convertedHeightmap = convertHeightmap(heightmap);
-        // png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
-        // updateInfopanel()
-        // stopTimer()
-        //
+        startTimer('Processing heightmap')
+        setUrlInfo('height')
+        heightmap = await getHeightmap()
+        if (autoCalc === true) {
+            await autoCalculateBaseHeight()
+        }
+        convertedHeightmap = convertHeightmap(heightmap);
+        png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
+        updateInfopanel()
+        stopTimer()
+
         // //Resample rescale
         // //Timer does not work with gdal so fake it
-        // startFakeTimer('Resizing and adjusting image')
-        // exportBuff = await manipulateImage(png, heightmapblurradius)
-        // download('heightmap.png', exportBuff, false);
-        // stopFakeTimer()
+        startFakeTimer('Resizing and adjusting image')
+        exportBuff = await imageUtils.manipulateImage(png, 0, sealevel, flipx, flipy, landscapeSize, true)
+        download('heightmap.png', exportBuff, false);
+        stopFakeTimer()
 
     } else if (scope.exportType === 'geojsonOnly') {
 
@@ -740,25 +718,25 @@ async function exportMap(buff) {
 
     // //Process satellite
     if (satellite === true) {
-        startTimer('Downloading satellite')
-        tilesUrl = scope.satelliteMapUrl
-        let data = await getTiles2()
-        let t = data[0][0].data
-       // console.log(t)
-
-        png = UPNG.encodeLL([t], 512, 512);
-       console.log(png)
-        //console.log(til)
-        //let convertedSatmap = convertSattmap(heightmap);
-        //png = tile[0][0];
-        //console.log(png)
-
-       // download('sat.png', png, false);
-
-        //download sat
-        //exportBuff = await manipulateImage(buff, 0)
+        startTimer('Processing satellite')
+        let zoom
+        if (eleZoom.length > 0 && override === true) {
+            zoom = eleZoom
+        }
+        setUrlInfo('sat')
+        let objTiles = await downloadTiles(scope.satelliteMapUrl, false, zoom, override)
         stopTimer()
+        startFakeTimer('Combining images')
+        const size = 512
+        let imageBuffer = await combineTilesJimp(objTiles.tiles, size, size)
+        //exportBuff = await manipulateImage(imageBuffer, 0,sealevel,flipx,flipy,landscapeSize,satellite,false)
+        download('sat.png', imageBuffer, false);
+        stopFakeTimer()
     }
+
+    //await idbKeyval.set('rgb_image_buffer', imageBuffer)
+    // await fileUtils.writeFileToDisk(dirHandle, tile_info.rgbFileName, imageBuffer)
+
     // //Process Weightmap
     // if (weightmap === true) {
     //     startTimer('Weightmap')
@@ -768,208 +746,19 @@ async function exportMap(buff) {
     // }
 }
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function manipulateImage(buff, blurradius) {
-    //  await sleep('3000')
-    let ZrangeSeaLevel = '32767'
-    let maxPngValue = '65535'
-    let minPngValue = '0'
-    let resizeMethod = 'bilinear'
-    let translateOptions = []
-
-    let sealevel = document.getElementById('sealevel').checked
-    let flipx = document.getElementById('flipx').checked
-    let flipy = document.getElementById('flipy').checked
-    let exportBuffer
-
-    let landscapeSize = scope.landscapeSize.toString()
-
-    let heightimage = await IJS.Image.load(buff);
-
-    //Manipulate image
-    if (flipx === true) {
-        heightimage = await heightimage.flipX()
-    }
-
-    if (flipy === true) {
-        heightimage = await heightimage.flipY()
-    }
-    if (blurradius > 0) {
-        heightimage = await heightimage.blurFilter(blurradius)
-    }
-    exportBuffer = await heightimage.toBuffer()
-
-    // Resample and scale
-    if (landscapeSize !== '0' || landscapeSize !== '1081') {
-        if (sealevel) {
-            translateOptions = ['-ot', 'UInt16', '-of', 'PNG', '-scale', minPngValue, maxPngValue, ZrangeSeaLevel, maxPngValue, '-outsize', landscapeSize, landscapeSize, '-r', resizeMethod];
-        } else {
-            translateOptions = ['-ot', 'UInt16', '-of', 'PNG', '-outsize', landscapeSize, landscapeSize, '-r', resizeMethod];
-        }
-        exportBuffer = await processGdal(exportBuffer, 'heightmap.png', translateOptions, "png");
-    }
-    return exportBuffer
-}
-
-async function processGdal(buff, filename, translateOptions, file_type) {
-    let blob = new Blob([buff], {type: 'image/' + file_type})
-    const file = new File([blob], filename);
-    const result = await Gdal.open(file);
-    const dataset = result.datasets[0];
-    const filePath = await Gdal.gdal_translate(dataset, translateOptions);
-    const fileBytes = await Gdal.getFileBytes(filePath);
-    Gdal.close(dataset);
-    return fileBytes;
-}
-
-// function isDownloadComplete(tiles) {
-//     let tileNum = tiles.length;
-//     for (let i = 0; i < tileNum; i++) {
-//         for (let j = 0; j < tileNum; j++) {
-//             if (!(tiles[i][j])) return false;
-//         }
-//     }
-//     return true;
-// }
 
 async function autoCalculateBaseHeight() {
     await setBaseLevel()
     await setHeightScale()
 }
-function toHeightmap2(tiles, distance) {
 
-    let tileNum = tiles.length;
-    let srcMap = Create2DArray(tileNum * 512, 0);
-
-    // in heightmap, each pixel is treated as vertex data, and 1081px represents 1080 faces
-    // therefore, "1px = 16m" when the map size is 17.28km
-    let heightmap = Create2DArray(Math.ceil(1080 * (distance / mapSize)), 0);
-
-    //  let heightmap = Create2DArray(Math.ceil(1080), 0);
-    let smSize = srcMap.length;
-    let hmSize = heightmap.length;
-
-    let r = (hmSize - 1) / (smSize - 1);
-
-    for (let i = 0; i < tileNum; i++) {
-        for (let j = 0; j < tileNum; j++) {
-            let tile = new Uint8Array(UPNG.toRGBA8(tiles[i][j])[0]);
-            for (let y = 0; y < 512; y++) {
-                for (let x = 0; x < 512; x++) {
-                    let tileIndex = y * 512 * 4 + x * 4;
-                    // resolution 0.1 meters
-                    srcMap[i * 512 + y][j * 512 + x] = -100000 + ((tile[tileIndex] * 256 * 256 + tile[tileIndex + 1] * 256 + tile[tileIndex + 2]));
-                }
-            }
-        }
-    }
-
-    // bilinear interpolation
-    let hmIndex = Array(hmSize);
-
-    for (let i = 0; i < hmSize; i++) {
-        hmIndex[i] = i / r
-    }
-    for (let i = 0; i < (hmSize - 1); i++) {
-        for (let j = 0; j < (hmSize - 1); j++) {
-            let y0 = Math.floor(hmIndex[i]);
-            let x0 = Math.floor(hmIndex[j]);
-            let y1 = y0 + 1;
-            let x1 = x0 + 1;
-            let dy = hmIndex[i] - y0;
-            let dx = hmIndex[j] - x0;
-            heightmap[i][j] = Math.round((1 - dx) * (1 - dy) * srcMap[y0][x0] + dx * (1 - dy) * srcMap[y0][x1] + (1 - dx) * dy * srcMap[y1][x0] + dx * dy * srcMap[y1][x1]);
-        }
-    }
-    for (let i = 0; i < hmSize; i++) {
-        heightmap[i][hmSize - 1] = srcMap[i][hmSize - 1]
-    }
-    for (let j = 0; j < hmSize; j++) {
-        heightmap[hmSize - 1][j] = srcMap[hmSize - 1][j]
-    }
-
-    return heightmap;
-}
-
-function toHeightmap(tiles, distance) {
-
-    let tileNum = tiles.length;
-    let srcMap = Create2DArray(tileNum * 512, 0);
-
-    // in heightmap, each pixel is treated as vertex data, and 1081px represents 1080 faces
-    // therefore, "1px = 16m" when the map size is 17.28km
-    let heightmap = Create2DArray(Math.ceil(1080 * (distance / mapSize)), 0);
-
-    //  let heightmap = Create2DArray(Math.ceil(1080), 0);
-    let smSize = srcMap.length;
-    let hmSize = heightmap.length;
-
-    let r = (hmSize - 1) / (smSize - 1);
-
-    for (let i = 0; i < tileNum; i++) {
-        for (let j = 0; j < tileNum; j++) {
-            let tile = new Uint8Array(UPNG.toRGBA8(tiles[i][j])[0]);
-            for (let y = 0; y < 512; y++) {
-                for (let x = 0; x < 512; x++) {
-                    let tileIndex = y * 512 * 4 + x * 4;
-                    // resolution 0.1 meters
-                    srcMap[i * 512 + y][j * 512 + x] = -100000 + ((tile[tileIndex] * 256 * 256 + tile[tileIndex + 1] * 256 + tile[tileIndex + 2]));
-                }
-            }
-        }
-    }
-
-    // bilinear interpolation
-    let hmIndex = Array(hmSize);
-
-    for (let i = 0; i < hmSize; i++) {
-        hmIndex[i] = i / r
-    }
-    for (let i = 0; i < (hmSize - 1); i++) {
-        for (let j = 0; j < (hmSize - 1); j++) {
-            let y0 = Math.floor(hmIndex[i]);
-            let x0 = Math.floor(hmIndex[j]);
-            let y1 = y0 + 1;
-            let x1 = x0 + 1;
-            let dy = hmIndex[i] - y0;
-            let dx = hmIndex[j] - x0;
-            heightmap[i][j] = Math.round((1 - dx) * (1 - dy) * srcMap[y0][x0] + dx * (1 - dy) * srcMap[y0][x1] + (1 - dx) * dy * srcMap[y1][x0] + dx * dy * srcMap[y1][x1]);
-        }
-    }
-    for (let i = 0; i < hmSize; i++) {
-        heightmap[i][hmSize - 1] = srcMap[i][hmSize - 1]
-    }
-    for (let j = 0; j < hmSize; j++) {
-        heightmap[hmSize - 1][j] = srcMap[hmSize - 1][j]
-    }
-
-    return heightmap;
-}
-
-function setMapStyle(el) {
-    const layerId = el.id;
-    let styleName = map.getStyle().metadata['mapbox:origin'];
-    if (layerId !== 'weightmap') {
-        if (!(styleName)) {
-            styleName = 'satellite-v9';
-        }
-        if (layerId != styleName) {
-            map.setStyle(scope.stylesUrl + layerId);
-        }
-    } else {
-        map.setStyle(scope.weightMapUrl);
-    }
-}
 
 function convertHeightmap(heightmap_source) {
     const heightmapSize = 1081;
 
     // height has L/H byte order
     let heightmap = new Uint8ClampedArray(2 * heightmapSize * heightmapSize);
-    let workingmap = Create2DArray(heightmapSize, 0);
+    let workingmap = mapUtils.Create2DArray(heightmapSize, 0);
 
     // correct the waterDepth for the scaling.
     // in the final pass, it will be scaled back. Round to 1 decimal
@@ -1003,53 +792,6 @@ function convertHeightmap(heightmap_source) {
         }
     }
 
-
-    // log the correct bounding rect to the console
-    let bounds = getExtent(grid.lng, grid.lat, mapSize);
-    console.log(bounds.topleft[0], bounds.topleft[1], bounds.bottomright[0], bounds.bottomright[1]);
-
-    return heightmap;
-}
-function convertSattmap(heightmap_source) {
-    const heightmapSize = 1081;
-
-    // height has L/H byte order
-    let heightmap = new Uint8ClampedArray                   (2 * heightmapSize * heightmapSize);
-    let workingmap = Create2DArray(heightmapSize, 0);
-
-    // correct the waterDepth for the scaling.
-    // in the final pass, it will be scaled back. Round to 1 decimal
-    //  let waterDepth = Math.round(scope.waterDepth /  parseFloat(scope.heightScale) * 100 * 10) / 10;
-
-    // watermap: => normalized depth between 0 => deepest water, 1 => land
-
-    for (let y = 0; y < heightmapSize; y++) {
-        for (let x = 0; x < heightmapSize; x++) {
-            // stay with ints as long as possible
-            let height = (heightmap_source[y][x]);
-
-            // raise the land by the amount of water depth
-            // a height lower than baselevel is considered to be the below sea level and the height is set to 0
-            // water depth is unaffected by height scale
-            // the map is unscaled at this point, so high mountains above 1024 meter can be present
-           // let calcHeight = (height + Math.round(scope.waterDepth * 10)) / 10;
-            workingmap[y][x] = Math.max(0, height);
-
-            //convert to 16 bit hi/low 255
-            let h = Math.round(workingmap[y][x]);
-
-           // if (h > 65535) h = 65535;
-
-            // calculate index in image
-            let index = y * heightmapSize * 2 + x * 2;
-
-            // height used hi/low 16 bit
-            heightmap[index + 0] = h;
-            heightmap[index + 1] = h;
-        }
-    }
-
-
     // log the correct bounding rect to the console
     let bounds = getExtent(grid.lng, grid.lat, mapSize);
     console.log(bounds.topleft[0], bounds.topleft[1], bounds.bottomright[0], bounds.bottomright[1]);
@@ -1076,72 +818,6 @@ function download(filename, data, url = false) {
     // Remove anchor from body
     document.body.removeChild(a)
 }
-async function downloadPngToTile2(url, withoutQueryUrl = url) {
-    const cachedRes = await caches.match(url, {ignoreSearch: true});
-    if (cachedRes && cachedRes.ok) {
-        console.log('terrain-rgb: load from cache');
-        let pngData = await cachedRes.arrayBuffer();
-        let png = UPNG.decode(pngData);
-        return png;
-    } else {
-        console.log('terrain-rgb: load by fetch, cache downloaded file');
-        try {
-            const response = await fetch(url);
-            if (response.ok) {
-                let res = response.clone();
-                let pngData = await response.arrayBuffer();
-                let png = UPNG.decode(pngData);
-                cache.put(withoutQueryUrl, res);
-                return png;
-            } else {
-                throw new Error('download terrain-rgb error:', response.status);
-            }
-        } catch (e) {
-            console.log(e.message);
-        }
-    }
-}
-
-async function downloadPngToTile(url, withoutQueryUrl = url) {
-    const cachedRes = await caches.match(url, {ignoreSearch: true});
-    if (cachedRes && cachedRes.ok) {
-        console.log('terrain-rgb: load from cache');
-        let pngData = await cachedRes.arrayBuffer();
-        let png = UPNG.decode(pngData);
-        return png;
-    } else {
-        console.log('terrain-rgb: load by fetch, cache downloaded file');
-        try {
-            const response = await fetch(url);
-            if (response.ok) {
-                let res = response.clone();
-                let pngData = await response.arrayBuffer();
-                let png = UPNG.decode(pngData);
-                cache.put(withoutQueryUrl, res);
-                return png;
-            } else {
-                throw new Error('download terrain-rgb error:', response.status);
-            }
-        } catch (e) {
-            console.log(e.message);
-        }
-    }
-}
-
-
-// function getInfo(fileName) {
-//     return 'Heightmap name: ' + fileName + '\n' +
-//         '\n' +
-//         '/* Generated by height: Skylines online heightmap generator (https://cs.heightmap.skydark.pl) (https://github.com/sysoppl/height-Skylines-heightmap-generator) */\n' +
-//         '\n' +
-//         'Longitude: ' + grid.lng.toFixed(5) + '\n' +
-//         'Latitude: ' + grid.lat.toFixed(5) + '\n' +
-//         'Min Height: ' + grid.minHeight + '\n' +
-//         'Max Height: ' + grid.maxHeight + '\n' +
-//         'Water contours: ' + grid.waterContours + '\n' +
-//         'Height contours: ' + grid.heightContours + '\n' +
-//         'Zoom: ' + grid.zoom + '\n';
-// }
 
 function overlayOn() {
     document.getElementById("overlay").style.display = "block";
@@ -1166,14 +842,9 @@ function landscapeSizeChange(e) {
     scope.landscapeSize = e.value
 }
 
-function serverTypeChange(e) {
-    if (e.value === 'mapbox') {
-        scope.apiKey = userSettings.mapboxApiKey || ''
-    } else {
-        scope.apiKey = userSettings.mapTilerApiKey || ''
-
-    }
+async function serverTypeChange(e) {
     scope.serverType = e.value
+    await loadUserSettings()
 }
 
 async function openDirectory() {
@@ -1206,6 +877,13 @@ function toggleModal(mode, msg) {
     }
 }
 
+function overrideSatChange(zoom) {
+    let extent = getExtent(grid.lng, grid.lat, mapSize / 1080 * 1081);
+    let tiles = mapUtils.getTileCount(zoom, extent)
+    let count = tiles.length
+    document.getElementById('tilecount').innerHTML = count.toString()
+}
+
 window.toggleModal = toggleModal
 window.togglePanel = togglePanel
 window.openDirectory = openDirectory
@@ -1219,5 +897,6 @@ window.setLngLat = setLngLat
 window.zoomIn = zoomIn
 window.zoomOut = zoomOut
 window.exportTypeChange = exportTypeChange
-
+window.changeMapsize = changeMapsize
+window.overrideSatChange = overrideSatChange
 
