@@ -1,17 +1,17 @@
 import {Image} from "image-js";
 
-// let Gdal = initGdalJs({path: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.4.0/dist/package', useWorker: false})
+// import workerUrl from 'gdal3.js/dist/package/gdal3.js?url'
+// import dataUrl from 'gdal3.js/dist/package/gdal3WebAssembly.data?url'
+// import wasmUrl from 'gdal3.js/dist/package/gdal3WebAssembly.wasm?url'
+// import initGdalJs from 'gdal3.js';
+// const paths = {
+//     wasm: wasmUrl,
+//     data: dataUrl,
+//     js: workerUrl,
+// };
+// let Gdal = await initGdalJs({paths})
 
-import workerUrl from 'gdal3.js/dist/package/gdal3.js?url'
-import dataUrl from 'gdal3.js/dist/package/gdal3WebAssembly.data?url'
-import wasmUrl from 'gdal3.js/dist/package/gdal3WebAssembly.wasm?url'
-import initGdalJs from 'gdal3.js';
-const paths = {
-    wasm: wasmUrl,
-    data: dataUrl,
-    js: workerUrl,
-};
-let Gdal = await initGdalJs({paths})
+let Gdal = await initGdalJs({ path: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.4.0/dist/package', useWorker: false })
 
 async function manipulateImage(buff, blurradius, sealevel, flipx, flipy, landscapeSize, isHeightmap) {
     let ZrangeSeaLevel = '32767'

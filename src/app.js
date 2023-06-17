@@ -371,7 +371,7 @@ async function saveUserSettings() {
     }
     idbKeyval.set('userSettings', userSettings)
     await loadUserSettings()
-    if(map){
+    if (map) {
         map.remove();
     }
     initMap()
@@ -677,6 +677,11 @@ async function previewHeightmap() {
 }
 
 async function exportMap() {
+    let dirHandle = await userSettings.dirHandle
+    if (await fileUtils.verifyPermission(dirHandle, true) === false) {
+        console.error(`User did not grant permission to '${dirHandle.name}'`);
+        return;
+    }
     let convertedHeightmap, png, heightmap;
     let autoCalc = document.getElementById("autoCalcBaseHeight").checked
     let weightmap = document.getElementById('weightmap').checked
@@ -689,9 +694,11 @@ async function exportMap() {
     let flipx = document.getElementById('flipx').checked
     let flipy = document.getElementById('flipy').checked
     let override = document.getElementById('satellitezoom').checked
-    let eleZoom = document.getElementById('satzoomval').value
+
     let landscapeSize = scope.landscapeSize.toString()
-    let exportBuff
+    let exportBuff, lat, lng
+    lng = grid.lng.toFixed(5)
+    lat = grid.lat.toFixed(5)
 
     if (scope.exportType === 'unrealHeightmap' || scope.exportType === 'unrealSend') {
         startTimer('Processing heightmap')
@@ -704,13 +711,14 @@ async function exportMap() {
         png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
         updateInfopanel()
         stopTimer()
-
         // //Resample rescale
         // //Timer does not work with gdal so fake it
         startFakeTimer('Resizing and adjusting image')
         exportBuff = await imageUtils.manipulateImage(png, 0, sealevel, flipx, flipy, landscapeSize, true)
-        download('heightmap.png', exportBuff, false);
         stopFakeTimer()
+
+        let heightmapFileName = `heightmap_lat_${lat}_lng_${lng}_landscape_size_${landscapeSize}.png`
+        await saveImage(dirHandle, exportBuff, heightmapFileName, "png")
 
     } else if (scope.exportType === 'geojsonOnly') {
 
@@ -721,18 +729,18 @@ async function exportMap() {
     // //Process satellite
     if (satellite === true) {
         startTimer('Processing satellite')
-        let zoom
-        if (eleZoom.length > 0 && override === true) {
-            zoom = eleZoom
-        }
+        let zoom = document.getElementById('satzoomval').value
         setUrlInfo('sat')
         let objTiles = await downloadTiles(scope.satelliteMapUrl, false, zoom, override)
         stopTimer()
+
         startFakeTimer('Combining images')
+
         const size = 512
         let imageBuffer = await combineTilesJimp(objTiles.tiles, size, size)
-        //exportBuff = await manipulateImage(imageBuffer, 0,sealevel,flipx,flipy,landscapeSize,satellite,false)
-        download('sat.png', imageBuffer, false);
+        let satelliteFileName = `satellite_lat_${lat}_lng_${lng}_zoom_${zoom}.png`
+        await saveImage(dirHandle, imageBuffer, satelliteFileName, "png")
+
         stopFakeTimer()
     }
 
@@ -884,6 +892,13 @@ function overrideSatChange(zoom) {
     let tiles = mapUtils.getTileCount(zoom, extent)
     let count = tiles.length
     document.getElementById('tilecount').innerHTML = count.toString()
+}
+
+async function saveImage(dirHandle, imageBytes, save_fileName, file_type) {
+
+
+    let outputBlob = new Blob([imageBytes], {type: 'image/' + file_type});
+    await fileUtils.writeFileToDisk(dirHandle, save_fileName, outputBlob)
 }
 
 window.toggleModal = toggleModal
