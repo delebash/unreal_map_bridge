@@ -594,6 +594,7 @@ async function downloadTiles(tilesUrl, isHeightmap = true, z = 14, override = fa
 
 
         document.getElementById('satzoomval').value = zoom
+        document.getElementById('zoomlevel').value = zoom
         document.getElementById('tilecount').innerHTML = mapUtils.getTileCount(zoom, extent).length.toString()
 
 
