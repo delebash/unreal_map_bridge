@@ -678,10 +678,20 @@ async function previewHeightmap() {
 
 async function exportMap() {
     let dirHandle = await userSettings.dirHandle
-    if (await fileUtils.verifyPermission(dirHandle, true) === false) {
-        console.error(`User did not grant permission to '${dirHandle.name}'`);
-        return;
+
+
+    try {
+        if (await fileUtils.verifyPermission(dirHandle, true) === false) {
+            console.error(`User did not grant permission to '${dirHandle.name}'`);
+            return;
+        }
+    } catch (e) {
+        toggleModal('open', `Please choose a download directory in the settings panel`)
+        togglePanel(4)
+        console.log(e)
+        return
     }
+
     let convertedHeightmap, png, heightmap;
     let autoCalc = document.getElementById("autoCalcBaseHeight").checked
     let weightmap = document.getElementById('weightmap').checked
@@ -743,18 +753,19 @@ async function exportMap() {
 
         stopFakeTimer()
     }
-
-    //await idbKeyval.set('rgb_image_buffer', imageBuffer)
-    // await fileUtils.writeFileToDisk(dirHandle, tile_info.rgbFileName, imageBuffer)
-
-    // //Process Weightmap
-    // if (weightmap === true) {
-    //     startTimer('Weightmap')
-    //     //download weight
-    //     //  exportBuff = await manipulateImage(buff, weightmapblurradius)
-    //     stopTimer()
-    // }
 }
+
+
+//await idbKeyval.set('rgb_image_buffer', imageBuffer)
+// await fileUtils.writeFileToDisk(dirHandle, tile_info.rgbFileName, imageBuffer)
+
+// //Process Weightmap
+// if (weightmap === true) {
+//     startTimer('Weightmap')
+//     //download weight
+//     //  exportBuff = await manipulateImage(buff, weightmapblurradius)
+//     stopTimer()
+// }
 
 
 async function autoCalculateBaseHeight() {

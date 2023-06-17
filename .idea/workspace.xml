@@ -6,11 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/javascript/image-utiles.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/javascript/image-utiles.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,7 +66,7 @@
       <option name="presentableId" value="Default" />
       <updated>1686756316994</updated>
       <workItem from="1686756318597" duration="4000" />
-      <workItem from="1686756340668" duration="96899000" />
+      <workItem from="1686756340668" duration="97664000" />
     </task>
     <task id="LOCAL-00001" summary="various fixes, sat download">
       <created>1686959652958</created>
@@ -86,7 +82,14 @@
       <option name="project" value="LOCAL" />
       <updated>1686961644545</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="download directory">
+      <created>1686967129080</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1686967129080</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -97,7 +100,8 @@
     <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="various fixes, sat download" />
     <MESSAGE value="fix for production" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix for production" />
+    <MESSAGE value="download directory" />
+    <option name="LAST_COMMIT_MESSAGE" value="download directory" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
