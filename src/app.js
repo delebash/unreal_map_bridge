@@ -703,6 +703,7 @@ async function exportMap() {
     let flipx = document.getElementById('flipx').checked
     let flipy = document.getElementById('flipy').checked
     let override = document.getElementById('satellitezoom').checked
+    let zoom = document.getElementById('satzoomval').value
 
     let landscapeSize = scope.landscapeSize.toString()
     let exportBuff, lat, lng
@@ -738,7 +739,7 @@ async function exportMap() {
     // //Process satellite
     if (satellite === true) {
         startTimer('Processing satellite')
-        let zoom = document.getElementById('satzoomval').value
+
         setUrlInfo('sat')
         let objTiles = await downloadTiles(scope.satelliteMapUrl, false, zoom, override)
         stopTimer()
