@@ -1022,5 +1022,5 @@ progress::-ms-fill {
 }
 a:link {color: darkblue;}
 a:visited {color: darkblue}
-a:hover {color: red}
+/*a:hover {color: red}*/
 a:active {color: red}

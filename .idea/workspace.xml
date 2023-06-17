@@ -5,18 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/javascript/combine-tiles-jimp.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/javascript/image-utiles.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/javascript/map-utils.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vite.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/webServers.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/javascript/tiles.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/javascript/binding.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/binding.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libs/UPNG.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/UPNG.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libs/jszip.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/jszip.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libs/pako.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/pako.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/vite.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,7 +45,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "master",
-    "last_opened_file_path": "F:/3DProjects/github/DansProjects/unreal_map_bridge/src/javascript",
+    "last_opened_file_path": "F:/3DProjects/github/DansProjects/unreal_map_bridge/src/public",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -59,7 +56,12 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\3DProjects\github\DansProjects\unreal_map_bridge\src\public" />
+      <recent name="F:\3DProjects\github\DansProjects\unreal_map_bridge\dist" />
       <recent name="F:\3DProjects\github\DansProjects\unreal_map_bridge\src\javascript" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\3DProjects\github\DansProjects\unreal_map_bridge\src\public" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -71,12 +73,26 @@
       <option name="presentableId" value="Default" />
       <updated>1686756316994</updated>
       <workItem from="1686756318597" duration="4000" />
-      <workItem from="1686756340668" duration="90395000" />
+      <workItem from="1686756340668" duration="92336000" />
     </task>
+    <task id="LOCAL-00001" summary="various fixes, sat download">
+      <created>1686959652958</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1686959652958</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <MESSAGE value="various fixes, sat download" />
+    <option name="LAST_COMMIT_MESSAGE" value="various fixes, sat download" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

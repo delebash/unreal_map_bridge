@@ -346,7 +346,7 @@ async function loadUserSettings() {
         scope.terrianUrl = userSettings.maptilerTerrianUrl || 'https://api.maptiler.com/tiles/terrain-rgb-v2/'
         scope.stylesUrl = userSettings.maptilerStylesUrl || 'https://api.maptiler.com/maps/outdoor/style.json'
         scope.weightMapUrl = userSettings.maptilerWeightMapUrl || ''
-        scope.satelliteMapUrl = userSettings.maptilerSatelliteMapUrl || 'https://api.maptiler.com/tiles/satellite-v2'
+        scope.satelliteMapUrl = userSettings.maptilerSatelliteMapUrl || 'https://api.maptiler.com/tiles/satellite-v2/'
         scope.mapUrl = userSettings.maptilerMapUrl || ''
     }
     return userSettings
@@ -371,7 +371,9 @@ async function saveUserSettings() {
     }
     idbKeyval.set('userSettings', userSettings)
     await loadUserSettings()
-    map.remove();
+    if(map){
+        map.remove();
+    }
     initMap()
     togglePanel(4)
 }
