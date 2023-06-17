@@ -137,15 +137,13 @@ async function unrealRemoteControl(data, url) {
  *
  * @param {boolean} toPng Convert to png or leave as array buffer
  * @param {string} url Convert to png or leave as array buffer
- * @param {string} withoutQueryUrl used to store in cache
  * @param {number} x slippy tile x
  * @param {number} y slippy tile y
  * @return {png,buffer} return png or buffer
  */
-async function downloadToTile(toPng, url, withoutQueryUrl = url, x = 0, y = 0,) {
-
+async function downloadToTile(toPng, url, x = 0, y = 0,) {
     let obj = {}, png
-    const cachedRes = await caches.match(url, {ignoreSearch: true});
+    const cachedRes = await caches.match(url);
     if (cachedRes && cachedRes.ok) {
         console.log('tile: load from cache');
         let buffer = await cachedRes.arrayBuffer();
@@ -165,7 +163,7 @@ async function downloadToTile(toPng, url, withoutQueryUrl = url, x = 0, y = 0,) 
             if (response.ok) {
                 let res = response.clone();
                 let buffer = await response.arrayBuffer();
-                cache.put(withoutQueryUrl, res);
+                cache.put(url, res);
                 if (toPng === true) {
                     png = await imageUtils.loadImageFromArray(buffer);
                     return png

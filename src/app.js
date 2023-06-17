@@ -620,12 +620,12 @@ async function downloadTiles(tilesUrl, isHeightmap = true, z = 14, override = fa
                 let url = tilesUrl + zoom + '/' + (x + j) + '/' + (y + i) + urlType + '?' + urlKey + scope.apiKey;
                 let woQUrl = tilesUrl + zoom + '/' + (x + j) + '/' + (y + i) + urlType;
                 if (isHeightmap === true) {
-                    promiseArray.push(mapUtils.downloadToTile(true, url, woQUrl).then((png) => {
+                    promiseArray.push(mapUtils.downloadToTile(true, url).then((png) => {
                         tiles[i][j] = png
                         progress(count++);
                     }));
                 } else {
-                    promiseArray.push(mapUtils.downloadToTile(false, url, woQUrl, (x + j), (y + i)).then((tile) => {
+                    promiseArray.push(mapUtils.downloadToTile(false, url, (x + j), (y + i)).then((tile) => {
                         tiles.push(tile)
                         progress(count++);
                     }));
@@ -678,7 +678,6 @@ async function previewHeightmap() {
 
 async function exportMap() {
     let dirHandle = await userSettings.dirHandle
-
 
     try {
         if (await fileUtils.verifyPermission(dirHandle, true) === false) {
