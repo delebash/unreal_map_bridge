@@ -21,21 +21,12 @@ export async function combineTilesJimp(tiles, tWidth, tHeight) {
   const w = tWidth * cols
   const h = tHeight * rows
 
-  async function CompositeImg(image) {
-    for (let data of index) {
-      let buffer = Buffer.from(data.buffer)
-      let y = data.y * tHeight
-      let x = data.x * tWidth
-      let newImage = await Jimp.read(buffer)
-      image.composite(newImage, x, y)
-    }
-    return image
-  }
+
 
   let image = await Jimp.read(Buffer.from(index[0].buffer))
   image.background(0xFFFFFFFF)
   image.resize(w, h);
-  let compImage = await CompositeImg(image)
+  let compImage = await CompositeImg(image,index,tHeight,tWidth)
 
   let buffer = await compImage.getBufferAsync(Jimp.MIME_PNG);
 
@@ -43,3 +34,13 @@ export async function combineTilesJimp(tiles, tWidth, tHeight) {
 }
 
 
+async function CompositeImg(image,index,tHeight,tWidth) {
+  for (let data of index) {
+    let buffer = Buffer.from(data.buffer)
+    let y = data.y * tHeight
+    let x = data.x * tWidth
+    let newImage = await Jimp.read(buffer)
+    image.composite(newImage, x, y)
+  }
+  return image
+}

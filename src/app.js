@@ -703,12 +703,12 @@ async function exportMap() {
     let flipx = document.getElementById('flipx').checked
     let flipy = document.getElementById('flipy').checked
     let override = document.getElementById('satellitezoom').checked
-    let zoom = document.getElementById('satzoomval').value
 
     let landscapeSize = scope.landscapeSize.toString()
     let exportBuff, lat, lng
     lng = grid.lng.toFixed(5)
     lat = grid.lat.toFixed(5)
+    let overridezoom = document.getElementById('satzoomval').value
 
     if (scope.exportType === 'unrealHeightmap' || scope.exportType === 'unrealSend') {
         startTimer('Processing heightmap')
@@ -738,9 +738,14 @@ async function exportMap() {
 
     // //Process satellite
     if (satellite === true) {
+        let zoom
         startTimer('Processing satellite')
-
         setUrlInfo('sat')
+        if (overridezoom === '') {
+            zoom = document.getElementById('satzoomval').value
+        } else {
+            zoom = overridezoom
+        }
         let objTiles = await downloadTiles(scope.satelliteMapUrl, false, zoom, override)
         stopTimer()
 
