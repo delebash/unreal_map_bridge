@@ -1,5 +1,6 @@
 import imageUtils from "./image-utiles.js";
 import tib from "tiles-in-bbox";
+import mapboxgl from 'mapbox-gl';
 let cache, downloadCount = 0
 caches.open('tiles').then((data) => cache = data);
 
@@ -78,12 +79,15 @@ function getTileInfo(lng, lat, multiple, x, y, z, bbox) {
 }
 
 
-function getFeaturesFromBB(map, tile_info, combine) {
-    tile_info.swPt = map.project(tile_info.bboxSW)
-    tile_info.nePt = map.project(tile_info.bboxNE)
-    tile_info.nwPt = map.project(tile_info.bboxNW)
-    tile_info.sePt = map.project(tile_info.bboxSE)
-    let features = map.queryRenderedFeatures([tile_info.swPt, tile_info.nePt])
+function getFeaturesFromBB(map, bbox, combine) {
+    const llb = new mapboxgl.LngLatBounds(bbox);
+    //Corners of bbox
+    let bboxSW = llb.getSouthWest()
+    let bboxNE = llb.getNorthEast()
+    let swPt = map.project(bboxSW)
+    let nePt = map.project(bboxNE)
+
+    let features = map.queryRenderedFeatures([swPt, nePt])
 
     if (combine === true) {
         features = getUniqueFeatures(features)
@@ -182,9 +186,6 @@ async function downloadToTile(toPng, url, x = 0, y = 0,) {
     }
 }
 
-
-
-
 function long2tile(lon, zoom) {
     return (Math.floor((lon + 180) / 360 * Math.pow(2, zoom)));
 }
@@ -206,7 +207,7 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function toHeightmap(tiles, distance,mapSize) {
+function toHeightmap(tiles, distance, mapSize) {
 
     let tileNum = tiles.length;
     let srcMap = Create2DArray(tileNum * 512, 0);
@@ -278,8 +279,9 @@ function calcMinMaxHeight(heightmap) {
 
     return heights;
 }
-function getTileCount(zoom,extent) {
-        let bbox = {
+
+function getTileCount(zoom, extent) {
+    let bbox = {
         bottom: extent.bottomright[1],
         left: extent.topleft[0],
         top: extent.topleft[1],
@@ -292,7 +294,7 @@ function getTileCountAdjusted(zoom, extent, override = false) {
     // get the extent of the current map
     // in heightmap, each pixel is treated as vertex data, and 1081px represents 1080 faces
     // therefore, "1px = 16m" when the map size is 17.28km
-       let obj = {}
+    let obj = {}
 
     // get a tile that covers the top left and bottom right (for the tile count calculation)
     let x = long2tile(extent.topleft[0], zoom);
@@ -336,6 +338,7 @@ function getTileCountAdjusted(zoom, extent, override = false) {
 
     return obj
 }
+
 function deleteCaches() {
     if (confirm('Delete the caches.\nIs that okay?')) {
         caches.delete('tiles').then(() => {
@@ -343,6 +346,7 @@ function deleteCaches() {
         });
     }
 }
+
 function convertMapboxMaptilerStyles(key, layerId) {
 
     let mapStyle =
@@ -350,28 +354,33 @@ function convertMapboxMaptilerStyles(key, layerId) {
             {
                 mapbox: 'streets-v11',
                 maptiler: 'STREETS',
+                maptiler_map: 'streets-v2',
                 diff: false
             },
             {
                 mapbox: 'dark-v10',
                 maptiler: 'STREETS.DARK',
                 maptilerAltName: 'Streets v2 Dark',
+                maptiler_map: 'streets-v2',
                 diff: false
             },
             {
                 mapbox: 'light-v10',
                 maptiler: 'STREETS.LIGHT',
                 maptilerAltName: 'Streets v2 Light',
+                maptiler_map: 'streets-v2',
                 diff: false
             },
             {
                 mapbox: 'outdoors-v11',
                 maptiler: 'OUTDOOR',
+                maptiler_map: 'outdoor-v2',
                 diff: false
             },
             {
                 mapbox: 'satellite-v9',
                 maptiler: 'SATELLITE',
+                maptiler_map: 'satellite',
                 diff: true
             }
         ]
@@ -380,6 +389,7 @@ function convertMapboxMaptilerStyles(key, layerId) {
     });
     return results
 }
+
 function Create2DArray(rows, def = null) {
     let arr = new Array(rows);
     for (let i = 0; i < rows; i++) {
@@ -406,7 +416,6 @@ export default {
     convertMapboxMaptilerStyles,
     Create2DArray
 }
-
 
 
 // async function downloadTiles(tileCount) {

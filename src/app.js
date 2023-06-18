@@ -63,7 +63,7 @@ function initMap() {
                     style: scope.stylesUrl + 'outdoors-v11',  // Specify which map style to use
                     center: [grid.lng, grid.lat],                   // Specify the starting position [lng, lat]
                     zoom: grid.zoom,                                // Specify the starting zoom
-                    preserveDrawingBuffer: true
+                    preserveDrawingBuffer: true,
                 });
 
                 geocoder = new MapboxGeocoder({
@@ -159,6 +159,18 @@ function initMap() {
                 zoom.innerHTML = Math.round(grid.zoom).toString()
                 updateInfopanel();
             });
+
+            // map.on('dblclick',function (e){
+            //     var coordinates = e.lngLat;
+            //     new mapboxgl.Popup()
+            //         .setLngLat(coordinates)
+            //         .setHTML('you clicked here: <br/>' + coordinates)
+            //         .addTo(map);
+            //
+            //     let bounds = getExtent(grid.lng, grid.lat, mapSize);
+            //      console.log(bounds.topleft[0], bounds.topleft[1], bounds.bottomright[0], bounds.bottomright[1]);
+            //
+            // })
 
             map.on('idle', function () {
                 // scope can be set if bindings.js is loaded (because of docReady)
@@ -340,14 +352,14 @@ async function loadUserSettings() {
         scope.stylesUrl = userSettings.mapboxStylesUrl || 'mapbox://styles/mapbox/'
         scope.weightMapUrl = userSettings.mapboxWeightMapUrl || ''
         scope.satelliteMapUrl = userSettings.mapboxSatelliteMapUrl || 'https://api.mapbox.com/v4/mapbox.satellite/'
-        scope.mapUrl = userSettings.mapboxMapUrl || ''
-    } else {
+        scope.mapUrl = userSettings.mapboxMapUrl || 'https://api.mapbox.com/styles/v1/'
+    } else if (scope.serverType === 'maptiler') {
         scope.apiKey = userSettings.maptilerApiKey || ''
         scope.terrianUrl = userSettings.maptilerTerrianUrl || 'https://api.maptiler.com/tiles/terrain-rgb-v2/'
         scope.stylesUrl = userSettings.maptilerStylesUrl || 'https://api.maptiler.com/maps/outdoor/style.json'
         scope.weightMapUrl = userSettings.maptilerWeightMapUrl || ''
         scope.satelliteMapUrl = userSettings.maptilerSatelliteMapUrl || 'https://api.maptiler.com/tiles/satellite-v2/'
-        scope.mapUrl = userSettings.maptilerMapUrl || ''
+        scope.mapUrl = userSettings.maptilerMapUrl || 'https://api.maptiler.com/maps/'
     }
     return userSettings
 }
@@ -597,7 +609,6 @@ async function downloadTiles(tilesUrl, isHeightmap = true, z = 14, override = fa
         document.getElementById('zoomlevel').value = zoom
         document.getElementById('tilecount').innerHTML = mapUtils.getTileCount(zoom, extent).length.toString()
 
-
         let tileLng = mapUtils.tile2long(x, zoom);
         let tileLat = mapUtils.tile2lat(y, zoom);
 
@@ -651,11 +662,16 @@ function setUrlInfo(val) {
         if (val === 'height') {
             urlType = '@2x.png'
         }
-    } else {
+        if (val === 'style') {
+            urlType = ''
+        }
+    } else if (scope.serverType === 'maptiler') {
         if (val === 'height') {
             urlType = '.webp'
-        } else {
+        } else if (val === 'jpg') {
             urlType = '.jpg'
+        } else if (val === 'png') {
+            urlType = '.png'
         }
     }
 }
@@ -694,15 +710,20 @@ async function exportMap() {
 
     let convertedHeightmap, png, heightmap;
     let autoCalc = document.getElementById("autoCalcBaseHeight").checked
-    let weightmap = document.getElementById('weightmap').checked
+    let ele_heightmap = document.getElementById('heightmap').checked
     let satellite = document.getElementById('satellite').checked
+    let mapimage = document.getElementById('mapimage').checked
+    let weightmap = document.getElementById('weightmapdl').checked
     let geojson = document.getElementById('geojson').checked
-    let worldpartiongridsize = document.getElementById('worldpartiongridsize').value
-    let heightmapblurradius = document.getElementById('blurradius').value
-    let weightmapblurradius = document.getElementById('weightmapblurradius').value
+
     let sealevel = document.getElementById('sealevel').checked
     let flipx = document.getElementById('flipx').checked
     let flipy = document.getElementById('flipy').checked
+
+    let worldpartiongridsize = document.getElementById('worldpartiongridsize').value
+    let heightmapblurradius = document.getElementById('blurradius').value
+    let weightmapblurradius = document.getElementById('weightmapblurradius').value
+
     let override = document.getElementById('satellitezoom').checked
 
     let landscapeSize = scope.landscapeSize.toString()
@@ -710,9 +731,14 @@ async function exportMap() {
     lng = grid.lng.toFixed(5)
     lat = grid.lat.toFixed(5)
     let overridezoom = document.getElementById('satzoomval').value
-
-    if (scope.exportType === 'unrealHeightmap' || scope.exportType === 'unrealSend') {
+    let tileSize = 512
+    let extent = getExtent(grid.lng, grid.lat, mapSize / 1080 * 1081);
+    let bbox = [extent.topleft[0], extent.bottomright[1], extent.bottomright[0], extent.topleft[1]]
+    let bboxString = '[' + bbox + ']'
+    //Process heightmap
+    if (ele_heightmap === true) {
         startTimer('Processing heightmap')
+        console.log('heightmap')
         setUrlInfo('height')
         heightmap = await getHeightmap()
         if (autoCalc === true) {
@@ -726,22 +752,18 @@ async function exportMap() {
         // //Timer does not work with gdal so fake it
         startFakeTimer('Resizing and adjusting image')
         exportBuff = await imageUtils.manipulateImage(png, 0, sealevel, flipx, flipy, landscapeSize, true)
-        stopFakeTimer()
 
         let heightmapFileName = `heightmap_lat_${lat}_lng_${lng}_landscape_size_${landscapeSize}.png`
         await saveImage(dirHandle, exportBuff, heightmapFileName, "png")
-
-    } else if (scope.exportType === 'geojsonOnly') {
-
-    } else if (scope.exportType === 'unrealMapImage') {
-
+        stopFakeTimer()
     }
 
-    // //Process satellite
+    //Process satellite
     if (satellite === true) {
+        console.log('satellite')
         let zoom
         startTimer('Processing satellite')
-        setUrlInfo('sat')
+        setUrlInfo('jpg')
         if (overridezoom === '') {
             zoom = document.getElementById('satzoomval').value
         } else {
@@ -751,13 +773,76 @@ async function exportMap() {
         stopTimer()
 
         startFakeTimer('Combining images')
-
-        const size = 512
-        let imageBuffer = await combineTilesJimp(objTiles.tiles, size, size)
+        let imageBuffer = await combineTilesJimp(objTiles.tiles, tileSize, tileSize)
         let satelliteFileName = `satellite_lat_${lat}_lng_${lng}_zoom_${zoom}.png`
         await saveImage(dirHandle, imageBuffer, satelliteFileName, "png")
-
         stopFakeTimer()
+    }
+    //Process mapimage
+    if (mapimage === true) {
+        startTimer('Processing map image')
+        console.log('mapimage')
+
+        let styleName, objStyle, url
+        if (scope.serverType === 'mapbox') {
+            //Use the static api instead of stitching tiles
+            styleName = map.getStyle().metadata['mapbox:origin'];
+            objStyle = mapUtils.convertMapboxMaptilerStyles('mapbox', styleName)
+            url = scope.mapUrl + 'mapbox/' + objStyle[0].mapbox + '/static/'
+            let width = 1280
+            let height = 1280
+            url = url + bboxString + `/${height}x${width}?access_token=${scope.apiKey}&attribution=false&logo=false`
+            let mapFileName = `map_image_lat_${lat}_lng_${lng}_width_${width}_height_${height}.png`
+
+            let objTile = await mapUtils.downloadToTile(false, url)
+            await saveImage(dirHandle, objTile.buffer, mapFileName, "png")
+            stopTimer()
+
+        } else if (scope.serverType === 'maptiler') {
+            setUrlInfo('png')
+            styleName = map.getStyle().name
+            objStyle = mapUtils.convertMapboxMaptilerStyles('maptiler', styleName.toUpperCase())
+            url = scope.mapUrl + objStyle[0].maptiler_map + '/'
+            let objTiles = await downloadTiles(url, false, 11, false)
+            stopTimer()
+
+            startFakeTimer('Combining images')
+            let imageBuffer = await combineTilesJimp(objTiles.tiles, tileSize, tileSize)
+            let mapFileName = `map_image_lat_${lat}_lng_${lng}_zoom_${zoom}.png`
+            await saveImage(dirHandle, imageBuffer, mapFileName, "png")
+            stopFakeTimer()
+        }
+    }
+
+    //Process weightmap
+    if (weightmap === true) {
+        startTimer('Processing weightmap image')
+        console.log('weightmap')
+        if (scope.serverType === 'mapbox') {
+            //Use the static api instead of stitching tiles
+            let url = scope.mapUrl + scope.weightMapUrl + '/static/'
+            let width = 1280
+            let height = 1280
+            url = url + bboxString + `/${height}x${width}?access_token=${scope.apiKey}&attribution=false&logo=false`
+            let weightmapFileName = `weightmap_image_lat_${lat}_lng_${lng}_width_${width}_height_${height}.png`
+
+            let objTile = await mapUtils.downloadToTile(false, url)
+            await saveImage(dirHandle, objTile.buffer, weightmapFileName, "png")
+            stopTimer()
+        } else {
+            toggleModal('open', `Weightmaps are not available for Maptiler`)
+        }
+    }
+    //Process geojson
+    if (geojson === true) {
+        startTimer('Processing geojson')
+        console.log('geojson')
+
+        let features = mapUtils.getFeaturesFromBB(map, bbox, true)
+        let strFeatures = JSON.stringify(features)
+        let featuresFileName = `features_lat_${lat}_lng_${lng}.json`
+        await fileUtils.writeFileToDisk(dirHandle, featuresFileName, strFeatures)
+        stopTimer()
     }
 }
 
@@ -918,6 +1003,8 @@ async function saveImage(dirHandle, imageBytes, save_fileName, file_type) {
     await fileUtils.writeFileToDisk(dirHandle, save_fileName, outputBlob)
 }
 
+
+
 window.toggleModal = toggleModal
 window.togglePanel = togglePanel
 window.openDirectory = openDirectory
@@ -933,4 +1020,5 @@ window.zoomOut = zoomOut
 window.exportTypeChange = exportTypeChange
 window.changeMapsize = changeMapsize
 window.overrideSatChange = overrideSatChange
+
 

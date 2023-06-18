@@ -97,7 +97,7 @@ dt {
 .row {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+
 }
 
 .column {
@@ -531,7 +531,9 @@ dt.withUnit {
 #pinPanel hr {
     margin-top: 0.5em;
 }
-
+#landscapename{
+    width: 15em;
+}
 #lngInput,
 #latInput {
     padding-left: 0.25em;

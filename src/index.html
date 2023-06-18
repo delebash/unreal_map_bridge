@@ -34,7 +34,8 @@
         <progress aria-label="Content loading…" class="refreshprogress" id="progressBusy"></progress>
     </div>
     <div class="center" id="progressArea" style="display: none">
-        <span class="progressMsg" id="progressMsg"></span>&nbsp;&nbsp;<span class="progressMsg" id="downloadCount"></span>
+        <span class="progressMsg" id="progressMsg"></span>&nbsp;&nbsp;<span class="progressMsg"
+                                                                            id="downloadCount"></span>
         <progress class="refreshprogress" id="progress" max="1000" value="0"></progress>
     </div>
 </div>
@@ -125,7 +126,8 @@
                 </dl>
             </div>
             <div class="footer">
-                <button class="refresh" onclick="previewHeightmap()"><i class="fas fa-sync-alt"></i>Refresh
+                <button class="refresh" onclick="previewHeightmap()"><i class="fas fa-sync-alt"></i>Refresh</button>
+
             </div>
         </div>
     </div>
@@ -141,7 +143,7 @@
                         <dt>Export Type:</dt>
                         <dd class="wsSlp wideSelect">
                             <select data-model="exportType" id="exportType" onchange="exportTypeChange(this)">
-                                <option value="unrealHeightmap">Unreal Heightmap Download png</option>
+                                <option value="unrealHeightmap">Download png</option>
                                 <option value="unrealSend">Import Heightmap into Unreal (Requires Plugin)</option>
                                 <!--                                <option value="unrealTMagicPluginEarthLandscapeClip">Unreal Terrain Magic Plugin ---->
                                 <!--                                                                                     EarthLandscape Clip-->
@@ -152,8 +154,6 @@
                                 <!--                                <option value="unrealStampBrushPlugin">Unreal Stamp Brush Plugin</option>-->
                                 <!--                                <option value="unrealLandmassEffectBrushPlugin">Unreal Landmass Effect Brush Plugin-->
                                 <!--                                </option>-->
-                                <option value="geojsonOnly">Geojson Only</option>
-                                <option value="unrealMapImage">Image of map only</option>
                                 <!--                                <option value="zip">Zip</option>-->
                                 <!--                                <option value="raw">Raw</option>-->
                             </select><i class="fas fa-chevron-down"></i>
@@ -181,6 +181,7 @@
                         <dd>&nbsp;</dd>
                     </dl>
                 </div>
+                <br>
                 <header><h4>Export Options</h4>
                     <hr>
                 </header>
@@ -197,53 +198,59 @@
                     <div>Tile Count:</div>
                     &nbsp;&nbsp;
                     <div id="tilecount"></div>
+                </dl>
+                <br>
+                <header><h4><b>Select image types to download:</b></h4></header>
+                <br>
+                <dl>
+                    <dt class="withCb">Heightmap:</dt>
+                    <dd><input id="heightmap" type="checkbox"><i class="fas fa-check"></i></dd>&nbsp;&nbsp;
+
+                    <dt class="withCb">Satellite:</dt>
+                    <dd><input id="satellite" type="checkbox"><i class="fas fa-check"></i></dd>&nbsp;&nbsp;
+
+                    <dt class="withCb">Map Image:</dt>&nbsp;
+                    <dd><input id="mapimage" type="checkbox"><i class="fas fa-check"></i></dd>&nbsp;&nbsp;
+
+                    <dt class="withCb">Weightmap:</dt>&nbsp;
+                    <dd><input id="weightmapdl" type="checkbox"><i class="fas fa-check"></i></dd>&nbsp;&nbsp;
+
+                    <dt class="withCb">Geojson:</dt>&nbsp;
+                    <dd><input id="geojson" type="checkbox"><i class="fas fa-check"></i></dd>
 
                 </dl>
                 <br>
+                <header><h4><b>Manipulate heightmap image options:</b></h4></header>
+                <br>
                 <dl>
-
-                    <dt class="withCb">Satellite:</dt>
-                    <dd><input id="satellite" type="checkbox"><i class="fas fa-check"></i></dd>
-
                     <dt class="withCb">Sea Level:</dt>
-                    <dd><input checked id="sealevel" type="checkbox"><i class="fas fa-check"></i></dd>
+                    <dd><input checked id="sealevel" type="checkbox"><i class="fas fa-check"></i></dd>&nbsp;&nbsp;
 
                     <dt class="withCb">FlipX:</dt>
-                    <dd><input id="flipx" type="checkbox"><i class="fas fa-check"></i></dd>
+                    <dd><input id="flipx" type="checkbox"><i class="fas fa-check"></i></dd>&nbsp;&nbsp;
 
                     <dt class="withCb">FlipY:</dt>
                     <dd><input id="flipy" type="checkbox"><i class="fas fa-check"></i></dd>
 
-                    <dt class="withCb">Geojson:</dt>
-                    <dd><input id="geojson" type="checkbox"><i class="fas fa-check"></i></dd>
-
-                    <dt class="withCb">Weightmap:</dt>
-
-                    <dd><input id="weightmap" type="checkbox"><i class="fas fa-check"></i></dd>
-
                 </dl>
+                <br>
                 <header><h4>Other Settings</h4>
                     <hr>
                 </header>
                 <dl>
-                    <dt class="withCb">World Part:</dt>
-                    <dd><input id="worldpart" type="checkbox"><i class="fas fa-check"></i></dd>
-                </dl>
-                <dl>
-                    <dt>Grid Size:</dt>
-                    <dd><input data-model="worldpartiongridsize" id="worldpartiongridsize" type="number"></dd>
-                </dl>
-
-                <dl>
-                    <dt>Blur Radius:</dt>
+                    <dd class="withCb">Enable World Partion:</dd>&nbsp;&nbsp;
+                    <dd><input id="worldpart" type="checkbox"><i class="fas fa-check"></i></dd>&nbsp;&nbsp;
+                    <dd>Grid Size:</dd>&nbsp;&nbsp;
+                    <dd><input data-model="worldpartiongridsize" id="worldpartiongridsize" type="number"></dd>&nbsp;&nbsp;
+                    <dd>Blur Radius:</dd>&nbsp;&nbsp;
                     <dd><input data-model="blurradius" id="blurradius" type="number"></dd>
                 </dl>
+                <br>
                 <dl>
-                    <dt>Weightmap Blur:</dt>
-                    <dd><input data-model="weightmapblurradius" id="weightmapblurradius" type="number"></dd>
-                </dl>
-                <dl>
-                    <dt>Landscape Name:</dt>
+                    <dd>Weightmap Blur:</dd>&nbsp;&nbsp;
+                    <dd><input data-model="weightmapblurradius" id="weightmapblurradius" type="number"></dd>&nbsp;&nbsp;
+
+                    <dd>Landscape Name:</dd>&nbsp;&nbsp;
                     <dd><input data-model="landscapename" id="landscapename" type="text"></dd>
                 </dl>
             </div>
@@ -297,7 +304,8 @@
     </div>
     <div class="panel slide-out hidden" id="settingsPanel">
         <div class="table">
-            <h3>User Settings: Create a free <a href="https://www.mapbox.com/">mapbox</a> or <a href="https://www.maptiler.com/">maptiler</a> account and get an Api key </h3>
+            <h3>User Settings: Create a free <a href="https://www.mapbox.com/">mapbox</a> or <a
+                    href="https://www.maptiler.com/">maptiler</a> account and get an Api key </h3>
             <div class="row">
                 <dl>
                     <dt>Server Type:</dt>
@@ -332,7 +340,7 @@
             </dl>
             <dl>
                 <dt>Map Url:</dt>
-                <dd><input data-model="mmapboxWeightMapUrlapUrl" type="text"></dd>
+                <dd><input data-model="mapUrl" type="text"></dd>
             </dl>
             <dl>
                 <dt>Download directory:</dt>
