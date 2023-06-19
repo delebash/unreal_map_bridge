@@ -13,7 +13,10 @@ import mapUtils from './javascript/map-utils.js'
 import {combineTilesJimp} from "./javascript/combine-tiles-jimp.js";
 import {setIntervalAsync, clearIntervalAsync} from 'set-interval-async';
 import imageUtils from "./javascript/image-utiles.js";
-
+import {Grid} from 'ag-grid-community';
+import 'ag-grid-community/styles//ag-grid.css';
+import 'ag-grid-community/styles//ag-theme-alpine.css';
+// import chroma from "chroma-js";
 
 const defaultWaterdepth = 50
 const pbElement = document.getElementById('progress');
@@ -22,7 +25,7 @@ const progressMsg = document.getElementById('progressMsg')
 const progressMsg2 = document.getElementById('progressMsg2')
 const progressBusyArea = document.getElementById('progressBusyArea')
 const progressArea = document.getElementById('progressArea');
-
+const eGridDiv = document.querySelector('#myGrid');
 const modal = document.getElementById("modal");
 const modalMsg = document.getElementById("modalMsg");
 const zoom = document.getElementById("zoom");
@@ -36,15 +39,212 @@ let timer, ticks = 0, prev_lng, prev_lat, mapCanvas
 let panels = document.getElementsByClassName('panel');
 let icons = document.getElementsByClassName('icon');
 let iconClass = [];
+let weightmapGrid = null
 
+let rows = [
+    {
+        name: 'Forest',
+        color: [201, 28, 19]
+    },
+    // {
+    //     name: 'Water',
+    //     color: '-------'
+    // },
+    {
+        name: 'Water',
+        color:
+            [
+                [78, 112, 155],
+                [103, 178, 178],
+                [85, 155, 200],
+                [90, 163, 195],
+                [64, 90, 104],
+                [82, 122, 183],
+                [95, 141, 175],
+                [91, 142, 184],
+                [100, 141, 167],
+                [111, 140, 146],
+                [46, 116, 81],
+                [62, 129, 142],
+                [58, 126, 131],
+                [55, 121, 118],
+                [68, 135, 169],
+                [65, 132, 155],
+                [83, 142, 208],
+                [83, 142, 199],
+                [19, 36, 52],
+                [26, 48, 70],
+                [21, 39, 56],
+                [12, 21, 31],
+                [14, 26, 37],
+                [28, 52, 76],
+                [37, 68, 100],
+                [43, 78, 114],
+                [41, 74, 108],
+                [65, 119, 172],
+                [68, 124, 180],
+                [91, 141, 182],
+                [26, 39, 49],
+                [64, 112, 158],
+                [15, 28, 40],
+                [24, 43, 63],
+                [39, 71, 104],
+                [21, 39, 57],
+                [18, 32, 47],
+                [58, 107, 156],
+                [39, 72, 105],
+                [12, 23, 33],
+                [37, 69, 100],
+                [45, 83, 121],
+                [53, 97, 141],
+                [28, 51, 74],
+                [19, 35, 52],
+                [43, 78, 113],
+                [25, 45, 66],
+                [65, 118, 172],
+                [48, 87, 127],
+                [23, 41, 60],
+                [41, 75, 109],
+                [16, 30, 44],
+                [35, 65, 94],
+                [71, 130, 188],
+                [68, 124, 181],
+                [14, 25, 37],
+                [62, 113, 164],
+                [31, 56, 82],
+                [73, 134, 194],
+                [50, 92, 133],
+                [74, 137, 198],
+                [77, 140, 204],
+                [56, 103, 149],
+                [55, 100, 146],
+                [57, 104, 151],
+                [56, 103, 149],
+                [78, 143, 208],
+                [42, 77, 112],
+                [50, 92, 133],
+                [62, 113, 165],
+                [75, 133, 180],
+                [56, 104, 148],
+                [62, 113, 165],
+                [78, 143, 207],
+                [50, 92, 133],
+                [36, 65, 94],
+                [69, 122, 175],
+                [28, 50, 73],
+                [21, 38, 55],
+                [33, 61, 88],
+                [15, 27, 39],
+                [66, 131, 154],
+                [89, 119, 144],
+                [73, 129, 175],
+                [66, 131, 154],
+                [99, 141, 169],
+                [65, 168, 154],
+                [75, 165, 173],
+                [62, 134, 142],
+                [111, 140, 147]
+            ]
+
+    },
+    {
+        name: 'Scrub',
+        color: [
+            [143, 253, 139],
+            [142, 253, 138]
+        ]
+    }, {
+        name: 'Trees',
+        color: [34, 106, 32]
+
+    },
+    {
+        name: 'Rock',
+        color: [101, 100, 93]
+
+    },
+    {
+        name: 'Sand',
+        color: [243, 234, 129]
+
+    },
+    {
+        name: 'Grass',
+        color: [
+            [33, 226, 29],
+            [33, 225, 29]
+        ]
+    },
+    {
+        name: 'Glacier',
+        color: [
+            [255, 255, 255],
+            [254, 254, 254]
+        ]
+
+    },
+    {
+        name: 'Landcover',
+        color: [0, 0, 0]
+    },
+    {
+        name: 'Hillshade',
+        color: [
+            [241, 110, 218],
+            [242, 110, 219],
+            [242, 110, 220]
+        ]
+    },
+    {
+        name: 'Land',
+        color: [154, 136, 66]
+    },
+    {
+        name: 'Farmland',
+        color: [
+            [140, 17, 155],
+            [140, 17, 156]
+        ]
+    }
+]
 let userSettings = await loadUserSettings()
 let grid = await loadSettings();
+
+
+let gridOptions = {
+    columnDefs: [
+        {headerName: 'Name', field: 'name', editable: true},
+        {headerName: 'Color', field: 'color', editable: true},
+    ], defaultColDef: {
+        flex: 1,
+        minWidth: 100,
+        resizable: true,
+        headerCheckboxSelection: isFirstColumn,
+        checkboxSelection: isFirstColumn,
+    },
+    suppressRowClickSelection: true,
+    rowSelection: 'multiple',
+    rowData: rows
+};
+
+function isFirstColumn(params) {
+    let displayedColumns = params.columnApi.getAllDisplayedColumns();
+    let thisIsFirstColumn = displayedColumns[0] === params.column;
+    return thisIsFirstColumn;
+}
 
 for (let i = 0; i < panels.length; i++) {
     iconClass.push(icons[i].className);
 }
 
 initMap()
+
+function initWeightmapGrid() {
+
+    if (weightmapGrid === null) {
+        weightmapGrid = new Grid(eGridDiv, gridOptions);
+    }
+}
 
 function initMap() {
     try {
@@ -353,6 +553,13 @@ async function loadUserSettings() {
         scope.weightMapUrl = userSettings.mapboxWeightMapUrl || ''
         scope.satelliteMapUrl = userSettings.mapboxSatelliteMapUrl || 'https://api.mapbox.com/v4/mapbox.satellite/'
         scope.mapUrl = userSettings.mapboxMapUrl || 'https://api.mapbox.com/styles/v1/'
+        let weightmapColors = userSettings.weightmapColors || []
+        if (weightmapColors.length === 0) {
+            userSettings.weightmapColors = rows
+        } else {
+            rows = weightmapColors
+        }
+
     } else if (scope.serverType === 'maptiler') {
         scope.apiKey = userSettings.maptilerApiKey || ''
         scope.terrianUrl = userSettings.maptilerTerrianUrl || 'https://api.maptiler.com/tiles/terrain-rgb-v2/'
@@ -360,6 +567,7 @@ async function loadUserSettings() {
         scope.weightMapUrl = userSettings.maptilerWeightMapUrl || ''
         scope.satelliteMapUrl = userSettings.maptilerSatelliteMapUrl || 'https://api.maptiler.com/tiles/satellite-v2/'
         scope.mapUrl = userSettings.maptilerMapUrl || 'https://api.maptiler.com/maps/'
+
     }
     return userSettings
 }
@@ -373,6 +581,7 @@ async function saveUserSettings() {
         userSettings.mapboxWeightMapUrl = scope.weightMapUrl
         userSettings.mapboxSatelliteMapUrl = scope.satelliteMapUrl
         userSettings.mapboxMapUrl = scope.mapUrl
+        userSettings.weightmapColors = gridOptions.rowData
     } else {
         userSettings.maptilerApiKey = scope.apiKey
         userSettings.maptilerTerrianUrl = scope.terrianUrl
@@ -387,7 +596,7 @@ async function saveUserSettings() {
         map.remove();
     }
     initMap()
-    togglePanel(4)
+    // togglePanel(4)
 }
 
 async function loadSettings() {
@@ -461,6 +670,9 @@ function togglePanel(index) {
         case 4:
             // none
             break;
+        case 5:
+            initWeightmapGrid()
+            break;
     }
 }
 
@@ -529,7 +741,12 @@ function incPb(el, value = 1) {
 function setMapStyle(el) {
     const layerId = el.id;
     if (scope.serverType === 'mapbox') {
-        map.setStyle(scope.stylesUrl + layerId);
+        if (layerId === 'weightmap') {
+            map.setStyle('mapbox://styles/' + scope.weightMapUrl);
+        } else {
+            map.setStyle(scope.stylesUrl + layerId);
+        }
+
     } else {
         let objStyle = mapUtils.convertMapboxMaptilerStyles('mapbox', layerId)
         if (objStyle.length > 0) {
@@ -735,6 +952,7 @@ async function exportMap() {
     let extent = getExtent(grid.lng, grid.lat, mapSize / 1080 * 1081);
     let bbox = [extent.topleft[0], extent.bottomright[1], extent.bottomright[0], extent.topleft[1]]
     let bboxString = '[' + bbox + ']'
+
     //Process heightmap
     if (ele_heightmap === true) {
         startTimer('Processing heightmap')
@@ -751,7 +969,7 @@ async function exportMap() {
         // //Resample rescale
         // //Timer does not work with gdal so fake it
         startFakeTimer('Resizing and adjusting image')
-        exportBuff = await imageUtils.manipulateImage(png, 0, sealevel, flipx, flipy, landscapeSize, true)
+        exportBuff = await imageUtils.manipulateImage(png, heightmapblurradius, sealevel, flipx, flipy, landscapeSize, true)
 
         let heightmapFileName = `heightmap_lat_${lat}_lng_${lng}_landscape_size_${landscapeSize}.png`
         await saveImage(dirHandle, exportBuff, heightmapFileName, "png")
@@ -824,11 +1042,73 @@ async function exportMap() {
             let width = 1280
             let height = 1280
             url = url + bboxString + `/${height}x${width}?access_token=${scope.apiKey}&attribution=false&logo=false`
-            let weightmapFileName = `weightmap_image_lat_${lat}_lng_${lng}_width_${width}_height_${height}.png`
+            let weightFileName = `weightmap_image_lat_${lat}_lng_${lng}_width_${width}_height_${height}.png`
 
             let objTile = await mapUtils.downloadToTile(false, url)
-            await saveImage(dirHandle, objTile.buffer, weightmapFileName, "png")
-            stopTimer()
+            await saveImage(dirHandle, objTile.buffer, weightFileName, "png")
+
+            let black = [0, 0, 0]
+            let white = [255, 255, 254] //offset from real white
+            let weight_data = userSettings.weightmapColors
+            for (let data of weight_data) {
+                let splat_image = null
+                let pixelsArray = null
+                //Change color for splat map
+                if (Array.isArray(data.color[0])) {
+                    splat_image = null
+                    pixelsArray = null
+                    splat_image = await imageUtils.loadImageFromArray(objTile.buffer)
+                    pixelsArray = splat_image.getPixelsArray()
+                    for (let aColor of data.color) {
+                        for (let i = 0; i < pixelsArray.length; i++) {
+                            if (JSON.stringify(pixelsArray[i]) === JSON.stringify(aColor)) {
+                                splat_image.setPixel(i, white)
+                            }
+                        }
+                    }
+
+                    pixelsArray = splat_image.getPixelsArray()
+                    for (let i = 0; i < pixelsArray.length; i++) {
+                        if (JSON.stringify(pixelsArray[i]) !== JSON.stringify(white)) {
+                            splat_image.setPixel(i, black)
+                        }
+                    }
+
+                    // let img = splat_image
+                    //     .resize({
+                    //         width: landscapeSize,
+                    //         height: landscapeSize
+                    //     })
+                    //     .gaussianFilter({radius: weightmapblurradius})
+
+                    let splat_buff = await splat_image.toBuffer()
+                    let weightmapFileName = `weightmap_${data.name}_lat_${grid.lat}_lng_${grid.lng}.png`
+                    await saveImage(dirHandle, splat_buff, weightmapFileName, "png")
+
+                } else {
+                    splat_image = await imageUtils.loadImageFromArray(objTile.buffer)
+                    pixelsArray = splat_image.getPixelsArray()
+                    for (let i = 0; i < pixelsArray.length; i++) {
+                        if (JSON.stringify(pixelsArray[i]) === JSON.stringify(data.color)) {
+                            splat_image.setPixel(i, white)
+                        } else {
+                            splat_image.setPixel(i, black)
+                        }
+                    }
+
+                    // let img = splat_image
+                    //     .resize({
+                    //         width: landscapeSize,
+                    //         height: landscapeSize
+                    //     })
+                    //     .gaussianFilter({radius: weightmapblurradius})
+
+                    let splat_buff = await splat_image.toBuffer()
+                    let weightmapFileName = `weightmap_${data.name}_lat_${grid.lat}_lng_${grid.lng}.png`
+                    await saveImage(dirHandle, splat_buff, weightmapFileName, "png")
+                }
+                stopTimer()
+            }
         } else {
             toggleModal('open', `Weightmaps are not available for Maptiler`)
         }
@@ -844,19 +1124,12 @@ async function exportMap() {
         await fileUtils.writeFileToDisk(dirHandle, featuresFileName, strFeatures)
         stopTimer()
     }
+
+    if (scope.exportType === 'unrealSend') {
+
+    }
+
 }
-
-
-//await idbKeyval.set('rgb_image_buffer', imageBuffer)
-// await fileUtils.writeFileToDisk(dirHandle, tile_info.rgbFileName, imageBuffer)
-
-// //Process Weightmap
-// if (weightmap === true) {
-//     startTimer('Weightmap')
-//     //download weight
-//     //  exportBuff = await manipulateImage(buff, weightmapblurradius)
-//     stopTimer()
-// }
 
 
 async function autoCalculateBaseHeight() {
@@ -997,13 +1270,34 @@ function overrideSatChange(zoom) {
 }
 
 async function saveImage(dirHandle, imageBytes, save_fileName, file_type) {
-
-
     let outputBlob = new Blob([imageBytes], {type: 'image/' + file_type});
     await fileUtils.writeFileToDisk(dirHandle, save_fileName, outputBlob)
 }
 
+async function saveWeightmapGrid() {
+    gridOptions.api.stopEditing();
+    await saveUserSettings()
+}
 
+async function deleteWeightmapGrid() {
+    gridOptions.api.stopEditing();
+    let selectedRows = gridOptions.api.getSelectedNodes()
+    let rows = gridOptions.rowData
+    for (let i = 0; i < selectedRows.length; i++) {
+        for (let j = 0; j < rows.length; j++) {
+            if (rows[j] === selectedRows[i].data) {
+                rows.splice(j, 1);
+            }
+        }
+    }
+    gridOptions.api.setRowData(rows);
+    await saveUserSettings()
+}
+
+function addWeightmapGrid() {
+    gridOptions.rowData.push({name: 'New Value', color: '1,1,1'})
+    gridOptions.api.setRowData(gridOptions.rowData);
+}
 
 window.toggleModal = toggleModal
 window.togglePanel = togglePanel
@@ -1020,5 +1314,8 @@ window.zoomOut = zoomOut
 window.exportTypeChange = exportTypeChange
 window.changeMapsize = changeMapsize
 window.overrideSatChange = overrideSatChange
+window.saveWeightmapGrid = saveWeightmapGrid
+window.deleteWeightmapGrid = deleteWeightmapGrid
+window.addWeightmapGrid = addWeightmapGrid
 
 

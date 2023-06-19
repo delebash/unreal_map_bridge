@@ -6,9 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/javascript/map-utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/javascript/map-utils.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -41,7 +42,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;F:/3DProjects/github/DansProjects/unreal_map_bridge/src/public&quot;,
+    &quot;last_opened_file_path&quot;: &quot;F:/3DProjects/github/DansProjects/chroma.js-main&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -71,7 +72,10 @@
       <workItem from="1686756318597" duration="4000" />
       <workItem from="1686756340668" duration="105878000" />
       <workItem from="1687008030178" duration="6984000" />
-      <workItem from="1687023753662" duration="21581000" />
+      <workItem from="1687023753662" duration="36641000" />
+      <workItem from="1687103252561" duration="7794000" />
+      <workItem from="1687118129954" duration="16462000" />
+      <workItem from="1687142681371" duration="10529000" />
     </task>
     <task id="LOCAL-00001" summary="various fixes, sat download">
       <created>1686959652958</created>
@@ -129,7 +133,14 @@
       <option name="project" value="LOCAL" />
       <updated>1686982993198</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="add map download and geojson">
+      <created>1687047911015</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1687047911015</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -143,7 +154,8 @@
     <MESSAGE value="download directory" />
     <MESSAGE value="fix url caching performance" />
     <MESSAGE value="fix sat zoom" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix sat zoom" />
+    <MESSAGE value="add map download and geojson" />
+    <option name="LAST_COMMIT_MESSAGE" value="add map download and geojson" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -152,6 +164,11 @@
           <url>file://$PROJECT_DIR$/src/app.js</url>
           <line>12</line>
           <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/app.js</url>
+          <line>43</line>
+          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

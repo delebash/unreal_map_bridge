@@ -49,6 +49,7 @@
         <li><a onclick="zoomIn()" title="Zoom in"><i class="fas fa-search-plus"></i></a></li>
         <li><a onclick="zoomOut()" title="Zoom out"><i class="fas fa-search-minus"></i></a></li>
         <li><a onclick="togglePanel(4)" title="Settings"><i class="icon fas fa-gear"></i></a></li>
+        <li><a onclick="togglePanel(5)" title="Weightmap colors table"><i class="icon fas fa-palette"></i></a></li>
 
         <li>
             <div class="small" id="zoom"></div>
@@ -248,7 +249,7 @@
                 <br>
                 <dl>
                     <dd>Weightmap Blur:</dd>&nbsp;&nbsp;
-                    <dd><input data-model="weightmapblurradius" id="weightmapblurradius" type="number"></dd>&nbsp;&nbsp;
+                    <dd><input data-model="weightmapblurradius" id="weightmapblurradius" type="number" value="10"></dd>&nbsp;&nbsp;
 
                     <dd>Landscape Name:</dd>&nbsp;&nbsp;
                     <dd><input data-model="landscapename" id="landscapename" type="text"></dd>
@@ -353,7 +354,16 @@
             <button onclick="saveUserSettings()"><i class="fas fa-check"></i>Save</button>
         </div>
     </div>
-</div>
+
+    <div class="panel slide-out hidden" id="weightmapPanel">
+        <div id="myGrid" style="height: 600px; width: 500px" class="ag-theme-alpine"></div>
+        <div class="footer">
+            <button onclick="saveWeightmapGrid()"><i class="fas fa-check"></i>Save</button>
+            <button onclick="deleteWeightmapGrid()"><i class="fas fa-check"></i>Delete selected rows</button>
+            <button onclick="addWeightmapGrid()"><i class="fas fa-check"></i>Add new row</button>
+        </div>
+    </div>
+
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jimp/0.22.8/jimp.min.js"
@@ -364,6 +374,7 @@
         integrity="sha384-XlqVvSG4V8zz8Kdw95OpRdsWyJnWE5QUZy++BeAIEVb+f2n5RM7jdbZh5lm0pHWk"
         crossorigin="anonymous"
 ></script>
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js" integrity="sha512-zInFF17qBFVvvvFpIfeBzo7Tj7+rQxLeTJDmbxjBz5/zIr89YVbTNelNhdTT+/DCrxoVzBeUPVFJsczKbB7sew==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>-->
 <script src="UPNG.js"></script>
 <script src="jszip.js"></script>
 <script src="pako.js"></script>
