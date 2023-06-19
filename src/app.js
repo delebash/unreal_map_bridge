@@ -1074,14 +1074,14 @@ async function exportMap() {
                         }
                     }
 
-                    // let img = splat_image
-                    //     .resize({
-                    //         width: landscapeSize,
-                    //         height: landscapeSize
-                    //     })
-                    //     .gaussianFilter({radius: weightmapblurradius})
+                    let img = splat_image
+                        .resize({
+                            width: landscapeSize,
+                            height: landscapeSize
+                        })
+                        .gaussianFilter({radius: weightmapblurradius})
 
-                    let splat_buff = await splat_image.toBuffer()
+                    let splat_buff = await img.toBuffer()
                     let weightmapFileName = `weightmap_${data.name}_lat_${grid.lat}_lng_${grid.lng}.png`
                     await saveImage(dirHandle, splat_buff, weightmapFileName, "png")
 
@@ -1096,14 +1096,14 @@ async function exportMap() {
                         }
                     }
 
-                    // let img = splat_image
-                    //     .resize({
-                    //         width: landscapeSize,
-                    //         height: landscapeSize
-                    //     })
-                    //     .gaussianFilter({radius: weightmapblurradius})
+                    let img = splat_image
+                        .resize({
+                            width: landscapeSize,
+                            height: landscapeSize
+                        })
+                        .gaussianFilter({radius: weightmapblurradius})
 
-                    let splat_buff = await splat_image.toBuffer()
+                    let splat_buff = await img.toBuffer()
                     let weightmapFileName = `weightmap_${data.name}_lat_${grid.lat}_lng_${grid.lng}.png`
                     await saveImage(dirHandle, splat_buff, weightmapFileName, "png")
                 }
