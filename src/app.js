@@ -1125,11 +1125,12 @@ async function exportMap() {
                         let weightmapFileName = `weightmap_${data.name}_lat_${grid.lat}_lng_${grid.lng}.png`
                         await saveImage(dirHandle, splat_buff, weightmapFileName, "png")
                     }
-                    stopTimer()
+
                 }
             } else {
                 toggleModal('open', `Weightmaps are not available for Maptiler`)
             }
+            stopTimer()
         }
         //Process geojson
         if (geojson === true) {
