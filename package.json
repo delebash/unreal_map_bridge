@@ -13,10 +13,10 @@
   },
   "dependencies": {
     "@mapbox/mapbox-gl-geocoder": "^5.0.1",
-    "@maptiler/geocoding-control": "^0.0.91",
+    "@maptiler/geocoding-control": "^0.0.92",
     "@maptiler/sdk": "^1.0.12",
     "@turf/turf": "^6.5.0",
-    "ag-grid-community": "^30.0.1",
+    "ag-grid-community": "^30.0.2",
     "chroma-js": "^2.4.2",
     "image-js": "^0.35.4",
     "lodash": "^4.17.21",

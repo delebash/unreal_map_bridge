@@ -1299,6 +1299,12 @@ function addWeightmapGrid() {
     gridOptions.api.setRowData(gridOptions.rowData);
 }
 
+function help() {
+    let params = `scrollbars=yes,resizable=no,status=no,location=no,toolbar=no,menubar=no,
+width=900,height=600,left=500,top=100`;
+    open('help.html', 'help', params);
+}
+
 window.toggleModal = toggleModal
 window.togglePanel = togglePanel
 window.openDirectory = openDirectory
@@ -1317,5 +1323,6 @@ window.overrideSatChange = overrideSatChange
 window.saveWeightmapGrid = saveWeightmapGrid
 window.deleteWeightmapGrid = deleteWeightmapGrid
 window.addWeightmapGrid = addWeightmapGrid
+window.help = help
 
 
