@@ -29,8 +29,11 @@ const eGridDiv = document.querySelector('#myGrid');
 const modal = document.getElementById("modal");
 const modalMsg = document.getElementById("modalMsg");
 const zoom = document.getElementById("zoom");
+const worldpart = document.getElementById('worldpart').checked
+const worldpartiongridsize = document.getElementById('worldpartiongridsize').value
+const landscapename = document.getElementById('landscapename').value
 
-let distance, urlKey, urlType, map, geocoder
+let distance, urlKey, urlType, map, geocoder, heightmapFileName
 let promiseArray = [];
 let mapSize = 50;
 let vmapSize = mapSize * 1.05;
@@ -763,7 +766,10 @@ function setMapStyle(el) {
 }
 
 
-function startTimer(msg) {
+function startTimer(msg,reset) {
+    if(reset === true){
+        ticks = 0
+    }
     overlayOn()
     progressArea.style.display = 'block'
     progressMsg.innerHTML = msg
@@ -894,7 +900,7 @@ function setUrlInfo(val) {
 }
 
 async function previewHeightmap() {
-    startTimer('Processing heightmap')
+    startTimer('Processing heightmap',true)
     let convertedHeightmap, png, heightmap, imgUrl;
     setUrlInfo('height')
     let autoCalc = document.getElementById("autoCalcBaseHeight").checked
@@ -936,8 +942,6 @@ async function exportMap() {
     let sealevel = document.getElementById('sealevel').checked
     let flipx = document.getElementById('flipx').checked
     let flipy = document.getElementById('flipy').checked
-
-    let worldpartiongridsize = document.getElementById('worldpartiongridsize').value
     let heightmapblurradius = document.getElementById('blurradius').value
     let weightmapblurradius = document.getElementById('weightmapblurradius').value
 
@@ -953,190 +957,197 @@ async function exportMap() {
     let bbox = [extent.topleft[0], extent.bottomright[1], extent.bottomright[0], extent.topleft[1]]
     let bboxString = '[' + bbox + ']'
 
-    //Process heightmap
-    if (ele_heightmap === true) {
-        startTimer('Processing heightmap')
-        console.log('heightmap')
-        setUrlInfo('height')
-        heightmap = await getHeightmap()
-        if (autoCalc === true) {
-            await autoCalculateBaseHeight()
+    if (scope.exportType === 'unrealSend') {
+        if (ele_heightmap !== true) {
+            toggleModal('open', `Send to Unreal requires image download type heightmap to be checked`)
+            return
         }
-        convertedHeightmap = convertHeightmap(heightmap);
-        png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
-        updateInfopanel()
-        stopTimer()
-        // //Resample rescale
-        // //Timer does not work with gdal so fake it
-        startFakeTimer('Resizing and adjusting image')
-        exportBuff = await imageUtils.manipulateImage(png, heightmapblurradius, sealevel, flipx, flipy, landscapeSize, true)
-
-        let heightmapFileName = `heightmap_lat_${lat}_lng_${lng}_landscape_size_${landscapeSize}.png`
-        await saveImage(dirHandle, exportBuff, heightmapFileName, "png")
-        stopFakeTimer()
     }
 
-    //Process satellite
-    if (satellite === true) {
-        console.log('satellite')
-        let zoom
-        startTimer('Processing satellite')
-        setUrlInfo('jpg')
-        if (overridezoom === '') {
-            zoom = document.getElementById('satzoomval').value
-        } else {
-            zoom = overridezoom
-        }
-        let objTiles = await downloadTiles(scope.satelliteMapUrl, false, zoom, override)
-        stopTimer()
-
-        startFakeTimer('Combining images')
-        let imageBuffer = await combineTilesJimp(objTiles.tiles, tileSize, tileSize)
-        let satelliteFileName = `satellite_lat_${lat}_lng_${lng}_zoom_${zoom}.png`
-        await saveImage(dirHandle, imageBuffer, satelliteFileName, "png")
-        stopFakeTimer()
-    }
-    //Process mapimage
-    if (mapimage === true) {
-        startTimer('Processing map image')
-        console.log('mapimage')
-
-        let styleName, objStyle, url
-        if (scope.serverType === 'mapbox') {
-            //Use the static api instead of stitching tiles
-            styleName = map.getStyle().metadata['mapbox:origin'];
-            objStyle = mapUtils.convertMapboxMaptilerStyles('mapbox', styleName)
-            url = scope.mapUrl + 'mapbox/' + objStyle[0].mapbox + '/static/'
-            let width = 1280
-            let height = 1280
-            url = url + bboxString + `/${height}x${width}?access_token=${scope.apiKey}&attribution=false&logo=false`
-            let mapFileName = `map_image_lat_${lat}_lng_${lng}_width_${width}_height_${height}.png`
-
-            let objTile = await mapUtils.downloadToTile(false, url)
-            await saveImage(dirHandle, objTile.buffer, mapFileName, "png")
+    if (ele_heightmap === true || satellite === true || mapimage === true || weightmap === true || geojson === true) {
+        //Process heightmap
+        if (ele_heightmap === true) {
+            startTimer('Processing heightmap',true)
+            console.log('heightmap')
+            setUrlInfo('height')
+            heightmap = await getHeightmap()
+            if (autoCalc === true) {
+                await autoCalculateBaseHeight()
+            }
+            convertedHeightmap = convertHeightmap(heightmap);
+            png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
+            updateInfopanel()
             stopTimer()
+            // //Resample rescale
+            // //Timer does not work with gdal so fake it
+            startFakeTimer('Resizing and adjusting image')
+            exportBuff = await imageUtils.manipulateImage(png, heightmapblurradius, sealevel, flipx, flipy, landscapeSize, true)
 
-        } else if (scope.serverType === 'maptiler') {
-            setUrlInfo('png')
-            styleName = map.getStyle().name
-            objStyle = mapUtils.convertMapboxMaptilerStyles('maptiler', styleName.toUpperCase())
-            url = scope.mapUrl + objStyle[0].maptiler_map + '/'
-            let objTiles = await downloadTiles(url, false, 11, false)
+            heightmapFileName = `heightmap_lat_${lat}_lng_${lng}_landscape_size_${landscapeSize}.png`
+            await saveImage(dirHandle, exportBuff, heightmapFileName, "png")
+            stopFakeTimer()
+        }
+
+        //Process satellite
+        if (satellite === true) {
+            console.log('satellite')
+            let zoom
+            startTimer('Processing satellite',true)
+            setUrlInfo('jpg')
+            if (overridezoom === '') {
+                zoom = document.getElementById('satzoomval').value
+            } else {
+                zoom = overridezoom
+            }
+            let objTiles = await downloadTiles(scope.satelliteMapUrl, false, zoom, override)
             stopTimer()
 
             startFakeTimer('Combining images')
             let imageBuffer = await combineTilesJimp(objTiles.tiles, tileSize, tileSize)
-            let mapFileName = `map_image_lat_${lat}_lng_${lng}_zoom_${zoom}.png`
-            await saveImage(dirHandle, imageBuffer, mapFileName, "png")
+            let satelliteFileName = `satellite_lat_${lat}_lng_${lng}_zoom_${zoom}.png`
+            await saveImage(dirHandle, imageBuffer, satelliteFileName, "png")
             stopFakeTimer()
         }
-    }
+        //Process mapimage
+        if (mapimage === true) {
+            startTimer('Processing map image',true)
+            console.log('mapimage')
 
-    //Process weightmap
-    if (weightmap === true) {
-        startTimer('Processing weightmap image')
-        console.log('weightmap')
-        if (scope.serverType === 'mapbox') {
-            //Use the static api instead of stitching tiles
-            let url = scope.mapUrl + scope.weightMapUrl + '/static/'
-            let width = 1280
-            let height = 1280
-            url = url + bboxString + `/${height}x${width}?access_token=${scope.apiKey}&attribution=false&logo=false`
-            let weightFileName = `weightmap_image_lat_${lat}_lng_${lng}_width_${width}_height_${height}.png`
+            let styleName, objStyle, url
+            if (scope.serverType === 'mapbox') {
+                //Use the static api instead of stitching tiles
+                styleName = map.getStyle().metadata['mapbox:origin'];
+                objStyle = mapUtils.convertMapboxMaptilerStyles('mapbox', styleName)
+                url = scope.mapUrl + 'mapbox/' + objStyle[0].mapbox + '/static/'
+                let width = 1280
+                let height = 1280
+                url = url + bboxString + `/${height}x${width}?access_token=${scope.apiKey}&attribution=false&logo=false`
+                let mapFileName = `map_image_lat_${lat}_lng_${lng}_width_${width}_height_${height}.png`
 
-            let objTile = await mapUtils.downloadToTile(false, url)
-            await saveImage(dirHandle, objTile.buffer, weightFileName, "png")
+                let objTile = await mapUtils.downloadToTile(false, url)
+                await saveImage(dirHandle, objTile.buffer, mapFileName, "png")
+                stopTimer()
 
-            let black = [0, 0, 0]
-            let white = [255, 255, 254] //offset from real white
-            let weight_data = userSettings.weightmapColors
-            for (let data of weight_data) {
-                let splat_image = null
-                let pixelsArray = null
-                //Change color for splat map
-                if (Array.isArray(data.color[0])) {
-                    splat_image = null
-                    pixelsArray = null
-                    splat_image = await imageUtils.loadImageFromArray(objTile.buffer)
-                    pixelsArray = splat_image.getPixelsArray()
-                    for (let aColor of data.color) {
-                        for (let i = 0; i < pixelsArray.length; i++) {
-                            if (JSON.stringify(pixelsArray[i]) === JSON.stringify(aColor)) {
-                                splat_image.setPixel(i, white)
+            } else if (scope.serverType === 'maptiler') {
+                setUrlInfo('png')
+                styleName = map.getStyle().name
+                objStyle = mapUtils.convertMapboxMaptilerStyles('maptiler', styleName.toUpperCase())
+                url = scope.mapUrl + objStyle[0].maptiler_map + '/'
+                let objTiles = await downloadTiles(url, false, 11, false)
+                stopTimer()
+
+                startFakeTimer('Combining images')
+                let imageBuffer = await combineTilesJimp(objTiles.tiles, tileSize, tileSize)
+                let mapFileName = `map_image_lat_${lat}_lng_${lng}_zoom_${zoom}.png`
+                await saveImage(dirHandle, imageBuffer, mapFileName, "png")
+                stopFakeTimer()
+            }
+        }
+
+        //Process weightmap
+        if (weightmap === true) {
+            startTimer('Processing weightmap image',true)
+            console.log('weightmap')
+            if (scope.serverType === 'mapbox') {
+                //Use the static api instead of stitching tiles
+                let url = scope.mapUrl + scope.weightMapUrl + '/static/'
+                let width = 1280
+                let height = 1280
+                url = url + bboxString + `/${height}x${width}?access_token=${scope.apiKey}&attribution=false&logo=false`
+                let weightFileName = `weightmap_image_lat_${lat}_lng_${lng}_width_${width}_height_${height}.png`
+
+                let objTile = await mapUtils.downloadToTile(false, url)
+                await saveImage(dirHandle, objTile.buffer, weightFileName, "png")
+
+                let black = [0, 0, 0]
+                let white = [255, 255, 254] //offset from real white
+                let weight_data = userSettings.weightmapColors
+                for (let data of weight_data) {
+                    let splat_image = null
+                    let pixelsArray = null
+                    //Change color for splat map
+                    if (Array.isArray(data.color[0])) {
+                        splat_image = null
+                        pixelsArray = null
+                        splat_image = await imageUtils.loadImageFromArray(objTile.buffer)
+                        pixelsArray = splat_image.getPixelsArray()
+                        for (let aColor of data.color) {
+                            for (let i = 0; i < pixelsArray.length; i++) {
+                                if (JSON.stringify(pixelsArray[i]) === JSON.stringify(aColor)) {
+                                    splat_image.setPixel(i, white)
+                                }
                             }
                         }
-                    }
 
-                    pixelsArray = splat_image.getPixelsArray()
-                    for (let i = 0; i < pixelsArray.length; i++) {
-                        if (JSON.stringify(pixelsArray[i]) !== JSON.stringify(white)) {
-                            splat_image.setPixel(i, black)
+                        pixelsArray = splat_image.getPixelsArray()
+                        for (let i = 0; i < pixelsArray.length; i++) {
+                            if (JSON.stringify(pixelsArray[i]) !== JSON.stringify(white)) {
+                                splat_image.setPixel(i, black)
+                            }
                         }
-                    }
 
-                    let img = splat_image
-                        .resize({
-                            width: landscapeSize,
-                            height: landscapeSize
-                        })
-                        .gaussianFilter({radius: weightmapblurradius})
+                        let img = splat_image
+                            .resize({
+                                width: landscapeSize,
+                                height: landscapeSize
+                            })
+                            .gaussianFilter({radius: weightmapblurradius})
 
-                    let splat_buff = await img.toBuffer()
-                    let weightmapFileName = `weightmap_${data.name}_lat_${grid.lat}_lng_${grid.lng}.png`
-                    await saveImage(dirHandle, splat_buff, weightmapFileName, "png")
+                        let splat_buff = await img.toBuffer()
+                        let weightmapFileName = `weightmap_${data.name}_lat_${grid.lat}_lng_${grid.lng}.png`
+                        await saveImage(dirHandle, splat_buff, weightmapFileName, "png")
 
-                } else {
-                    splat_image = await imageUtils.loadImageFromArray(objTile.buffer)
-                    pixelsArray = splat_image.getPixelsArray()
-                    for (let i = 0; i < pixelsArray.length; i++) {
-                        if (JSON.stringify(pixelsArray[i]) === JSON.stringify(data.color)) {
-                            splat_image.setPixel(i, white)
-                        } else {
-                            splat_image.setPixel(i, black)
+                    } else {
+                        splat_image = await imageUtils.loadImageFromArray(objTile.buffer)
+                        pixelsArray = splat_image.getPixelsArray()
+                        for (let i = 0; i < pixelsArray.length; i++) {
+                            if (JSON.stringify(pixelsArray[i]) === JSON.stringify(data.color)) {
+                                splat_image.setPixel(i, white)
+                            } else {
+                                splat_image.setPixel(i, black)
+                            }
                         }
+
+                        let img = splat_image
+                            .resize({
+                                width: landscapeSize,
+                                height: landscapeSize
+                            })
+                            .gaussianFilter({radius: weightmapblurradius})
+
+                        let splat_buff = await img.toBuffer()
+                        let weightmapFileName = `weightmap_${data.name}_lat_${grid.lat}_lng_${grid.lng}.png`
+                        await saveImage(dirHandle, splat_buff, weightmapFileName, "png")
                     }
-
-                    let img = splat_image
-                        .resize({
-                            width: landscapeSize,
-                            height: landscapeSize
-                        })
-                        .gaussianFilter({radius: weightmapblurradius})
-
-                    let splat_buff = await img.toBuffer()
-                    let weightmapFileName = `weightmap_${data.name}_lat_${grid.lat}_lng_${grid.lng}.png`
-                    await saveImage(dirHandle, splat_buff, weightmapFileName, "png")
+                    stopTimer()
                 }
-                stopTimer()
+            } else {
+                toggleModal('open', `Weightmaps are not available for Maptiler`)
             }
-        } else {
-            toggleModal('open', `Weightmaps are not available for Maptiler`)
         }
+        //Process geojson
+        if (geojson === true) {
+            startTimer('Processing geojson',true)
+            console.log('geojson')
+
+            let features = mapUtils.getFeaturesFromBB(map, bbox, true)
+            let strFeatures = JSON.stringify(features)
+            let featuresFileName = `features_lat_${lat}_lng_${lng}.json`
+            await fileUtils.writeFileToDisk(dirHandle, featuresFileName, strFeatures)
+            stopTimer()
+        }
+        if (scope.exportType === 'unrealSend') {
+            await sendToUnreal()
+        }
+    } else {
+        toggleModal('open', `Please select at least one image type to download`)
     }
-    //Process geojson
-    if (geojson === true) {
-        startTimer('Processing geojson')
-        console.log('geojson')
-
-        let features = mapUtils.getFeaturesFromBB(map, bbox, true)
-        let strFeatures = JSON.stringify(features)
-        let featuresFileName = `features_lat_${lat}_lng_${lng}.json`
-        await fileUtils.writeFileToDisk(dirHandle, featuresFileName, strFeatures)
-        stopTimer()
-    }
-
-    if (scope.exportType === 'unrealSend') {
-
-    }
-
 }
-
 
 async function autoCalculateBaseHeight() {
     await setBaseLevel()
     await setHeightScale()
 }
-
 
 function convertHeightmap(heightmap_source) {
     const heightmapSize = 1081;
@@ -1213,13 +1224,6 @@ function overlayOff() {
 }
 
 function exportTypeChange(e) {
-    // let ele = document.getElementById("exportType").value;
-    // let unrealOptions = document.getElementById("unrealOptions");
-    // if (ele.includes('unreal')) {
-    //     unrealOptions.style.display = 'block'
-    // } else {
-    //     unrealOptions.style.display = 'none'
-    // }
     scope.exportType = e.value
 }
 
@@ -1303,6 +1307,92 @@ function help() {
     let params = `scrollbars=yes,resizable=no,status=no,location=no,toolbar=no,menubar=no,
 width=900,height=600,left=500,top=100`;
     open('help.html', 'help', params);
+}
+
+async function sendToUnreal() {
+    startTimer('Sending to Unreal',true)
+    console.log('sendtounreal')
+    let host = 'http://localhost:30010/', call = 'remote/object/call', data = {}, dataJson, result,
+        bpPath, bluePrintName = 'Mapbox_BP'
+
+
+    //Find name of Mapbox_BP in scene
+    data = {
+        "objectPath": "/Script/UnrealEd.Default__EditorActorSubsystem",
+        "functionName": "GetAllLevelActors"
+    }
+
+    dataJson = await mapUtils.unrealRemoteControl(data, host + call)
+    if (dataJson.error) {
+        if (dataJson.error.message === "Failed to fetch") {
+            toggleModal('open', "Cannot connect to Unreal server. Please make sure your project is open and Mapbox_BP is in the scene.  " +
+                "Also make sure you launched the Map using the Select Map button as this starts the Unreal Web Server")
+        } else {
+            toggleModal('open', dataJson.error.message)
+        }
+    } else {
+        let objArray = await dataJson.response.json()
+        for (let obj of objArray.ReturnValue) {
+            result = obj.includes(bluePrintName)
+            if (result === true) {
+                bpPath = obj
+                break;
+            } else {
+                bpPath = null
+            }
+        }
+
+        if (bpPath) {
+            //Mapbox_BP is in scene and we can continue
+            let wpGridSize
+            if (worldpart === true) {
+                wpGridSize = worldpartiongridsize
+            } else {
+                wpGridSize = 0
+            }
+
+            data = {
+                "objectPath": bpPath,
+                "functionName": "GenerateMapboxLandscape",
+                "parameters": {
+                    "LandscapeName": landscapename,
+                    "LandscapeSize": scope.landscapeSize.toString(),
+                    "TileHeightmapFileName": heightmapFileName,
+                    "TileGeojsonFileName": "",
+                    "TileInfoFileName": "",
+                    "MapMiddleLngX": "",
+                    "MapMiddleLatY": "",
+                    "MapBtmRLng": "",
+                    "MapBtmLLng": "",
+                    "MapTopLLat": "",
+                    "MapBtmLLat": "",
+                    "RunFunction": "Unreal Heightmap",
+                    "SlippyMapTileString": "",
+                    "HeightMapTexturesPath": '/Game/ImportedHeightMaps/',
+                    "AlphaBrushName": "",
+                    "AlphaBrushDestinationPath": "",
+                    "AlphaBrushTemplatePath": "",
+                    "AlphaBrushTexturesPath": "",
+                    "HeightmapProperty": "HeightMap",
+                    "WorldPartitionGridSize": wpGridSize.toString()
+                }
+            }
+
+
+            //Call method on Mapbox_BP
+            dataJson = await mapUtils.unrealRemoteControl(data, host + call)
+            if (dataJson.error) {
+                console.log(dataJson.error)
+                toggleModal('open', dataJson.error.message)
+            } else {
+                //Success
+                console.log(await dataJson.response.json())
+            }
+        } else {
+            toggleModal('open', 'Could not find Mapbox_BP in scene')
+        }
+    }
+    stopTimer()
 }
 
 window.toggleModal = toggleModal
