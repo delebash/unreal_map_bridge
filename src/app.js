@@ -766,8 +766,8 @@ function setMapStyle(el) {
 }
 
 
-function startTimer(msg,reset) {
-    if(reset === true){
+function startTimer(msg, reset) {
+    if (reset === true) {
         ticks = 0
     }
     overlayOn()
@@ -900,7 +900,7 @@ function setUrlInfo(val) {
 }
 
 async function previewHeightmap() {
-    startTimer('Processing heightmap',true)
+    startTimer('Processing heightmap', true)
     let convertedHeightmap, png, heightmap, imgUrl;
     setUrlInfo('height')
     let autoCalc = document.getElementById("autoCalcBaseHeight").checked
@@ -967,7 +967,7 @@ async function exportMap() {
     if (ele_heightmap === true || satellite === true || mapimage === true || weightmap === true || geojson === true) {
         //Process heightmap
         if (ele_heightmap === true) {
-            startTimer('Processing heightmap',true)
+            startTimer('Processing heightmap', true)
             console.log('heightmap')
             setUrlInfo('height')
             heightmap = await getHeightmap()
@@ -992,7 +992,7 @@ async function exportMap() {
         if (satellite === true) {
             console.log('satellite')
             let zoom
-            startTimer('Processing satellite',true)
+            startTimer('Processing satellite', true)
             setUrlInfo('jpg')
             if (overridezoom === '') {
                 zoom = document.getElementById('satzoomval').value
@@ -1010,15 +1010,21 @@ async function exportMap() {
         }
         //Process mapimage
         if (mapimage === true) {
-            startTimer('Processing map image',true)
+            startTimer('Processing map image', true)
             console.log('mapimage')
 
             let styleName, objStyle, url
             if (scope.serverType === 'mapbox') {
                 //Use the static api instead of stitching tiles
                 styleName = map.getStyle().metadata['mapbox:origin'];
-                objStyle = mapUtils.convertMapboxMaptilerStyles('mapbox', styleName)
-                url = scope.mapUrl + 'mapbox/' + objStyle[0].mapbox + '/static/'
+                if (styleName === undefined) {
+                    url = scope.mapUrl + scope.weightMapUrl + '/static/'
+                    console.log('weight')
+                } else {
+                    objStyle = mapUtils.convertMapboxMaptilerStyles('mapbox', styleName)
+                    url = scope.mapUrl + 'mapbox/' + objStyle[0].mapbox + '/static/'
+                }
+
                 let width = 1280
                 let height = 1280
                 url = url + bboxString + `/${height}x${width}?access_token=${scope.apiKey}&attribution=false&logo=false`
@@ -1046,7 +1052,7 @@ async function exportMap() {
 
         //Process weightmap
         if (weightmap === true) {
-            startTimer('Processing weightmap image',true)
+            startTimer('Processing weightmap image', true)
             console.log('weightmap')
             if (scope.serverType === 'mapbox') {
                 //Use the static api instead of stitching tiles
@@ -1127,7 +1133,7 @@ async function exportMap() {
         }
         //Process geojson
         if (geojson === true) {
-            startTimer('Processing geojson',true)
+            startTimer('Processing geojson', true)
             console.log('geojson')
 
             let features = mapUtils.getFeaturesFromBB(map, bbox, true)
@@ -1310,7 +1316,7 @@ width=900,height=600,left=500,top=100`;
 }
 
 async function sendToUnreal() {
-    startTimer('Sending to Unreal',true)
+    startTimer('Sending to Unreal', true)
     console.log('sendtounreal')
     let host = 'http://localhost:30010/', call = 'remote/object/call', data = {}, dataJson, result,
         bpPath, bluePrintName = 'Mapbox_BP'

@@ -382,6 +382,9 @@ function convertMapboxMaptilerStyles(key, layerId) {
                 maptiler: 'SATELLITE',
                 maptiler_map: 'satellite',
                 diff: true
+            },
+            {
+                mapbox: 'weightmap'
             }
         ]
     const results = mapStyle.filter(obj => {
