@@ -5,13 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/help.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/help.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/help.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,7 +73,7 @@
       <workItem from="1687103252561" duration="7794000" />
       <workItem from="1687118129954" duration="16462000" />
       <workItem from="1687142681371" duration="11736000" />
-      <workItem from="1687181244919" duration="7512000" />
+      <workItem from="1687181244919" duration="8201000" />
     </task>
     <task id="LOCAL-00001" summary="various fixes, sat download">
       <created>1686959652958</created>
@@ -158,7 +152,14 @@
       <option name="project" value="LOCAL" />
       <updated>1687154630636</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="help section">
+      <created>1687193395687</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1687193395687</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -174,7 +175,8 @@
     <MESSAGE value="fix sat zoom" />
     <MESSAGE value="add map download and geojson" />
     <MESSAGE value="fix weightmap" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix weightmap" />
+    <MESSAGE value="help section" />
+    <option name="LAST_COMMIT_MESSAGE" value="help section" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
