@@ -973,6 +973,10 @@ async function exportMap() {
     let bbox = [extent.topleft[0], extent.bottomright[1], extent.bottomright[0], extent.topleft[1]]
     let bboxString = '[' + bbox + ']'
     let config = {}
+
+    let subDirName = `tile_lat${lat}_lng${lng}`
+    const subDir = await dirHandle.getDirectoryHandle(subDirName, {create: true});
+
     if (scope.exportType === 'unrealSend') {
         if (ele_heightmap !== true) {
             toggleModal('open', `Send to Unreal requires image download type heightmap to be checked`)
@@ -1010,7 +1014,7 @@ async function exportMap() {
             config.flipy = flipy
             config.landscapeSize = landscapeSize
             config.isHeightmap = true
-            config.dirHandle = dirHandle
+            config.dirHandle = subDir
             config.filename = `heightmap_lat_${lat}_lng_${lng}_landscape_size_${landscapeSize}.png`
             await workerProcess(config)
 
@@ -1038,7 +1042,7 @@ async function exportMap() {
             config.function = 'combineImages'
             config.objTiles = objTiles
             config.tileSize = tileSize
-            config.dirHandle = dirHandle
+            config.dirHandle = subDir
             config.lng = lng
             config.lat = lat
             config.zoom = zoom
@@ -1069,7 +1073,7 @@ async function exportMap() {
                 let mapFileName = `map_image_lat_${lat}_lng_${lng}_width_${width}_height_${height}.png`
 
                 let objTile = await mapUtils.downloadToTile(false, url)
-                await saveImage(dirHandle, objTile.buffer, mapFileName, "png")
+                await saveImage(subDir, objTile.buffer, mapFileName, "png")
                 stopTimer()
 
             } else if (scope.serverType === 'maptiler') {
@@ -1088,7 +1092,7 @@ async function exportMap() {
                 config.function = 'combineImages'
                 config.objTiles = objTiles
                 config.tileSize = tileSize
-                config.dirHandle = dirHandle
+                config.dirHandle = subDir
                 config.lng = lng
                 config.lat = lat
                 config.zoom = zoom
@@ -1111,13 +1115,13 @@ async function exportMap() {
                 let weightFileName = `weightmap_image_lat_${lat}_lng_${lng}_width_${width}_height_${height}.png`
                 //Use the static api instead of stitching tiles
                 let objTile = await mapUtils.downloadToTile(false, url)
-                await saveImage(dirHandle, objTile.buffer, weightFileName, "png")
+                await saveImage(subDir, objTile.buffer, weightFileName, "png")
 
                 config = {}
                 config.function = 'weightMap'
                 config.weight_data = userSettings.weightmapColors
                 config.weightMapUrl = scope.weightMapUrl
-                config.dirHandle = dirHandle
+                config.dirHandle = subDir
                 config.objTile = objTile
                 config.lng = grid.lng
                 config.lat = grid.lat
@@ -1137,7 +1141,7 @@ async function exportMap() {
             let features = mapUtils.getFeaturesFromBB(map, bbox, true)
             let strFeatures = JSON.stringify(features)
             let featuresFileName = `features_lat_${lat}_lng_${lng}.json`
-            await fileUtils.writeFileToDisk(dirHandle, featuresFileName, strFeatures)
+            await fileUtils.writeFileToDisk(subDir, featuresFileName, strFeatures)
             stopTimer()
         }
         if (scope.exportType === 'unrealSend') {
