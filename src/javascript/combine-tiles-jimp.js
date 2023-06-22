@@ -3,7 +3,7 @@
 import minBy from 'lodash/minBy';
 import maxBy from 'lodash/maxBy';
 import sortBy from 'lodash/sortBy';
-
+import 'https://cdnjs.cloudflare.com/ajax/libs/jimp/0.22.8/jimp.min.js'
 
 export async function combineTilesJimp(tiles, tWidth, tHeight) {
     const offsetX = minBy(tiles, tile => tile.x).x

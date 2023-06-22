@@ -818,7 +818,7 @@ async function getHeightmap(z = 14, override = false) {
 async function downloadTiles(tilesUrl, isHeightmap = true, z = 14, override = false) {
     return new Promise(async (resolve, reject) => {
         let extent = getExtent(grid.lng, grid.lat, mapSize / 1080 * 1081);
-
+        console.log(z)
         let objTileCnt = mapUtils.getTileCountAdjusted(z, extent, override)
         let x = objTileCnt.x
         let y = objTileCnt.y
@@ -1021,20 +1021,19 @@ async function exportMap() {
             startTimer()
             let zoom
             setUrlInfo('jpg')
-            if (overridezoom === '') {
-                zoom = document.getElementById('satzoomval').value
+            if (overridezoom.length === 0) {
+                zoom = 14
             } else {
                 zoom = overridezoom
             }
             let objTiles = await downloadTiles(scope.satelliteMapUrl, false, zoom, override)
             stopTimer()
 
-
             console.log('Combining images')
             progressMsg.innerHTML = 'Combining images'
             startTimer()
-            config.function = 'combineImages'
             config = {}
+            config.function = 'combineImages'
             config.objTiles = objTiles
             config.tileSize = tileSize
             config.dirHandle = dirHandle
