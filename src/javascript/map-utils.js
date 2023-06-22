@@ -1,6 +1,7 @@
 import imageUtils from "./image-utiles.js";
 import tib from "tiles-in-bbox";
 import mapboxgl from 'mapbox-gl';
+
 let cache, downloadCount = 0
 caches.open('tiles').then((data) => cache = data);
 

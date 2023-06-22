@@ -1,7 +1,6 @@
 'use strict'
 
-import 'destyle.css'
-import '@fortawesome/fontawesome-free/css/all.css'
+
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
@@ -17,14 +16,13 @@ import * as turf from '@turf/turf'
 import idbKeyval from "./javascript/idb-keyval-iife.js";
 import fileUtils from "./javascript/fs-helpers.js"
 import mapUtils from './javascript/map-utils.js'
-import {combineTilesJimp} from "./javascript/combine-tiles-jimp.js";
 import {setIntervalAsync, clearIntervalAsync} from 'set-interval-async';
-import imageUtils from "./javascript/image-utiles.js";
 // import chroma from "chroma-js";
 
-const myWorker = new Worker('./javascript/worker.js', {
+const myWorker = new Worker(new URL('./javascript/worker', import.meta.url), {
     type: 'module'
-});
+})
+
 const defaultWaterdepth = 50
 const pbElement = document.getElementById('progress');
 const previewImage = document.getElementById("previewImage");
@@ -215,8 +213,17 @@ let rows = [
         ]
     }
 ]
-let userSettings = await loadUserSettings()
-let grid = await loadSettings();
+let userSettings
+let grid
+
+//init
+init()
+
+async function init() {
+    userSettings = await loadUserSettings()
+    grid = await loadSettings();
+    initMap()
+}
 
 
 let gridOptions = {
@@ -245,7 +252,6 @@ for (let i = 0; i < panels.length; i++) {
     iconClass.push(icons[i].className);
 }
 
-initMap()
 
 function initWeightmapGrid() {
 
@@ -603,7 +609,7 @@ async function saveUserSettings() {
     if (map) {
         map.remove();
     }
-    initMap()
+    init()
     // togglePanel(4)
 }
 
@@ -914,7 +920,7 @@ async function workerProcess(config) {
         myWorker.onmessage = function (e) {
             console.log(e.data)
             let results = e.data
-            if (results.process === 'worker' && results.msg ==='complete') {
+            if (results.process === 'worker' && results.msg === 'complete') {
                 stopTimer()
                 resolve(true)
             } else if (results.process === 'weightMap' && results.msg === 'update') {
@@ -1005,6 +1011,7 @@ async function exportMap() {
             config.dirHandle = dirHandle
             config.filename = `heightmap_lat_${lat}_lng_${lng}_landscape_size_${landscapeSize}.png`
             await workerProcess(config)
+
         }
 
         //Process satellite

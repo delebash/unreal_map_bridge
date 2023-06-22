@@ -1,19 +1,22 @@
 import {Image} from "image-js";
 
-import workerUrl from 'gdal3.js/dist/package/gdal3.js?url'
-import dataUrl from 'gdal3.js/dist/package/gdal3WebAssembly.data?url'
-import wasmUrl from 'gdal3.js/dist/package/gdal3WebAssembly.wasm?url'
-import initGdalJs from 'gdal3.js';
-const paths = {
-    wasm: wasmUrl,
-    data: dataUrl,
-    js: workerUrl,
-};
-let Gdal = await initGdalJs({paths})
+await import('https://cdn.jsdelivr.net/npm/gdal3.js@2.4.0/dist/package/gdal3.js')
+let Gdal = await initGdalJs({path: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.4.0/dist/package', useWorker: false})
 
-//let Gdal = await initGdalJs({ path: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.4.0/dist/package', useWorker: false })
+// import workerUrl from 'gdal3.js/dist/package/gdal3.js?url'
+// import dataUrl from 'gdal3.js/dist/package/gdal3WebAssembly.data?url'
+// import wasmUrl from 'gdal3.js/dist/package/gdal3WebAssembly.wasm?url'
+// import initGdalJs from 'gdal3.js';
+// const paths = {
+//     wasm: wasmUrl,
+//     data: dataUrl,
+//     js: workerUrl,
+// };
+// let Gdal = await initGdalJs({paths})
+
 
 async function manipulateImage(buff, blurradius, sealevel, flipx, flipy, landscapeSize, isHeightmap) {
+
     let ZrangeSeaLevel = '32767'
     let maxPngValue = '65535'
     let minPngValue = '0'
@@ -85,11 +88,12 @@ function convertImage(width, height, imageArray, bitDepth, colorModel) {
 
 
 async function processGdal(buff, filename, translateOptions, file_type) {
+
     let blob = new Blob([buff], {type: 'image/' + file_type})
     const file = new File([blob], filename);
     const result = await Gdal.open(file);
     const dataset = result.datasets[0];
-    console.log('gdal transale')
+    console.log('gdal translate')
     const filePath = await Gdal.gdal_translate(dataset, translateOptions);
     const fileBytes = await Gdal.getFileBytes(filePath);
     Gdal.close(dataset);

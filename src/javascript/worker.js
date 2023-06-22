@@ -1,14 +1,10 @@
 import imageUtils from "./image-utiles.js";
 import fileUtils from "./fs-helpers.js";
 import {combineTilesJimp} from "./combine-tiles-jimp.js";
-import mapUtils from "./map-utils.js";
 
 onmessage = async function (e) {
 
     const config = e.data;
-
-    // return to main thread
-    //postMessage(stat);
 
     switch (config.function) {
         case "manipulateImage":
@@ -24,19 +20,19 @@ onmessage = async function (e) {
             break;
 
     }
-    postMessage({process:'worker', msg:'complete'})
+    postMessage({process: 'worker', msg: 'complete'})
 };
 
 async function manipulateImage(config) {
     let exportBuff = await imageUtils.manipulateImage(config.png, config.heightmapblurradius, config.sealevel, config.flipx, config.flipy, config.landscapeSize, config.isHeightmap)
     await saveImage(config.dirHandle, exportBuff, config.filename, "png")
-    postMessage({process:config.function, msg:'complete'})
+    postMessage({process: config.function, msg: 'complete'})
 }
 
 async function combineImages(config) {
     let imageBuffer = await combineTilesJimp(config.objTiles.tiles, config.tileSize, config.tileSize)
     await saveImage(config.dirHandle, imageBuffer, config.filename, "png")
-    postMessage({process:config.function, msg:'complete'})
+    postMessage({process: config.function, msg: 'complete'})
 }
 
 function weightMap(config) {
@@ -45,7 +41,7 @@ function weightMap(config) {
         let white = [255, 255, 254] //offset from real white
         let weight_data = config.weight_data
         for (let data of weight_data) {
-            postMessage({process:config.function, msg:'update',name:data.name})
+            postMessage({process: config.function, msg: 'update', name: data.name})
             let splat_image = null
             let pixelsArray = null
             //Change color for splat map
@@ -104,7 +100,7 @@ function weightMap(config) {
 
             }
         }
-        postMessage({process:config.function, msg:'complete'})
+        postMessage({process: config.function, msg: 'complete'})
         resolve(true)
     })
 }
@@ -112,5 +108,5 @@ function weightMap(config) {
 async function saveImage(dirHandle, imageBytes, save_fileName, file_type) {
     let outputBlob = new Blob([imageBytes], {type: 'image/' + file_type});
     await fileUtils.writeFileToDisk(dirHandle, save_fileName, outputBlob)
-    postMessage({process:'saveImage', msg:'complete'})
+    postMessage({process: 'saveImage', msg: 'complete'})
 }

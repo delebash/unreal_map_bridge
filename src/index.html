@@ -10,6 +10,10 @@
     <meta http-equiv="Expires" content="0">
     <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon">
     <link href="images/favicon.ico" rel="icon" type="image/x-icon">
+    <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+          referrerpolicy="no-referrer" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/destyle.css@1.0.15/destyle.css" rel="stylesheet"/>
     <link href="styles.css" rel="stylesheet" type="text/css">
 </head>
 <body class="row">
@@ -20,12 +24,13 @@
     </div>
 </div>
 <div id="overlay">
-<!--    <div aria-busy="true" aria-describedby="progressBusy" class="center" id="progressBusyArea" style="display: none">-->
-<!--        <span class="progressMsg" id="progressMsg2"></span>-->
-<!--        <progress aria-label="Content loading…" class="refreshprogress" id="progressBusy"></progress>-->
-<!--    </div>-->
+    <!--    <div aria-busy="true" aria-describedby="progressBusy" class="center" id="progressBusyArea" style="display: none">-->
+    <!--        <span class="progressMsg" id="progressMsg2"></span>-->
+    <!--        <progress aria-label="Content loading…" class="refreshprogress" id="progressBusy"></progress>-->
+    <!--    </div>-->
     <div class="center" id="progressArea" style="display: none">
-        <span class="progressMsg" id="progressMsg"></span>&nbsp;&nbsp;<span class="progressMsg" id="processCount"></span>
+        <span class="progressMsg" id="progressMsg"></span>&nbsp;&nbsp;<span class="progressMsg"
+                                                                            id="processCount"></span>
         <progress class="refreshprogress" id="progress" max="1000" value="0"></progress>
     </div>
 </div>
@@ -366,17 +371,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jimp/0.22.8/jimp.min.js"
             integrity="sha512-35IpHDqZJRT/3FJlRl03MG3FSyg9CdLKLNgbUR15MgxKF/8WcUxB7tQ5vROtr0ClQ5ij5MaQXd8UOU+8doXbwA=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<!--    <script type="text/javascript"-->
-<!--            src="https://cdn.jsdelivr.net/npm/gdal3.js@2.4.0/dist/package/gdal3.js"-->
-<!--            integrity="sha384-XlqVvSG4V8zz8Kdw95OpRdsWyJnWE5QUZy++BeAIEVb+f2n5RM7jdbZh5lm0pHWk"-->
-<!--            crossorigin="anonymous"-->
-<!--    ></script>-->
-    <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js" integrity="sha512-zInFF17qBFVvvvFpIfeBzo7Tj7+rQxLeTJDmbxjBz5/zIr89YVbTNelNhdTT+/DCrxoVzBeUPVFJsczKbB7sew==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>-->
+
+    <!--    <script type="text/javascript"-->
+    <!--            src="https://cdn.jsdelivr.net/npm/gdal3.js@2.4.0/dist/package/gdal3.js"-->
+    <!--            integrity="sha384-XlqVvSG4V8zz8Kdw95OpRdsWyJnWE5QUZy++BeAIEVb+f2n5RM7jdbZh5lm0pHWk"-->
+    <!--            crossorigin="anonymous"-->
+    <!--    ></script>-->
+
     <script src="UPNG.js"></script>
     <script src="jszip.js"></script>
     <script src="pako.js"></script>
     <script src="binding.js"></script>
     <script type="module" src="app.js">
+
     </script>
 </body>
 </html>

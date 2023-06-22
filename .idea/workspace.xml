@@ -5,13 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/javascript/worker.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/javascript/combine-tiles-jimp.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/javascript/combine-tiles-jimp.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/javascript/fs-helpers.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/javascript/fs-helpers.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/javascript/image-utiles.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/javascript/image-utiles.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/javascript/map-utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/javascript/map-utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/javascript/worker.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/javascript/worker.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/vite.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,27 +41,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;F:/3DProjects/github/DansProjects/chroma.js-main&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.sync&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "F:/3DProjects/github/DansProjects/unreal_map_bridge/src/public",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "settings.sync",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="F:\3DProjects\github\DansProjects\unreal_map_bridge\src\public" />
+      <recent name="F:\3DProjects\github\DansProjects\unreal_map_bridge\dist\assets" />
       <recent name="F:\3DProjects\github\DansProjects\unreal_map_bridge\dist" />
       <recent name="F:\3DProjects\github\DansProjects\unreal_map_bridge\src\javascript" />
     </key>
@@ -85,7 +90,7 @@
       <workItem from="1687257769411" duration="6752000" />
       <workItem from="1687283776914" duration="3308000" />
       <workItem from="1687287139426" duration="154000" />
-      <workItem from="1687396855225" duration="16536000" />
+      <workItem from="1687396855225" duration="39728000" />
     </task>
     <task id="LOCAL-00001" summary="various fixes, sat download">
       <created>1686959652958</created>
@@ -213,7 +218,15 @@
       <option name="project" value="LOCAL" />
       <updated>1687202316359</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="add webworker to fix progress bar">
+      <option name="closed" value="true" />
+      <created>1687416373216</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1687416373216</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -234,20 +247,27 @@
     <MESSAGE value="sendtounreal" />
     <MESSAGE value="fix mapimage download" />
     <MESSAGE value="timer" />
-    <option name="LAST_COMMIT_MESSAGE" value="timer" />
+    <MESSAGE value="add webworker to fix progress bar" />
+    <option name="LAST_COMMIT_MESSAGE" value="add webworker to fix progress bar" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/app.js</url>
-          <line>19</line>
+          <line>17</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/app.js</url>
-          <line>51</line>
+          <line>49</line>
           <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/app.js</url>
+          <line>221</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
