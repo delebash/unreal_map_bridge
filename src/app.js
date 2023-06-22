@@ -1,11 +1,18 @@
 'use strict'
 
+import 'destyle.css'
+import '@fortawesome/fontawesome-free/css/all.css'
 import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
+import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import * as maptilersdk from "@maptiler/sdk";
-import {GeocodingControl} from "@maptiler/geocoding-control/maptilersdk";
 import "@maptiler/sdk/dist/maptiler-sdk.css";
+import {GeocodingControl} from "@maptiler/geocoding-control/maptilersdk";
 import "@maptiler/geocoding-control/style.css";
+import {Grid} from 'ag-grid-community';
+import 'ag-grid-community/styles//ag-grid.css';
+import 'ag-grid-community/styles//ag-theme-alpine.css';
 import * as turf from '@turf/turf'
 import idbKeyval from "./javascript/idb-keyval-iife.js";
 import fileUtils from "./javascript/fs-helpers.js"
@@ -13,17 +20,15 @@ import mapUtils from './javascript/map-utils.js'
 import {combineTilesJimp} from "./javascript/combine-tiles-jimp.js";
 import {setIntervalAsync, clearIntervalAsync} from 'set-interval-async';
 import imageUtils from "./javascript/image-utiles.js";
-import {Grid} from 'ag-grid-community';
-import 'ag-grid-community/styles//ag-grid.css';
-import 'ag-grid-community/styles//ag-theme-alpine.css';
 // import chroma from "chroma-js";
 
+const myWorker = new Worker('./javascript/worker.js', {
+    type: 'module'
+});
 const defaultWaterdepth = 50
 const pbElement = document.getElementById('progress');
 const previewImage = document.getElementById("previewImage");
 const progressMsg = document.getElementById('progressMsg')
-const progressMsg2 = document.getElementById('progressMsg2')
-const progressBusyArea = document.getElementById('progressBusyArea')
 const progressArea = document.getElementById('progressArea');
 const eGridDiv = document.querySelector('#myGrid');
 const modal = document.getElementById("modal");
@@ -32,7 +37,7 @@ const zoom = document.getElementById("zoom");
 const worldpart = document.getElementById('worldpart').checked
 const worldpartiongridsize = document.getElementById('worldpartiongridsize').value
 const landscapename = document.getElementById('landscapename').value
-
+const processCount = document.getElementById('processCount')
 let distance, urlKey, urlType, map, geocoder, heightmapFileName
 let promiseArray = [];
 let mapSize = 50;
@@ -766,16 +771,16 @@ function setMapStyle(el) {
 }
 
 
-function startTimer(msg, reset) {
-    if (reset === true) {
-        ticks = 0
-    }
+function startTimer(showTime = false) {
     overlayOn()
     progressArea.style.display = 'block'
-    progressMsg.innerHTML = msg
     timer = setIntervalAsync(async () => {
         ticks++;
         incPb(pbElement)
+        if (showTime === true) {
+            processCount.innerHTML = `Time: ${ticks}`
+        }
+
     }, 10);
 }
 
@@ -786,21 +791,9 @@ function stopTimer() {
     ticks = 0
     progressMsg.innerHTML = ''
     progressArea.style.display = 'none'
+    processCount.innerHTML = ''
     overlayOff()
 }
-
-function startFakeTimer(msg) {
-    overlayOn()
-    progressBusyArea.style.display = 'block'
-    progressMsg2.innerHTML = msg
-}
-
-function stopFakeTimer() {
-    progressBusyArea.style.display = 'none'
-    progressMsg2.innerHTML = ''
-    overlayOff()
-}
-
 
 async function getHeightmap(z = 14, override = false) {
     return new Promise(async (resolve, reject) => {
@@ -847,8 +840,8 @@ async function downloadTiles(tilesUrl, isHeightmap = true, z = 14, override = fa
             tiles = []
         }
         promiseArray = [];
-        let count = 0
-        progress(count);
+        let count = 1
+        progressCount(count);
         // download the tiles
         for (let i = 0; i < tileCnt; i++) {
             for (let j = 0; j < tileCnt; j++) {
@@ -857,12 +850,12 @@ async function downloadTiles(tilesUrl, isHeightmap = true, z = 14, override = fa
                 if (isHeightmap === true) {
                     promiseArray.push(mapUtils.downloadToTile(true, url).then((png) => {
                         tiles[i][j] = png
-                        progress(count++);
+                        progressCount(count++);
                     }));
                 } else {
                     promiseArray.push(mapUtils.downloadToTile(false, url, (x + j), (y + i)).then((tile) => {
                         tiles.push(tile)
-                        progress(count++);
+                        progressCount(count++);
                     }));
                 }
             }
@@ -874,10 +867,8 @@ async function downloadTiles(tilesUrl, isHeightmap = true, z = 14, override = fa
     });
 }
 
-function progress(count) {
-    let ele = document.getElementById('downloadCount')
-    ele.innerHTML = `downloading ${count} of ${promiseArray.length}`
-    // console.log(count / promiseArray.length);
+function progressCount(count) {
+    processCount.innerHTML = `downloading ${count} of ${promiseArray.length}`
 }
 
 function setUrlInfo(val) {
@@ -900,7 +891,8 @@ function setUrlInfo(val) {
 }
 
 async function previewHeightmap() {
-    startTimer('Processing heightmap', true)
+    progressMsg.innerHTML = 'Processing heightmap'
+    startTimer()
     let convertedHeightmap, png, heightmap, imgUrl;
     setUrlInfo('height')
     let autoCalc = document.getElementById("autoCalcBaseHeight").checked
@@ -914,6 +906,22 @@ async function previewHeightmap() {
     previewImage.src = imgUrl
     updateInfopanel()
     stopTimer()
+}
+
+async function workerProcess(config) {
+    return new Promise(async (resolve, reject) => {
+        myWorker.postMessage(config);
+        myWorker.onmessage = function (e) {
+            console.log(e.data)
+            let results = e.data
+            if (results.process === 'worker' && results.msg ==='complete') {
+                stopTimer()
+                resolve(true)
+            } else if (results.process === 'weightMap' && results.msg === 'update') {
+                processCount.innerHTML = `Converting ${results.name}`
+            }
+        }
+    })
 }
 
 async function exportMap() {
@@ -948,7 +956,7 @@ async function exportMap() {
     let override = document.getElementById('satellitezoom').checked
 
     let landscapeSize = scope.landscapeSize.toString()
-    let exportBuff, lat, lng
+    let lat, lng
     lng = grid.lng.toFixed(5)
     lat = grid.lat.toFixed(5)
     let overridezoom = document.getElementById('satzoomval').value
@@ -956,7 +964,7 @@ async function exportMap() {
     let extent = getExtent(grid.lng, grid.lat, mapSize / 1080 * 1081);
     let bbox = [extent.topleft[0], extent.bottomright[1], extent.bottomright[0], extent.topleft[1]]
     let bboxString = '[' + bbox + ']'
-
+    let config = {}
     if (scope.exportType === 'unrealSend') {
         if (ele_heightmap !== true) {
             toggleModal('open', `Send to Unreal requires image download type heightmap to be checked`)
@@ -967,8 +975,10 @@ async function exportMap() {
     if (ele_heightmap === true || satellite === true || mapimage === true || weightmap === true || geojson === true) {
         //Process heightmap
         if (ele_heightmap === true) {
-            startTimer('Processing heightmap', true)
+
+            progressMsg.innerHTML = 'Processing heightmap'
             console.log('heightmap')
+            startTimer()
             setUrlInfo('height')
             heightmap = await getHeightmap()
             if (autoCalc === true) {
@@ -978,21 +988,31 @@ async function exportMap() {
             png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
             updateInfopanel()
             stopTimer()
-            // //Resample rescale
-            // //Timer does not work with gdal so fake it
-            startFakeTimer('Resizing and adjusting image')
-            exportBuff = await imageUtils.manipulateImage(png, heightmapblurradius, sealevel, flipx, flipy, landscapeSize, true)
 
-            heightmapFileName = `heightmap_lat_${lat}_lng_${lng}_landscape_size_${landscapeSize}.png`
-            await saveImage(dirHandle, exportBuff, heightmapFileName, "png")
-            stopFakeTimer()
+            console.log('start manipulating image')
+            progressMsg.innerHTML = 'Manipulating and resizing image'
+            startTimer(true)
+            config = {}
+            //Resample rescale
+            config.function = 'manipulateImage'
+            config.png = png
+            config.heightmapblurradius = heightmapblurradius
+            config.sealevel = sealevel
+            config.flipx = flipx
+            config.flipy = flipy
+            config.landscapeSize = landscapeSize
+            config.isHeightmap = true
+            config.dirHandle = dirHandle
+            config.filename = `heightmap_lat_${lat}_lng_${lng}_landscape_size_${landscapeSize}.png`
+            await workerProcess(config)
         }
 
         //Process satellite
         if (satellite === true) {
-            console.log('satellite')
+            console.log('Processing satellite')
+            progressMsg.innerHTML = 'Processing satellite'
+            startTimer()
             let zoom
-            startTimer('Processing satellite', true)
             setUrlInfo('jpg')
             if (overridezoom === '') {
                 zoom = document.getElementById('satzoomval').value
@@ -1002,15 +1022,24 @@ async function exportMap() {
             let objTiles = await downloadTiles(scope.satelliteMapUrl, false, zoom, override)
             stopTimer()
 
-            startFakeTimer('Combining images')
-            let imageBuffer = await combineTilesJimp(objTiles.tiles, tileSize, tileSize)
-            let satelliteFileName = `satellite_lat_${lat}_lng_${lng}_zoom_${zoom}.png`
-            await saveImage(dirHandle, imageBuffer, satelliteFileName, "png")
-            stopFakeTimer()
+
+            console.log('Combining images')
+            progressMsg.innerHTML = 'Combining images'
+            startTimer()
+            config.function = 'combineImages'
+            config = {}
+            config.objTiles = objTiles
+            config.tileSize = tileSize
+            config.dirHandle = dirHandle
+            config.lng = lng
+            config.lat = lat
+            config.zoom = zoom
+            config.filename = `satellite_lat_${lat}_lng_${lng}_zoom_${zoom}.png`
+            await workerProcess(config)
         }
         //Process mapimage
         if (mapimage === true) {
-            startTimer('Processing map image', true)
+            startTimer('Processing map image')
             console.log('mapimage')
 
             let styleName, objStyle, url
@@ -1042,91 +1071,49 @@ async function exportMap() {
                 let objTiles = await downloadTiles(url, false, 11, false)
                 stopTimer()
 
-                startFakeTimer('Combining images')
-                let imageBuffer = await combineTilesJimp(objTiles.tiles, tileSize, tileSize)
-                let mapFileName = `map_image_lat_${lat}_lng_${lng}_zoom_${zoom}.png`
-                await saveImage(dirHandle, imageBuffer, mapFileName, "png")
-                stopFakeTimer()
+
+                console.log('Combining images')
+                progressMsg.innerHTML = 'Combining images'
+                startTimer()
+                config = {}
+                config.function = 'combineImages'
+                config.objTiles = objTiles
+                config.tileSize = tileSize
+                config.dirHandle = dirHandle
+                config.lng = lng
+                config.lat = lat
+                config.zoom = zoom
+                config.filename = `map_image_lat_${lat}_lng_${lng}_zoom_${zoom}.png`
+                await workerProcess(config)
             }
         }
 
         //Process weightmap
         if (weightmap === true) {
-            startTimer('Processing weightmap image', true)
-            console.log('weightmap')
             if (scope.serverType === 'mapbox') {
-                //Use the static api instead of stitching tiles
+                console.log('Processing weightmap image')
+                progressMsg.innerHTML = 'Processing weightmap image'
+                startTimer()
+
                 let url = scope.mapUrl + scope.weightMapUrl + '/static/'
                 let width = 1280
                 let height = 1280
                 url = url + bboxString + `/${height}x${width}?access_token=${scope.apiKey}&attribution=false&logo=false`
                 let weightFileName = `weightmap_image_lat_${lat}_lng_${lng}_width_${width}_height_${height}.png`
-
+                //Use the static api instead of stitching tiles
                 let objTile = await mapUtils.downloadToTile(false, url)
                 await saveImage(dirHandle, objTile.buffer, weightFileName, "png")
-
-                let black = [0, 0, 0]
-                let white = [255, 255, 254] //offset from real white
-                let weight_data = userSettings.weightmapColors
-                for (let data of weight_data) {
-                    let splat_image = null
-                    let pixelsArray = null
-                    //Change color for splat map
-                    if (Array.isArray(data.color[0])) {
-                        splat_image = null
-                        pixelsArray = null
-                        splat_image = await imageUtils.loadImageFromArray(objTile.buffer)
-                        pixelsArray = splat_image.getPixelsArray()
-                        for (let aColor of data.color) {
-                            for (let i = 0; i < pixelsArray.length; i++) {
-                                if (JSON.stringify(pixelsArray[i]) === JSON.stringify(aColor)) {
-                                    splat_image.setPixel(i, white)
-                                }
-                            }
-                        }
-
-                        pixelsArray = splat_image.getPixelsArray()
-                        for (let i = 0; i < pixelsArray.length; i++) {
-                            if (JSON.stringify(pixelsArray[i]) !== JSON.stringify(white)) {
-                                splat_image.setPixel(i, black)
-                            }
-                        }
-
-                        let img = splat_image
-                            .resize({
-                                width: landscapeSize,
-                                height: landscapeSize
-                            })
-                            .gaussianFilter({radius: weightmapblurradius})
-
-                        let splat_buff = await img.toBuffer()
-                        let weightmapFileName = `weightmap_${data.name}_lat_${grid.lat}_lng_${grid.lng}.png`
-                        await saveImage(dirHandle, splat_buff, weightmapFileName, "png")
-
-                    } else {
-                        splat_image = await imageUtils.loadImageFromArray(objTile.buffer)
-                        pixelsArray = splat_image.getPixelsArray()
-                        for (let i = 0; i < pixelsArray.length; i++) {
-                            if (JSON.stringify(pixelsArray[i]) === JSON.stringify(data.color)) {
-                                splat_image.setPixel(i, white)
-                            } else {
-                                splat_image.setPixel(i, black)
-                            }
-                        }
-
-                        let img = splat_image
-                            .resize({
-                                width: landscapeSize,
-                                height: landscapeSize
-                            })
-                            .gaussianFilter({radius: weightmapblurradius})
-
-                        let splat_buff = await img.toBuffer()
-                        let weightmapFileName = `weightmap_${data.name}_lat_${grid.lat}_lng_${grid.lng}.png`
-                        await saveImage(dirHandle, splat_buff, weightmapFileName, "png")
-                    }
-
-                }
+                config = {}
+                config.function = 'weightMap'
+                config.weight_data = userSettings.weightmapColors
+                config.weightMapUrl = scope.weightMapUrl
+                config.dirHandle = dirHandle
+                config.objTile = objTile
+                config.lng = grid.lng
+                config.lat = grid.lat
+                config.weightmapblurradius = weightmapblurradius
+                config.landscapeSize = landscapeSize
+                await workerProcess(config)
             } else {
                 toggleModal('open', `Weightmaps are not available for Maptiler`)
             }

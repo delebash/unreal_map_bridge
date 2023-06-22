@@ -5,7 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/javascript/worker.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/javascript/image-utiles.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/javascript/image-utiles.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,8 +21,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JavaScript File" />
         <option value="HTML File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -45,6 +51,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;settings.sync&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -74,7 +81,11 @@
       <workItem from="1687118129954" duration="16462000" />
       <workItem from="1687142681371" duration="11736000" />
       <workItem from="1687181244919" duration="8437000" />
-      <workItem from="1687197208554" duration="4990000" />
+      <workItem from="1687197208554" duration="5285000" />
+      <workItem from="1687257769411" duration="6752000" />
+      <workItem from="1687283776914" duration="3308000" />
+      <workItem from="1687287139426" duration="154000" />
+      <workItem from="1687396855225" duration="16536000" />
     </task>
     <task id="LOCAL-00001" summary="various fixes, sat download">
       <created>1686959652958</created>
@@ -195,7 +206,14 @@
       <option name="project" value="LOCAL" />
       <updated>1687202000281</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="timer">
+      <created>1687202316359</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1687202316359</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -215,19 +233,20 @@
     <MESSAGE value="README.md" />
     <MESSAGE value="sendtounreal" />
     <MESSAGE value="fix mapimage download" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix mapimage download" />
+    <MESSAGE value="timer" />
+    <option name="LAST_COMMIT_MESSAGE" value="timer" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/app.js</url>
-          <line>12</line>
+          <line>19</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/app.js</url>
-          <line>46</line>
+          <line>51</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
