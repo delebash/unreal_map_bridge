@@ -36,6 +36,7 @@ const worldpart = document.getElementById('worldpart').checked
 const worldpartiongridsize = document.getElementById('worldpartiongridsize').value
 const landscapename = document.getElementById('landscapename').value
 const processCount = document.getElementById('processCount')
+const processStatus = document.getElementById('processStatus')
 let distance, urlKey, urlType, map, geocoder, heightmapFileName
 let promiseArray = [];
 let mapSize = 50;
@@ -798,6 +799,7 @@ function stopTimer() {
     progressMsg.innerHTML = ''
     progressArea.style.display = 'none'
     processCount.innerHTML = ''
+    processStatus.innerHTML = ''
     overlayOff()
 }
 
@@ -924,7 +926,7 @@ async function workerProcess(config) {
                 stopTimer()
                 resolve(true)
             } else if (results.process === 'weightMap' && results.msg === 'update') {
-                processCount.innerHTML = `Converting ${results.name}`
+                processStatus.innerHTML = `Converting ${results.name}  `
             }
         }
     })
@@ -1031,7 +1033,7 @@ async function exportMap() {
 
             console.log('Combining images')
             progressMsg.innerHTML = 'Combining images'
-            startTimer()
+            startTimer(true)
             config = {}
             config.function = 'combineImages'
             config.objTiles = objTiles
@@ -1045,8 +1047,9 @@ async function exportMap() {
         }
         //Process mapimage
         if (mapimage === true) {
-            startTimer('Processing map image')
-            console.log('mapimage')
+            console.log('Processing map image')
+            progressMsg.innerHTML = 'Processing map image'
+            startTimer()
 
             let styleName, objStyle, url
             if (scope.serverType === 'mapbox') {
@@ -1080,7 +1083,7 @@ async function exportMap() {
 
                 console.log('Combining images')
                 progressMsg.innerHTML = 'Combining images'
-                startTimer()
+                startTimer(true)
                 config = {}
                 config.function = 'combineImages'
                 config.objTiles = objTiles
@@ -1099,7 +1102,7 @@ async function exportMap() {
             if (scope.serverType === 'mapbox') {
                 console.log('Processing weightmap image')
                 progressMsg.innerHTML = 'Processing weightmap image'
-                startTimer()
+                startTimer(true)
 
                 let url = scope.mapUrl + scope.weightMapUrl + '/static/'
                 let width = 1280
@@ -1109,6 +1112,7 @@ async function exportMap() {
                 //Use the static api instead of stitching tiles
                 let objTile = await mapUtils.downloadToTile(false, url)
                 await saveImage(dirHandle, objTile.buffer, weightFileName, "png")
+
                 config = {}
                 config.function = 'weightMap'
                 config.weight_data = userSettings.weightmapColors
@@ -1127,9 +1131,9 @@ async function exportMap() {
         }
         //Process geojson
         if (geojson === true) {
-            startTimer('Processing geojson', true)
-            console.log('geojson')
-
+            console.log('Processing geojson')
+            progressMsg.innerHTML = 'Processing geojson'
+            startTimer()
             let features = mapUtils.getFeaturesFromBB(map, bbox, true)
             let strFeatures = JSON.stringify(features)
             let featuresFileName = `features_lat_${lat}_lng_${lng}.json`
