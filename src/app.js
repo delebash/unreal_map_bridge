@@ -974,7 +974,7 @@ async function exportMap() {
     let bboxString = '[' + bbox + ']'
     let config = {}
 
-    let subDirName = `tile_lat${lat}_lng${lng}`
+    let subDirName = `tile_lat_${lat}_lng_${lng}`
     const subDir = await dirHandle.getDirectoryHandle(subDirName, {create: true});
 
     if (scope.exportType === 'unrealSend') {

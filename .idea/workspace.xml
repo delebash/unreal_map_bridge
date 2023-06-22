@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -83,7 +82,7 @@
       <workItem from="1687287139426" duration="154000" />
       <workItem from="1687396855225" duration="44333000" />
       <workItem from="1687474355027" duration="1431000" />
-      <workItem from="1687476199050" duration="532000" />
+      <workItem from="1687476199050" duration="617000" />
     </task>
     <task id="LOCAL-00001" summary="various fixes, sat download">
       <created>1686959652958</created>
@@ -251,7 +250,15 @@
       <option name="project" value="LOCAL" />
       <updated>1687475796365</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="add tile subdiretory">
+      <option name="closed" value="true" />
+      <created>1687476793726</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1687476793726</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -276,7 +283,8 @@
     <MESSAGE value="fix combine tiles" />
     <MESSAGE value="remove logs" />
     <MESSAGE value="timer" />
-    <option name="LAST_COMMIT_MESSAGE" value="timer" />
+    <MESSAGE value="add tile subdiretory" />
+    <option name="LAST_COMMIT_MESSAGE" value="add tile subdiretory" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
