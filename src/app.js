@@ -37,7 +37,7 @@ const worldpartiongridsize = document.getElementById('worldpartiongridsize').val
 const landscapename = document.getElementById('landscapename').value
 const processCount = document.getElementById('processCount')
 const processStatus = document.getElementById('processStatus')
-let distance, urlKey, urlType, map, geocoder, heightmapFileName
+let distance, urlKey, urlType, map, geocoder, heightmapFileName, subDirName
 let promiseArray = [];
 let mapSize = 50;
 let vmapSize = mapSize * 1.05;
@@ -973,8 +973,8 @@ async function exportMap() {
     let bbox = [extent.topleft[0], extent.bottomright[1], extent.bottomright[0], extent.topleft[1]]
     let bboxString = '[' + bbox + ']'
     let config = {}
-
-    let subDirName = `tile_lat_${lat}_lng_${lng}`
+    subDirName = ''
+    subDirName = `tile_lat_${lat}_lng_${lng}`
     const subDir = await dirHandle.getDirectoryHandle(subDirName, {create: true});
 
     if (scope.exportType === 'unrealSend') {
@@ -987,7 +987,7 @@ async function exportMap() {
     if (ele_heightmap === true || satellite === true || mapimage === true || weightmap === true || geojson === true) {
         //Process heightmap
         if (ele_heightmap === true) {
-
+            heightmapFileName = `heightmap_lat_${lat}_lng_${lng}_landscape_size_${landscapeSize}.png`
             progressMsg.innerHTML = 'Processing heightmap'
             console.log('heightmap')
             startTimer()
@@ -1015,7 +1015,7 @@ async function exportMap() {
             config.landscapeSize = landscapeSize
             config.isHeightmap = true
             config.dirHandle = subDir
-            config.filename = `heightmap_lat_${lat}_lng_${lng}_landscape_size_${landscapeSize}.png`
+            config.filename = heightmapFileName
             await workerProcess(config)
 
         }
@@ -1365,7 +1365,7 @@ async function sendToUnreal() {
                 "parameters": {
                     "LandscapeName": landscapename,
                     "LandscapeSize": scope.landscapeSize.toString(),
-                    "TileHeightmapFileName": heightmapFileName,
+                    "TileHeightmapFileName": subDirName + '/' + heightmapFileName,
                     "TileGeojsonFileName": "",
                     "TileInfoFileName": "",
                     "MapMiddleLngX": "",
