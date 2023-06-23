@@ -1,5 +1,5 @@
 # unreal_map_bridge
-Import real world locations into Unreal Engine
+Front end app for UnrealMapboxBridgePlugin for Unreal. Import heightmaps into Unreal from real world locations using Mapbox or Maptiler
 
 New map web application replacing my previous UnrealMapboxBridge.
 
