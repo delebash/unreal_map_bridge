@@ -17,12 +17,7 @@ import idbKeyval from "./javascript/idb-keyval-iife.js";
 import fileUtils from "./javascript/fs-helpers.js"
 import mapUtils from './javascript/map-utils.js'
 import {setIntervalAsync, clearIntervalAsync} from 'set-interval-async';
-import pako from 'pako'
-// import {encode, decode} from "@msgpack/msgpack";
-// import { Packr } from 'msgpackr';
-// import chroma from "chroma-js";
-// import cbor from 'cbor-web'
-import {decode, encode} from 'cbor-x';
+
 
 const myWorker = new Worker(new URL('./javascript/worker', import.meta.url), {
     type: 'module'
