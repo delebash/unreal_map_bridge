@@ -7,8 +7,6 @@
     <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/javascript/combine-tiles-jimp.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/javascript/combine-tiles-jimp.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/javascript/worker.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/javascript/worker.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,7 +94,7 @@
       <workItem from="1687984014163" duration="142000" />
       <workItem from="1687997135707" duration="1213000" />
       <workItem from="1688004567283" duration="6989000" />
-      <workItem from="1688047731562" duration="6681000" />
+      <workItem from="1688047731562" duration="7536000" />
     </task>
     <task id="LOCAL-00001" summary="various fixes, sat download">
       <created>1686959652958</created>
@@ -304,7 +302,15 @@
       <option name="project" value="LOCAL" />
       <updated>1688051079452</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="backend stitching">
+      <option name="closed" value="true" />
+      <created>1688054607415</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1688054607415</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

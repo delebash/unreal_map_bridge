@@ -994,7 +994,13 @@ async function workerProcess(config) {
 
 async function exportMap() {
     let dirHandle = await userSettings.dirHandle
-
+    if (userSettings.backendServer === true) {
+        let isRunning = await isServerRunning()
+        if (isRunning === false) {
+            toggleModal('open', `Backend server is checked in settings, but the server is not running.  Please see help to install and start the server or uncheck Backend server.`)
+            return
+        }
+    }
     try {
         if (await fileUtils.verifyPermission(dirHandle, true) === false) {
             console.error(`User did not grant permission to '${dirHandle.name}'`);
@@ -1258,8 +1264,25 @@ function wait(milliseconds) {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
 }
 
-async function processFromBackend(data) {
+async function isServerRunning() {
+    try {
+        const response = await fetch(userSettings.backendServerUrl, {
+            method: "GET"
+        })
+        let result = await response.json()
+        if (result.msg === 'server is running') {
+            return true
+        } else {
+            return false
+        }
+    } catch (e) {
+        console.log(e)
+        stopTimer()
+        return false
+    }
+}
 
+async function processFromBackend(data) {
     try {
         let payload = JSON.stringify(data)
         // console.log(payload)
