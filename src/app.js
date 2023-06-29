@@ -593,7 +593,7 @@ async function loadUserSettings() {
 
     }
     document.getElementById('backendServer').checked = userSettings.backendServer || false
-    scope.backendServerUrl = userSettings.backendServerUrl || 'http://localhost:3000/'
+    scope.backendServerUrl = userSettings.backendServerUrl || 'http://localhost:5000/'
     scope.serverDownloadDirectory = userSettings.serverDownloadDirectory || ''
     return userSettings
 }
