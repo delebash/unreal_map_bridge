@@ -928,6 +928,7 @@ async function downloadTiles(tilesUrl, isHeightmap = true, z = 14, override = fa
         await Promise.all(promiseArray);
         objTiles.tiles = tiles
         objTiles.distance = distance
+        objTiles.zoom = objTileCnt.zoom
         objTiles ? resolve(objTiles) : reject('timout');
     });
 }
@@ -1029,7 +1030,12 @@ async function exportMap() {
     let extent = getExtent(grid.lng, grid.lat, mapSize / 1080 * 1081);
     let bbox = [extent.topleft[0], extent.bottomright[1], extent.bottomright[0], extent.topleft[1]]
     let bboxTLBR = [extent.topleft[0], extent.topleft[1], extent.bottomright[0], extent.bottomright[1]]
-
+    let zoom
+    if (overridezoom.length === 0) {
+        zoom = 14
+    } else {
+        zoom = overridezoom
+    }
     let bboxString = '[' + bbox + ']'
     let config = {}
     subDirName = ''
@@ -1057,6 +1063,7 @@ async function exportMap() {
             }
             convertedHeightmap = convertHeightmap(heightmap);
             png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
+            console.log('finished convert heightmap')
             updateInfopanel()
             stopTimer()
 
@@ -1084,15 +1091,12 @@ async function exportMap() {
             console.log('Processing satellite')
             progressMsg.innerHTML = 'Processing satellite'
             startTimer()
-            let zoom
+
             setUrlInfo('jpg')
-            if (overridezoom.length === 0) {
-                zoom = 14
-            } else {
-                zoom = overridezoom
-            }
+
             let objTileCnt = mapUtils.getTileCountAdjusted(zoom, extent, override)
             let filename = `satellite_lat_${lat}_lng_${lng}_zoom_${objTileCnt.zoom}.png`
+
             if (userSettings.backendServer === true) {
                 let source = new EventSource(userSettings.backendServerUrl + 'subscribe');
                 source.onmessage = function (event) {
@@ -1127,7 +1131,7 @@ async function exportMap() {
                 config.dirHandle = subDir
                 config.lng = lng
                 config.lat = lat
-                config.zoom = zoom
+                config.zoom = objTiles.zoom
                 config.filename = filename
                 await workerProcess(config)
                 stopTimer()
@@ -1169,7 +1173,7 @@ async function exportMap() {
                 styleName = map.getStyle().name
                 objStyle = mapUtils.convertMapboxMaptilerStyles('maptiler', styleName.toUpperCase())
                 url = scope.mapUrl + objStyle[0].maptiler_map + '/'
-                let objTiles = await downloadTiles(url, false, 11, false)
+                let objTiles = await downloadTiles(url, false, zoom, false)
                 stopTimer()
                 mapFileName = `map_image_lat_${lat}_lng_${lng}.png`
 
@@ -1183,7 +1187,7 @@ async function exportMap() {
                 config.dirHandle = subDir
                 config.lng = lng
                 config.lat = lat
-                config.zoom = zoom
+                config.zoom = objTiles.zoom
                 config.filename = mapFileName
                 await workerProcess(config)
                 stopTimer()
@@ -1219,7 +1223,8 @@ async function exportMap() {
                 await workerProcess(config)
                 stopTimer()
             } else {
-                toggleModal('open', `Weightmaps are not available for Maptiler`)
+                console.log('Weightmaps are not available for Maptiler')
+                //toggleModal('open', `Weightmaps are not available for Maptiler`)
             }
             stopTimer()
         }

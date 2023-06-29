@@ -30,7 +30,7 @@ export async function combineTilesJimp(tiles, tWidth, tHeight, postMessage) {
         let image = await Jimp.read(Buffer.from(index[0].buffer))
         image.background(0xFFFFFFFF)
         image.resize(w, h);
-        let compImage = await CompositeImg(image, index, tHeight, tWidth,postMessage)
+        let compImage = await CompositeImg(image, index, tHeight, tWidth, postMessage)
         let buffer = await compImage.getBufferAsync(Jimp.MIME_PNG);
         return buffer
     } catch (e) {
@@ -39,7 +39,7 @@ export async function combineTilesJimp(tiles, tWidth, tHeight, postMessage) {
 }
 
 
-async function CompositeImg(image, index, tHeight, tWidth,postMessage) {
+async function CompositeImg(image, index, tHeight, tWidth, postMessage) {
     try {
         let count = 1
         for (let data of index) {
