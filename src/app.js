@@ -594,6 +594,7 @@ async function loadUserSettings() {
     }
     document.getElementById('backendServer').checked = userSettings.backendServer || false
     scope.backendServerUrl = userSettings.backendServerUrl || 'http://localhost:3000/'
+    scope.serverDownloadDirectory = userSettings.serverDownloadDirectory || ''
     return userSettings
 }
 
@@ -617,6 +618,7 @@ async function saveUserSettings() {
     }
     userSettings.backendServer = document.getElementById('backendServer').checked
     userSettings.backendServerUrl = scope.backendServerUrl
+    userSettings.serverDownloadDirectory = scope.serverDownloadDirectory
     idbKeyval.set('userSettings', userSettings)
     await loadUserSettings()
     if (map) {
@@ -1074,15 +1076,14 @@ async function exportMap() {
             config.dirHandle = subDir
             config.filename = heightmapFileName
             await workerProcess(config)
+            stopTimer()
         }
 
         //Process satellite
         if (satellite === true) {
-
             console.log('Processing satellite')
             progressMsg.innerHTML = 'Processing satellite'
-
-            // let tiles = []
+            startTimer()
             let zoom
             setUrlInfo('jpg')
             if (overridezoom.length === 0) {
@@ -1091,42 +1092,34 @@ async function exportMap() {
                 zoom = overridezoom
             }
             let objTileCnt = mapUtils.getTileCountAdjusted(zoom, extent, override)
-
             let filename = `satellite_lat_${lat}_lng_${lng}_zoom_${objTileCnt.zoom}.png`
-
-            //startTimer()
             if (userSettings.backendServer === true) {
                 let source = new EventSource(userSettings.backendServerUrl + 'subscribe');
                 source.onmessage = function (event) {
                     let data = JSON.parse(event.data)
-                    // console.log(data)
-                    if(data.event === 'stitch_tiles'  && data.count){
+                    if (data.event === 'stitch_tiles' && data.count) {
                         progressCount(data.count, data.total_count, data.process)
-                    }else if(data.event === 'stitch_tiles'){
+                    } else if (data.event === 'stitch_tiles') {
                         processCount.innerHTML = data.process
                     }
                 };
-                // tiles = buildTileUrls(scope.satelliteMapUrl, zoom, override)
+
                 let data = {
                     bbox: bboxTLBR,
                     filename: filename,
                     zoom: parseInt(objTileCnt.zoom),
-                    dir: subDir,
-                    access_token : scope.apiKey,
-                    api_url : scope.satelliteMapUrl,
-                    base_dir : 'F:/3DProjects/github/DansProjects/map_bridge_backend_flask/',
-                    composite_dir : 'satellite_composite_images/'
+                    access_token: urlType + '?' + urlKey + scope.apiKey,
+                    api_url: scope.satelliteMapUrl,
+                    base_dir: scope.serverDownloadDirectory,
+                    sub_dir: subDirName
                 }
-                startTimer()
                 await processFromBackend(data)
                 stopTimer()
             } else {
                 let objTiles = await downloadTiles(scope.satelliteMapUrl, false, zoom, override)
-                //    stopTimer()
                 console.log('Combining images')
                 progressMsg.innerHTML = 'Combining images'
                 startTimer()
-                // console.log(objTiles)
                 config = {}
                 config.function = 'combineImages'
                 config.objTiles = objTiles
@@ -1142,10 +1135,10 @@ async function exportMap() {
         }
         //Process mapimage
         if (mapimage === true) {
-            let isString = false
-            if (userSettings.backendServer === true) {
-                isString = true
-            }
+            // let isString = false
+            // if (userSettings.backendServer === true) {
+            //     isString = true
+            // }
             console.log('Processing map image')
             progressMsg.innerHTML = 'Processing map image'
             startTimer()
@@ -1224,6 +1217,7 @@ async function exportMap() {
                 config.weightmapblurradius = weightmapblurradius
                 config.landscapeSize = landscapeSize
                 await workerProcess(config)
+                stopTimer()
             } else {
                 toggleModal('open', `Weightmaps are not available for Maptiler`)
             }
@@ -1259,11 +1253,11 @@ function wait(milliseconds) {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
 }
 
-async function processFromBackend(data, subDir, filename) {
+async function processFromBackend(data) {
 
     try {
         let payload = JSON.stringify(data)
-       // console.log(payload)
+        // console.log(payload)
         const response = await fetch(userSettings.backendServerUrl + 'process_tiles', {
             method: "POST",
             headers: {
@@ -1271,10 +1265,7 @@ async function processFromBackend(data, subDir, filename) {
             },
             body: payload
         })
-        let resultBlob = await response.json()
-        // console.log(resultBlob)
-        // await saveImage(subDir, resultBlob, filename, "png")
-        //console.log('wrote file')
+        let result = await response.json()
     } catch (e) {
         console.log(e)
         stopTimer()

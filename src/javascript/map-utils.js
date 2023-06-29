@@ -148,9 +148,6 @@ async function unrealRemoteControl(data, url) {
  */
 async function downloadToTile(toPng, url, x = 0, y = 0, toString = false) {
     let obj = {}
-    // obj.buffer = []
-    // obj.x = null
-    // obj.y = null
     let png
     const cachedRes = await caches.match(url);
     if (cachedRes && cachedRes.ok) {
