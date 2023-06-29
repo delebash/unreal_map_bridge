@@ -146,17 +146,26 @@ async function unrealRemoteControl(data, url) {
  * @param {number} y slippy tile y
  * @return {png,buffer} return png or buffer
  */
-async function downloadToTile(toPng, url, x = 0, y = 0,) {
-    let obj = {}, png
+async function downloadToTile(toPng, url, x = 0, y = 0, toString = false) {
+    let obj = {}
+    // obj.buffer = []
+    // obj.x = null
+    // obj.y = null
+    let png
     const cachedRes = await caches.match(url);
     if (cachedRes && cachedRes.ok) {
         console.log('tile: load from cache');
         let buffer = await cachedRes.arrayBuffer();
+
         if (toPng === true) {
             png = await imageUtils.loadImageFromArray(buffer);
             return png
         } else {
-            obj.buffer = buffer
+            if (toString === true) {
+                obj.buffer = new Uint8Array(buffer)
+            } else {
+                obj.buffer = buffer
+            }
             obj.x = x
             obj.y = y
             return obj;
@@ -173,7 +182,11 @@ async function downloadToTile(toPng, url, x = 0, y = 0,) {
                     png = await imageUtils.loadImageFromArray(buffer);
                     return png
                 } else {
-                    obj.buffer = buffer
+                    if (toString === true) {
+                        obj.buffer = new Uint8Array(buffer)
+                    } else {
+                        obj.buffer = buffer
+                    }
                     obj.x = x
                     obj.y = y
                     return obj;

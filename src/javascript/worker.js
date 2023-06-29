@@ -30,7 +30,9 @@ async function manipulateImage(config) {
 }
 
 async function combineImages(config) {
-    let imageBuffer = await combineTilesJimp(config.objTiles.tiles, config.tileSize, config.tileSize)
+    console.log('begin')
+    let imageBuffer = await combineTilesJimp(config.objTiles.tiles, config.tileSize, config.tileSize,postMessage)
+  console.log('end')
     await saveImage(config.dirHandle, imageBuffer, config.filename, "png")
     postMessage({process: config.function, msg: 'complete'})
 }

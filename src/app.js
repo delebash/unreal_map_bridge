@@ -17,7 +17,12 @@ import idbKeyval from "./javascript/idb-keyval-iife.js";
 import fileUtils from "./javascript/fs-helpers.js"
 import mapUtils from './javascript/map-utils.js'
 import {setIntervalAsync, clearIntervalAsync} from 'set-interval-async';
+import pako from 'pako'
+// import {encode, decode} from "@msgpack/msgpack";
+// import { Packr } from 'msgpackr';
 // import chroma from "chroma-js";
+// import cbor from 'cbor-web'
+import {decode, encode} from 'cbor-x';
 
 const myWorker = new Worker(new URL('./javascript/worker', import.meta.url), {
     type: 'module'
@@ -37,7 +42,9 @@ const worldpartiongridsize = document.getElementById('worldpartiongridsize').val
 const landscapename = document.getElementById('landscapename').value
 const processCount = document.getElementById('processCount')
 const processStatus = document.getElementById('processStatus')
+
 let distance, urlKey, urlType, map, geocoder, heightmapFileName, subDirName
+
 let promiseArray = [];
 let mapSize = 50;
 let vmapSize = mapSize * 1.05;
@@ -568,6 +575,7 @@ async function loadUserSettings() {
         scope.weightMapUrl = userSettings.mapboxWeightMapUrl || ''
         scope.satelliteMapUrl = userSettings.mapboxSatelliteMapUrl || 'https://api.mapbox.com/v4/mapbox.satellite/'
         scope.mapUrl = userSettings.mapboxMapUrl || 'https://api.mapbox.com/styles/v1/'
+
         let weightmapColors = userSettings.weightmapColors || []
         if (weightmapColors.length === 0) {
             userSettings.weightmapColors = rows
@@ -584,6 +592,8 @@ async function loadUserSettings() {
         scope.mapUrl = userSettings.maptilerMapUrl || 'https://api.maptiler.com/maps/'
 
     }
+    document.getElementById('backendServer').checked = userSettings.backendServer || false
+    scope.backendServerUrl = userSettings.backendServerUrl || 'http://localhost:3000/'
     return userSettings
 }
 
@@ -605,6 +615,8 @@ async function saveUserSettings() {
         userSettings.maptilerSatelliteMapUrl = scope.satelliteMapUrl
         userSettings.maptilerMapUrl = scope.mapUrl
     }
+    userSettings.backendServer = document.getElementById('backendServer').checked
+    userSettings.backendServerUrl = scope.backendServerUrl
     idbKeyval.set('userSettings', userSettings)
     await loadUserSettings()
     if (map) {
@@ -817,10 +829,50 @@ async function getHeightmap(z = 14, override = false) {
     })
 }
 
+function buildTileUrls(tilesUrl, z = 14, override = true) {
+    let extent = getExtent(grid.lng, grid.lat, mapSize / 1080 * 1081);
+
+    let objTileCnt = mapUtils.getTileCountAdjusted(z, extent, override)
+    let x = objTileCnt.x
+    let y = objTileCnt.y
+    let zoom = objTileCnt.zoom
+    let tileCnt = objTileCnt.tileCnt
+
+
+    document.getElementById('satzoomval').value = zoom
+    document.getElementById('zoomlevel').value = zoom
+    document.getElementById('tilecount').innerHTML = mapUtils.getTileCount(zoom, extent).length.toString()
+
+    let tileLng = mapUtils.tile2long(x, zoom);
+    let tileLat = mapUtils.tile2lat(y, zoom);
+
+    let tileLng2 = mapUtils.tile2long(x + tileCnt, zoom);
+    let tileLat2 = mapUtils.tile2lat(y + tileCnt, zoom);
+    // get the length of one side of the tiles extent
+    distance = turf.distance(turf.point([tileLng, tileLat]), turf.point([tileLng2, tileLat2]), {units: 'kilometers'}) / Math.SQRT2;
+
+    let tiles = []
+    promiseArray = [];
+    let count = 1
+    let totalCount = tileCnt * tileCnt
+    // download the tiles
+
+    for (let i = 0; i < tileCnt; i++) {
+        for (let j = 0; j < tileCnt; j++) {
+            let objTiles = {}
+            let url = tilesUrl + zoom + '/' + (x + j) + '/' + (y + i) + urlType + '?' + urlKey + scope.apiKey;
+            objTiles.url = url
+            objTiles.x = (x + j)
+            objTiles.y = (y + i)
+            tiles.push(objTiles)
+        }
+    }
+    return tiles
+}
+
 async function downloadTiles(tilesUrl, isHeightmap = true, z = 14, override = false) {
     return new Promise(async (resolve, reject) => {
         let extent = getExtent(grid.lng, grid.lat, mapSize / 1080 * 1081);
-        console.log(z)
         let objTileCnt = mapUtils.getTileCountAdjusted(z, extent, override)
         let x = objTileCnt.x
         let y = objTileCnt.y
@@ -849,25 +901,28 @@ async function downloadTiles(tilesUrl, isHeightmap = true, z = 14, override = fa
         }
         promiseArray = [];
         let count = 1
-        progressCount(count);
+        let totalCount = tileCnt * tileCnt
+        progressCount(count, totalCount, 'downloading');
         // download the tiles
+
         for (let i = 0; i < tileCnt; i++) {
             for (let j = 0; j < tileCnt; j++) {
                 let url = tilesUrl + zoom + '/' + (x + j) + '/' + (y + i) + urlType + '?' + urlKey + scope.apiKey;
-                let woQUrl = tilesUrl + zoom + '/' + (x + j) + '/' + (y + i) + urlType;
                 if (isHeightmap === true) {
                     promiseArray.push(mapUtils.downloadToTile(true, url).then((png) => {
                         tiles[i][j] = png
-                        progressCount(count++);
+                        progressCount(count++, totalCount, 'downloading');
+
                     }));
                 } else {
                     promiseArray.push(mapUtils.downloadToTile(false, url, (x + j), (y + i)).then((tile) => {
                         tiles.push(tile)
-                        progressCount(count++);
+                        progressCount(count++, totalCount, 'downloading');
                     }));
                 }
             }
         }
+
         await Promise.all(promiseArray);
         objTiles.tiles = tiles
         objTiles.distance = distance
@@ -875,8 +930,8 @@ async function downloadTiles(tilesUrl, isHeightmap = true, z = 14, override = fa
     });
 }
 
-function progressCount(count) {
-    processCount.innerHTML = `downloading ${count} of ${promiseArray.length}`
+function progressCount(count, totalCount, msg) {
+    processCount.innerHTML = `${msg}  ${count} of ${totalCount}`
 }
 
 function setUrlInfo(val) {
@@ -920,13 +975,15 @@ async function workerProcess(config) {
     return new Promise(async (resolve, reject) => {
         myWorker.postMessage(config);
         myWorker.onmessage = function (e) {
-            console.log(e.data)
+            //  console.log(e.data)
             let results = e.data
             if (results.process === 'worker' && results.msg === 'complete') {
                 stopTimer()
                 resolve(true)
             } else if (results.process === 'weightMap' && results.msg === 'update') {
                 processStatus.innerHTML = `Converting ${results.name}  `
+            } else if (results.process === 'combineTilesJimp' && results.msg === 'update') {
+                progressCount(results.count, results.totalCount, '')
             }
         }
     })
@@ -954,13 +1011,11 @@ async function exportMap() {
     let mapimage = document.getElementById('mapimage').checked
     let weightmap = document.getElementById('weightmapdl').checked
     let geojson = document.getElementById('geojson').checked
-
     let sealevel = document.getElementById('sealevel').checked
     let flipx = document.getElementById('flipx').checked
     let flipy = document.getElementById('flipy').checked
     let heightmapblurradius = document.getElementById('blurradius').value
     let weightmapblurradius = document.getElementById('weightmapblurradius').value
-
     let override = document.getElementById('satellitezoom').checked
 
     let landscapeSize = scope.landscapeSize.toString()
@@ -971,6 +1026,8 @@ async function exportMap() {
     let tileSize = 512
     let extent = getExtent(grid.lng, grid.lat, mapSize / 1080 * 1081);
     let bbox = [extent.topleft[0], extent.bottomright[1], extent.bottomright[0], extent.topleft[1]]
+    let bboxTLBR = [extent.topleft[0], extent.topleft[1], extent.bottomright[0], extent.bottomright[1]]
+
     let bboxString = '[' + bbox + ']'
     let config = {}
     subDirName = ''
@@ -1017,14 +1074,15 @@ async function exportMap() {
             config.dirHandle = subDir
             config.filename = heightmapFileName
             await workerProcess(config)
-
         }
 
         //Process satellite
         if (satellite === true) {
+
             console.log('Processing satellite')
             progressMsg.innerHTML = 'Processing satellite'
-            startTimer()
+
+            // let tiles = []
             let zoom
             setUrlInfo('jpg')
             if (overridezoom.length === 0) {
@@ -1032,30 +1090,67 @@ async function exportMap() {
             } else {
                 zoom = overridezoom
             }
-            let objTiles = await downloadTiles(scope.satelliteMapUrl, false, zoom, override)
-            stopTimer()
+            let objTileCnt = mapUtils.getTileCountAdjusted(zoom, extent, override)
 
-            console.log('Combining images')
-            progressMsg.innerHTML = 'Combining images'
-            startTimer(true)
-            config = {}
-            config.function = 'combineImages'
-            config.objTiles = objTiles
-            config.tileSize = tileSize
-            config.dirHandle = subDir
-            config.lng = lng
-            config.lat = lat
-            config.zoom = zoom
-            config.filename = `satellite_lat_${lat}_lng_${lng}_zoom_${zoom}.png`
-            await workerProcess(config)
+            let filename = `satellite_lat_${lat}_lng_${lng}_zoom_${objTileCnt.zoom}.png`
+
+            //startTimer()
+            if (userSettings.backendServer === true) {
+                let source = new EventSource(userSettings.backendServerUrl + 'subscribe');
+                source.onmessage = function (event) {
+                    let data = JSON.parse(event.data)
+                    // console.log(data)
+                    if(data.event === 'stitch_tiles'  && data.count){
+                        progressCount(data.count, data.total_count, data.process)
+                    }else if(data.event === 'stitch_tiles'){
+                        processCount.innerHTML = data.process
+                    }
+                };
+                // tiles = buildTileUrls(scope.satelliteMapUrl, zoom, override)
+                let data = {
+                    bbox: bboxTLBR,
+                    filename: filename,
+                    zoom: parseInt(objTileCnt.zoom),
+                    dir: subDir,
+                    access_token : scope.apiKey,
+                    api_url : scope.satelliteMapUrl,
+                    base_dir : 'F:/3DProjects/github/DansProjects/map_bridge_backend_flask/',
+                    composite_dir : 'satellite_composite_images/'
+                }
+                startTimer()
+                await processFromBackend(data)
+                stopTimer()
+            } else {
+                let objTiles = await downloadTiles(scope.satelliteMapUrl, false, zoom, override)
+                //    stopTimer()
+                console.log('Combining images')
+                progressMsg.innerHTML = 'Combining images'
+                startTimer()
+                // console.log(objTiles)
+                config = {}
+                config.function = 'combineImages'
+                config.objTiles = objTiles
+                config.tileSize = tileSize
+                config.dirHandle = subDir
+                config.lng = lng
+                config.lat = lat
+                config.zoom = zoom
+                config.filename = filename
+                await workerProcess(config)
+                stopTimer()
+            }
         }
         //Process mapimage
         if (mapimage === true) {
+            let isString = false
+            if (userSettings.backendServer === true) {
+                isString = true
+            }
             console.log('Processing map image')
             progressMsg.innerHTML = 'Processing map image'
             startTimer()
 
-            let styleName, objStyle, url
+            let styleName, objStyle, url, mapFileName
             if (scope.serverType === 'mapbox') {
                 //Use the static api instead of stitching tiles
                 styleName = map.getStyle().metadata['mapbox:origin'];
@@ -1070,7 +1165,7 @@ async function exportMap() {
                 let width = 1280
                 let height = 1280
                 url = url + bboxString + `/${height}x${width}?access_token=${scope.apiKey}&attribution=false&logo=false`
-                let mapFileName = `map_image_lat_${lat}_lng_${lng}_width_${width}_height_${height}.png`
+                mapFileName = `map_image_lat_${lat}_lng_${lng}_width_${width}_height_${height}.png`
 
                 let objTile = await mapUtils.downloadToTile(false, url)
                 await saveImage(subDir, objTile.buffer, mapFileName, "png")
@@ -1083,11 +1178,11 @@ async function exportMap() {
                 url = scope.mapUrl + objStyle[0].maptiler_map + '/'
                 let objTiles = await downloadTiles(url, false, 11, false)
                 stopTimer()
-
+                mapFileName = `map_image_lat_${lat}_lng_${lng}.png`
 
                 console.log('Combining images')
                 progressMsg.innerHTML = 'Combining images'
-                startTimer(true)
+                startTimer()
                 config = {}
                 config.function = 'combineImages'
                 config.objTiles = objTiles
@@ -1096,8 +1191,9 @@ async function exportMap() {
                 config.lng = lng
                 config.lat = lat
                 config.zoom = zoom
-                config.filename = `map_image_lat_${lat}_lng_${lng}_zoom_${zoom}.png`
+                config.filename = mapFileName
                 await workerProcess(config)
+                stopTimer()
             }
         }
 
@@ -1149,6 +1245,39 @@ async function exportMap() {
         }
     } else {
         toggleModal('open', `Please select at least one image type to download`)
+    }
+}
+
+// async function makeStream(objTiles){
+//     new Promise(async (resolve, reject) => {
+//
+//         resolve(stream)
+//     })
+// }
+
+function wait(milliseconds) {
+    return new Promise(resolve => setTimeout(resolve, milliseconds));
+}
+
+async function processFromBackend(data, subDir, filename) {
+
+    try {
+        let payload = JSON.stringify(data)
+       // console.log(payload)
+        const response = await fetch(userSettings.backendServerUrl + 'process_tiles', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: payload
+        })
+        let resultBlob = await response.json()
+        // console.log(resultBlob)
+        // await saveImage(subDir, resultBlob, filename, "png")
+        //console.log('wrote file')
+    } catch (e) {
+        console.log(e)
+        stopTimer()
     }
 }
 
@@ -1401,6 +1530,18 @@ async function sendToUnreal() {
         }
     }
     stopTimer()
+}
+
+function readChunks(reader) {
+    return {
+        async* [Symbol.asyncIterator]() {
+            let readResult = await reader.read();
+            while (!readResult.done) {
+                yield readResult.value;
+                readResult = await reader.read();
+            }
+        },
+    };
 }
 
 window.toggleModal = toggleModal
