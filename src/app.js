@@ -54,7 +54,7 @@ let panels = document.getElementsByClassName('panel');
 let icons = document.getElementsByClassName('icon');
 let iconClass = [];
 let weightmapGrid = null
-
+let event_source
 let rows = [
     {
         name: 'Forest',
@@ -992,15 +992,30 @@ async function workerProcess(config) {
     })
 }
 
-async function exportMap() {
-    let dirHandle = await userSettings.dirHandle
-    if (userSettings.backendServer === true) {
+async function setupEventSource(satellite) {
+    if (userSettings.backendServer === true && satellite === true) {
         let isRunning = await isServerRunning()
         if (isRunning === false) {
             toggleModal('open', `Backend server is checked in settings, but the server is not running.  Please see help to install and start the server or uncheck Backend server.`)
             return
         }
+        if (event_source === undefined) {
+            console.log('test')
+            event_source = new EventSource(userSettings.backendServerUrl + 'subscribe');
+            event_source.onmessage = function (event) {
+                let data = JSON.parse(event.data)
+                if (data.event === 'stitch_tiles' && data.count) {
+                    progressCount(data.count, data.total_count, data.process)
+                } else if (data.event === 'stitch_tiles') {
+                    processCount.innerHTML = data.process
+                }
+            };
+        }
     }
+}
+
+async function exportMap() {
+    let dirHandle = await userSettings.dirHandle
     try {
         if (await fileUtils.verifyPermission(dirHandle, true) === false) {
             console.error(`User did not grant permission to '${dirHandle.name}'`);
@@ -1047,6 +1062,8 @@ async function exportMap() {
     subDirName = ''
     subDirName = `tile_lat_${lat}_lng_${lng}`
     const subDir = await dirHandle.getDirectoryHandle(subDirName, {create: true});
+
+    await setupEventSource(satellite)
 
     if (scope.exportType === 'unrealSend') {
         if (ele_heightmap !== true) {
@@ -1104,16 +1121,6 @@ async function exportMap() {
             let filename = `satellite_lat_${lat}_lng_${lng}_zoom_${objTileCnt.zoom}.png`
 
             if (userSettings.backendServer === true) {
-                let source = new EventSource(userSettings.backendServerUrl + 'subscribe');
-                source.onmessage = function (event) {
-                    let data = JSON.parse(event.data)
-                    if (data.event === 'stitch_tiles' && data.count) {
-                        progressCount(data.count, data.total_count, data.process)
-                    } else if (data.event === 'stitch_tiles') {
-                        processCount.innerHTML = data.process
-                    }
-                };
-
                 let data = {
                     bbox: bboxTLBR,
                     filename: filename,
