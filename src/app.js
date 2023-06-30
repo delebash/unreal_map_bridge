@@ -888,9 +888,8 @@ async function downloadTiles(tilesUrl, isHeightmap = true, z = 14, override = fa
         let tileCnt = objTileCnt.tileCnt
         let objTiles = {}
 
-
         document.getElementById('satzoomval').value = zoom
-        document.getElementById('zoomlevel').value = zoom
+        document.getElementById('zoomlevel').innerHTML = zoom
         document.getElementById('tilecount').innerHTML = mapUtils.getTileCount(zoom, extent).length.toString()
 
         let tileLng = mapUtils.tile2long(x, zoom);
@@ -1022,6 +1021,14 @@ async function setupEventSource(satellite) {
 
 async function exportMap() {
     let dirHandle = await userSettings.dirHandle
+    let overridezoom = document.getElementById('satzoomval').value
+    let override = document.getElementById('satellitezoom').checked
+
+    if (override === true && overridezoom > 14) {
+        toggleModal('open', `To use a satellite zoom level of greater than 14 you must use the backend server`)
+        return
+    }
+
     try {
         if (await fileUtils.verifyPermission(dirHandle, true) === false) {
             console.error(`User did not grant permission to '${dirHandle.name}'`);
@@ -1046,13 +1053,13 @@ async function exportMap() {
     let flipy = document.getElementById('flipy').checked
     let heightmapblurradius = document.getElementById('blurradius').value
     let weightmapblurradius = document.getElementById('weightmapblurradius').value
-    let override = document.getElementById('satellitezoom').checked
+
 
     let landscapeSize = scope.landscapeSize.toString()
     let lat, lng
     lng = grid.lng.toFixed(5)
     lat = grid.lat.toFixed(5)
-    let overridezoom = document.getElementById('satzoomval').value
+
     let tileSize = 512
     let extent = getExtent(grid.lng, grid.lat, mapSize / 1080 * 1081);
     let bbox = [extent.topleft[0], extent.bottomright[1], extent.bottomright[0], extent.topleft[1]]
