@@ -603,11 +603,19 @@ input[type="number"] {
     width: 4.25em;
 }
 
+input[type="password"] {
+    background: #fff;
+    border-radius: 3px;
+    cursor: pointer;
+    height: 1.375em;
+    margin: 0.25em 0.75em 0 0;
+    outline: none;
+    width: 15em;
+}
+
 input[type="text"] {
     background: #fff;
-
     border-radius: 3px;
-
     cursor: pointer;
     height: 1.375em;
     margin: 0.25em 0.75em 0 0;
@@ -1053,13 +1061,15 @@ a:active {
     color: red
 }
 
-.help{
+.help {
     font-size: 20px;
 }
-.help dt{
+
+.help dt {
     font-weight: bold;
     padding-top: 10px;
 }
-.help dd{
+
+.help dd {
 
 }

@@ -37,6 +37,17 @@ const worldpartiongridsize = document.getElementById('worldpartiongridsize').val
 const landscapename = document.getElementById('landscapename').value
 const processCount = document.getElementById('processCount')
 const processStatus = document.getElementById('processStatus')
+const togglePassword = document.querySelector('#togglePassword');
+const apiKey = document.querySelector('#apiKey');
+
+
+togglePassword.addEventListener('click', function (e) {
+    // toggle the type attribute
+    const type = apiKey.getAttribute('type') === 'password' ? 'text' : 'password';
+    apiKey.setAttribute('type', type);
+    // toggle the eye slash icon
+    this.classList.toggle('fa-eye-slash');
+});
 
 let distance, urlKey, urlType, map, geocoder, heightmapFileName, subDirName
 
