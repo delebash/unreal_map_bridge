@@ -1024,9 +1024,13 @@ async function exportMap() {
     let overridezoom = document.getElementById('satzoomval').value
     let override = document.getElementById('satellitezoom').checked
 
+
     if (override === true && overridezoom > 14) {
-        toggleModal('open', `To use a satellite zoom level of greater than 14 you must use the backend server`)
-        return
+        let isRunning = await isServerRunning()
+        if (isRunning === false) {
+            toggleModal('open', `To use a satellite zoom level of greater than 14 you must use the backend server`)
+            return
+        }
     }
 
     try {
