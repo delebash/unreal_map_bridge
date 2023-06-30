@@ -1081,7 +1081,7 @@ async function exportMap() {
     if (ele_heightmap === true || satellite === true || mapimage === true || weightmap === true || geojson === true) {
         //Process heightmap
         if (ele_heightmap === true) {
-            heightmapFileName = `heightmap_lat_${lat}_lng_${lng}_landscape_size_${landscapeSize}.png`
+            heightmapFileName = `heightmap_landscape_size_${landscapeSize}.png`
             progressMsg.innerHTML = 'Processing heightmap'
             console.log('heightmap')
             startTimer()
@@ -1124,7 +1124,7 @@ async function exportMap() {
             setUrlInfo('jpg')
 
             let objTileCnt = mapUtils.getTileCountAdjusted(zoom, extent, override)
-            let filename = `satellite_lat_${lat}_lng_${lng}_zoom_${objTileCnt.zoom}.png`
+            let filename = `satellite_zoom_${objTileCnt.zoom}.png`
 
             if (userSettings.backendServer === true) {
                 let data = {
@@ -1181,7 +1181,7 @@ async function exportMap() {
                 let width = 1280
                 let height = 1280
                 url = url + bboxString + `/${height}x${width}?access_token=${scope.apiKey}&attribution=false&logo=false`
-                mapFileName = `map_image_lat_${lat}_lng_${lng}_width_${width}_height_${height}.png`
+                mapFileName = `map_image_width_${width}_height_${height}.png`
 
                 let objTile = await mapUtils.downloadToTile(false, url)
                 await saveImage(subDir, objTile.buffer, mapFileName, "png")
@@ -1194,7 +1194,7 @@ async function exportMap() {
                 url = scope.mapUrl + objStyle[0].maptiler_map + '/'
                 let objTiles = await downloadTiles(url, false, zoom, false)
                 stopTimer()
-                mapFileName = `map_image_lat_${lat}_lng_${lng}.png`
+                mapFileName = `map_image.png`
 
                 console.log('Combining images')
                 progressMsg.innerHTML = 'Combining images'
@@ -1224,7 +1224,7 @@ async function exportMap() {
                 let width = 1280
                 let height = 1280
                 url = url + bboxString + `/${height}x${width}?access_token=${scope.apiKey}&attribution=false&logo=false`
-                let weightFileName = `weightmap_image_lat_${lat}_lng_${lng}_width_${width}_height_${height}.png`
+                let weightFileName = `weightmap_image_width_${width}_height_${height}.png`
                 //Use the static api instead of stitching tiles
                 let objTile = await mapUtils.downloadToTile(false, url)
                 await saveImage(subDir, objTile.buffer, weightFileName, "png")
