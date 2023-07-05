@@ -1,6 +1,7 @@
 'use strict'
 
-
+import './styles.css'
+import '@fortawesome/fontawesome-free/css/all.css'
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'

@@ -1,6 +1,7 @@
 export default {
     root: 'src',
     build: {
+        cssCodeSplit: false,
         outDir: '../dist'
     },
     esbuild: {
