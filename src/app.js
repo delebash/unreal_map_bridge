@@ -823,10 +823,10 @@ function stopTimer() {
     overlayOff()
 }
 
-async function getHeightmap(z = 14, override = false) {
+async function getHeightmap(z = 14, overrideZoom = false) {
     return new Promise(async (resolve, reject) => {
 
-        let obj = await downloadTiles(scope.terrianUrl, true, z, override)
+        let obj = await downloadTiles(scope.terrianUrl, true, z, overrideZoom)
         let heightmap = mapUtils.toHeightmap(obj.tiles, obj.distance, mapSize);
         let heights = mapUtils.calcMinMaxHeight(heightmap);
         grid.minHeight = heights.min;
@@ -837,58 +837,18 @@ async function getHeightmap(z = 14, override = false) {
     })
 }
 
-function buildTileUrls(tilesUrl, z = 14, override = true) {
-    let extent = getExtent(grid.lng, grid.lat, mapSize / 1080 * 1081);
 
-    let objTileCnt = mapUtils.getTileCountAdjusted(z, extent, override)
-    let x = objTileCnt.x
-    let y = objTileCnt.y
-    let zoom = objTileCnt.zoom
-    let tileCnt = objTileCnt.tileCnt
-
-
-    document.getElementById('satzoomval').value = zoom
-    document.getElementById('zoomlevel').value = zoom
-    document.getElementById('tilecount').innerHTML = mapUtils.getTileCount(zoom, extent).length.toString()
-
-    let tileLng = mapUtils.tile2long(x, zoom);
-    let tileLat = mapUtils.tile2lat(y, zoom);
-
-    let tileLng2 = mapUtils.tile2long(x + tileCnt, zoom);
-    let tileLat2 = mapUtils.tile2lat(y + tileCnt, zoom);
-    // get the length of one side of the tiles extent
-    distance = turf.distance(turf.point([tileLng, tileLat]), turf.point([tileLng2, tileLat2]), {units: 'kilometers'}) / Math.SQRT2;
-
-    let tiles = []
-    promiseArray = [];
-    let count = 1
-    let totalCount = tileCnt * tileCnt
-    // download the tiles
-
-    for (let i = 0; i < tileCnt; i++) {
-        for (let j = 0; j < tileCnt; j++) {
-            let objTiles = {}
-            let url = tilesUrl + zoom + '/' + (x + j) + '/' + (y + i) + urlType + '?' + urlKey + scope.apiKey;
-            objTiles.url = url
-            objTiles.x = (x + j)
-            objTiles.y = (y + i)
-            tiles.push(objTiles)
-        }
-    }
-    return tiles
-}
-
-async function downloadTiles(tilesUrl, isHeightmap = true, z = 14, override = false) {
+async function downloadTiles(tilesUrl, isHeightmap = true, z = 14, overrideZoom = false) {
     return new Promise(async (resolve, reject) => {
         let extent = getExtent(grid.lng, grid.lat, mapSize / 1080 * 1081);
-        let objTileCnt = mapUtils.getTileCountAdjusted(z, extent, override)
+        let objTileCnt = mapUtils.getTileCountAdjusted(z, extent, overrideZoom)
         let x = objTileCnt.x
         let y = objTileCnt.y
         let zoom = objTileCnt.zoom
         let tileCnt = objTileCnt.tileCnt
         let objTiles = {}
 
-        document.getElementById('satzoomval').value = zoom
+        document.getElementById('satZoomVal').value = zoom
         document.getElementById('zoomlevel').innerHTML = zoom
         document.getElementById('tilecount').innerHTML = mapUtils.getTileCount(zoom, extent).length.toString()
 
@@ -997,8 +957,8 @@ async function workerProcess(config) {
     })
 }
 
-async function setupEventSource(satellite) {
-    if (userSettings.backendServer === true && satellite === true) {
+async function setupEventSource(satellite, heightmap) {
+    if (userSettings.backendServer === true && (satellite === true || heightmap === true)) {
         let isRunning = await isServerRunning()
         if (isRunning === false) {
             toggleModal('open', `Backend server is checked in settings, but the server is not running.  Please see help to install and start the server or uncheck Backend server.`)
@@ -1021,14 +981,15 @@ async function setupEventSource(satellite) {
 
 async function exportMap() {
     let dirHandle = await userSettings.dirHandle
-    let overridezoom = document.getElementById('satzoomval').value
-    let override = document.getElementById('satellitezoom').checked
+    let satZoomVal = document.getElementById('satZoomVal').value
+    let overrideSatZoom = document.getElementById('overrideSatZoom').checked
+    let heightmapZoomVal = document.getElementById('heightmapZoomVal').value
+    let overrideHeightmapZoom = document.getElementById('overrideHeightmapZoom').checked
 
-
-    if (override === true && overridezoom > 14) {
+    if ((overrideSatZoom === true && satZoomVal > 14) || (overrideHeightmapZoom === true && heightmapZoomVal > 14)) {
         let isRunning = await isServerRunning()
         if (isRunning === false) {
-            toggleModal('open', `To use a satellite zoom level of greater than 14 you must use the backend server`)
+            toggleModal('open', `To use a satellite or heightmap zoom level of greater than 14 you must use the backend server`)
             return
         }
     }
@@ -1068,11 +1029,16 @@ async function exportMap() {
     let extent = getExtent(grid.lng, grid.lat, mapSize / 1080 * 1081);
     let bbox = [extent.topleft[0], extent.bottomright[1], extent.bottomright[0], extent.topleft[1]]
     let bboxTLBR = [extent.topleft[0], extent.topleft[1], extent.bottomright[0], extent.bottomright[1]]
-    let zoom
-    if (overridezoom.length === 0) {
-        zoom = 14
+    let satzoom, heightzoom
+    if (satZoomVal.length === 0) {
+        satzoom = 14
     } else {
-        zoom = overridezoom
+        satzoom = satZoomVal
+    }
+    if (heightmapZoomVal.length === 0) {
+        heightzoom = 14
+    } else {
+        heightzoom = heightmapZoomVal
     }
     let bboxString = '[' + bbox + ']'
     let config = {}
@@ -1080,7 +1046,7 @@ async function exportMap() {
     subDirName = `tile_lat_${lat}_lng_${lng}`
     const subDir = await dirHandle.getDirectoryHandle(subDirName, {create: true});
 
-    await setupEventSource(satellite)
+    await setupEventSource(satellite, ele_heightmap)
 
     if (scope.exportType === 'unrealSend') {
         if (ele_heightmap !== true) {
@@ -1097,33 +1063,49 @@ async function exportMap() {
             console.log('heightmap')
             startTimer()
             setUrlInfo('height')
-            heightmap = await getHeightmap()
-            if (autoCalc === true) {
-                await autoCalculateBaseHeight()
-            }
-            convertedHeightmap = convertHeightmap(heightmap);
-            png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
-            console.log('finished convert heightmap')
-            updateInfopanel()
-            stopTimer()
+            let objTileCnt = mapUtils.getTileCountAdjusted(heightzoom, extent, overrideHeightmapZoom)
 
-            console.log('start manipulating image')
-            progressMsg.innerHTML = 'Manipulating and resizing image'
-            startTimer(true)
-            config = {}
-            //Resample rescale
-            config.function = 'manipulateImage'
-            config.png = png
-            config.heightmapblurradius = heightmapblurradius
-            config.sealevel = sealevel
-            config.flipx = flipx
-            config.flipy = flipy
-            config.landscapeSize = landscapeSize
-            config.isHeightmap = true
-            config.dirHandle = subDir
-            config.filename = heightmapFileName
-            await workerProcess(config)
-            stopTimer()
+            if (userSettings.backendServer === true) {
+                let data = {
+                    bbox: bboxTLBR,
+                    filename: heightmapFileName,
+                    zoom: parseInt(objTileCnt.zoom),
+                    access_token: urlType + '?' + urlKey + scope.apiKey,
+                    api_url: scope.satelliteMapUrl,
+                    base_dir: scope.serverDownloadDirectory,
+                    sub_dir: subDirName
+                }
+                await processFromBackend(data)
+                stopTimer()
+            } else {
+                heightmap = await getHeightmap(heightzoom, overrideHeightmapZoom)
+                if (autoCalc === true) {
+                    await autoCalculateBaseHeight()
+                }
+                convertedHeightmap = convertHeightmap(heightmap);
+                png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
+                console.log('finished convert heightmap')
+                updateInfopanel()
+                stopTimer()
+
+                console.log('start manipulating image')
+                progressMsg.innerHTML = 'Manipulating and resizing image'
+                startTimer(true)
+                config = {}
+                //Resample rescale
+                config.function = 'manipulateImage'
+                config.png = png
+                config.heightmapblurradius = heightmapblurradius
+                config.sealevel = sealevel
+                config.flipx = flipx
+                config.flipy = flipy
+                config.landscapeSize = landscapeSize
+                config.isHeightmap = true
+                config.dirHandle = subDir
+                config.filename = heightmapFileName
+                await workerProcess(config)
+                stopTimer()
+            }
         }
 
         //Process satellite
@@ -1134,7 +1116,7 @@ async function exportMap() {
 
             setUrlInfo('jpg')
 
-            let objTileCnt = mapUtils.getTileCountAdjusted(zoom, extent, override)
+            let objTileCnt = mapUtils.getTileCountAdjusted(satzoom, extent, overrideSatZoom)
             let filename = `satellite_zoom_${objTileCnt.zoom}.png`
 
             if (userSettings.backendServer === true) {
@@ -1150,7 +1132,7 @@ async function exportMap() {
                 await processFromBackend(data)
                 stopTimer()
             } else {
-                let objTiles = await downloadTiles(scope.satelliteMapUrl, false, zoom, override)
+                let objTiles = await downloadTiles(scope.satelliteMapUrl, false, satzoom, overrideSatZoom)
                 console.log('Combining images')
                 progressMsg.innerHTML = 'Combining images'
                 startTimer()
@@ -1446,11 +1428,18 @@ function toggleModal(mode, msg) {
     }
 }
 
-function overrideSatChange(zoom) {
+function overrideSatZoomChange(zoom) {
     let extent = getExtent(grid.lng, grid.lat, mapSize / 1080 * 1081);
     let tiles = mapUtils.getTileCount(zoom, extent)
     let count = tiles.length
-    document.getElementById('tilecount').innerHTML = count.toString()
+    document.getElementById('satZoomTileCount').innerHTML = count.toString()
+}
+
+function overrideHeightmapZoomChange(zoom) {
+    let extent = getExtent(grid.lng, grid.lat, mapSize / 1080 * 1081);
+    let tiles = mapUtils.getTileCount(zoom, extent)
+    let count = tiles.length
+    document.getElementById('heightmapZoomTileCount').innerHTML = count.toString()
 }
 
 async function saveImage(dirHandle, imageBytes, save_fileName, file_type) {
@@ -1601,7 +1590,8 @@ window.zoomIn = zoomIn
 window.zoomOut = zoomOut
 window.exportTypeChange = exportTypeChange
 window.changeMapsize = changeMapsize
-window.overrideSatChange = overrideSatChange
+window.overrideSatZoomChange = overrideSatZoomChange
+window.overrideHeightmapZoomChange = overrideHeightmapZoomChange
 window.saveWeightmapGrid = saveWeightmapGrid
 window.deleteWeightmapGrid = deleteWeightmapGrid
 window.addWeightmapGrid = addWeightmapGrid

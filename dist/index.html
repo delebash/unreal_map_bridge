@@ -8,13 +8,15 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon">
-    <link href="images/favicon.ico" rel="icon" type="image/x-icon">
+    <link href="/assets/favicon-10aedeea.ico" rel="shortcut icon" type="image/x-icon">
+    <link href="/assets/favicon-10aedeea.ico" rel="icon" type="image/x-icon">
     <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
           integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
           referrerpolicy="no-referrer" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/destyle.css@1.0.15/destyle.css" rel="stylesheet"/>
-    <link href="styles.css" rel="stylesheet" type="text/css">
+    
+  <script type="module" crossorigin src="/assets/index-95881b5b.js"></script>
+  <link rel="stylesheet" href="/assets/index-2c1b1897.css">
 </head>
 <body class="row">
 <div class="modal" id="modal">
@@ -66,7 +68,7 @@
     <div class="panel slide-out hidden" id="infoPanel">
         <div class="geocoder" id="geocoder"></div>
         <div class="previewImage">
-            <img alt="preview image" height="512px" id="previewImage" src="images/default.png" width="512px">
+            <img alt="preview image" height="512px" id="previewImage" src="/assets/default-babe7699.png" width="512px">
         </div>
         <div class="infotable">
             <div class="info">
@@ -191,31 +193,16 @@
                 <dl>
                     <div class="withCb">Override Satellite Zoom Level:</div>
                     &nbsp;&nbsp;
-                    <dd><input id="overrideSatZoom" type="checkbox"><i class="fas fa-check"></i></dd>
+                    <dd><input id="satellitezoom" type="checkbox"><i class="fas fa-check"></i></dd>
                     &nbsp;&nbsp;
                     <div>Zoom:</div>
                     &nbsp;&nbsp;
-                    <div><input type="number" max="22" min="0" step="1" data-model="satZoomVal" id="satZoomVal"
-                                onchange="overrideSatZoomChange(this.value)"></div>
+                    <div><input type="number" max="22" min="0" step="1" data-model="satzoomval" id="satzoomval"
+                                onchange="overrideSatChange(this.value)"></div>
                     &nbsp;&nbsp;
                     <div>Tile Count:</div>
                     &nbsp;&nbsp;
-                    <div id="satZoomTileCount"></div>
-                </dl>
-                <br>
-                <dl>
-                    <div class="withCb">Override Heightmap Zoom Level:</div>
-                    &nbsp;&nbsp;
-                    <dd><input id="overrideHeightmapZoom" type="checkbox"><i class="fas fa-check"></i></dd>
-                    &nbsp;&nbsp;
-                    <div>Zoom:</div>
-                    &nbsp;&nbsp;
-                    <div><input type="number" max="22" min="0" step="1" data-model="heightmapZoomVal" id="heightmapzoomval"
-                                onchange="overrideHeightmapZoomChange(this.value)"></div>
-                    &nbsp;&nbsp;
-                    <div>Tile Count:</div>
-                    &nbsp;&nbsp;
-                    <div id="heightmapZoomTileCount"></div>
+                    <div id="tilecount"></div>
                 </dl>
                 <br>
                 <header><h4><b>Select image types to download:</b></h4></header>
@@ -409,8 +396,6 @@
     <script src="jszip.js"></script>
     <script src="pako.js"></script>
     <script src="binding.js"></script>
-    <script type="module" src="app.js">
-
-    </script>
+    
 </body>
 </html>
