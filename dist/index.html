@@ -15,7 +15,7 @@
           referrerpolicy="no-referrer" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/destyle.css@1.0.15/destyle.css" rel="stylesheet"/>
     
-  <script type="module" crossorigin src="/assets/index-95881b5b.js"></script>
+  <script type="module" crossorigin src="/assets/index-ae2db28b.js"></script>
   <link rel="stylesheet" href="/assets/index-2c1b1897.css">
 </head>
 <body class="row">
@@ -193,16 +193,31 @@
                 <dl>
                     <div class="withCb">Override Satellite Zoom Level:</div>
                     &nbsp;&nbsp;
-                    <dd><input id="satellitezoom" type="checkbox"><i class="fas fa-check"></i></dd>
+                    <dd><input id="overrideSatZoom" type="checkbox"><i class="fas fa-check"></i></dd>
                     &nbsp;&nbsp;
                     <div>Zoom:</div>
                     &nbsp;&nbsp;
-                    <div><input type="number" max="22" min="0" step="1" data-model="satzoomval" id="satzoomval"
-                                onchange="overrideSatChange(this.value)"></div>
+                    <div><input type="number" max="22" min="0" step="1" data-model="satZoomVal" id="satZoomVal"
+                                onchange="overrideSatZoomChange(this.value)"></div>
                     &nbsp;&nbsp;
                     <div>Tile Count:</div>
                     &nbsp;&nbsp;
-                    <div id="tilecount"></div>
+                    <div id="satZoomTileCount"></div>
+                </dl>
+                <br>
+                <dl>
+                    <div class="withCb">Override Heightmap Zoom Level:</div>
+                    &nbsp;&nbsp;
+                    <dd><input id="overrideHeightmapZoom" type="checkbox"><i class="fas fa-check"></i></dd>
+                    &nbsp;&nbsp;
+                    <div>Zoom:</div>
+                    &nbsp;&nbsp;
+                    <div><input type="number" max="22" min="0" step="1" data-model="heightmapZoomVal" id="heightmapzoomval"
+                                onchange="overrideHeightmapZoomChange(this.value)"></div>
+                    &nbsp;&nbsp;
+                    <div>Tile Count:</div>
+                    &nbsp;&nbsp;
+                    <div id="heightmapZoomTileCount"></div>
                 </dl>
                 <br>
                 <header><h4><b>Select image types to download:</b></h4></header>
