@@ -10,11 +10,11 @@
     <meta http-equiv="Expires" content="0">
     <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon">
     <link href="images/favicon.ico" rel="icon" type="image/x-icon">
-<!--    <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"-->
-<!--          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="-->
-<!--          referrerpolicy="no-referrer" rel="stylesheet"/>-->
-<!--    <link href="https://cdn.jsdelivr.net/npm/destyle.css@1.0.15/destyle.css" rel="stylesheet"/>-->
-<!--    <link href="styles.css" rel="stylesheet" type="text/css">-->
+    <!--    <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"-->
+    <!--          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="-->
+    <!--          referrerpolicy="no-referrer" rel="stylesheet"/>-->
+    <!--    <link href="https://cdn.jsdelivr.net/npm/destyle.css@1.0.15/destyle.css" rel="stylesheet"/>-->
+    <!--    <link href="styles.css" rel="stylesheet" type="text/css">-->
 </head>
 <body class="row">
 <div class="modal" id="modal">
@@ -29,7 +29,8 @@
     <!--        <progress aria-label="Content loading…" class="refreshprogress" id="progressBusy"></progress>-->
     <!--    </div>-->
     <div class="center" id="progressArea" style="display: none">
-        <span class="progressMsg" id="progressMsg"></span>&nbsp;&nbsp;<span class="progressMsg" id="processStatus">&nbsp;</span><span class="progressMsg" id="processCount"></span>
+        <span class="progressMsg" id="progressMsg"></span>&nbsp;&nbsp;<span class="progressMsg" id="processStatus">&nbsp;</span><span
+            class="progressMsg" id="processCount"></span>
         <progress class="refreshprogress" id="progress" max="1000" value="0"></progress>
     </div>
 </div>
@@ -176,8 +177,67 @@
                                 <option value="2017">2017x2017</option>
                                 <option value="1513">1513x1513</option>
                                 <option value="1009">1009x1009</option>
-                                <option value="1081">1081x1081 -- Default Resolution</option>
+                                <option value="0">1081x1081 -- Default Resolution</option>
                                 <option value="505">505x505</option>
+                                <option value="0">none</option>
+                            </select><i class="fas fa-chevron-down"></i>
+                        </dd>
+                        <span class="withCb">Use World Partition:</span>&nbsp;&nbsp;
+                        <span><input id="useworldpart" type="checkbox"><i class="fas fa-check"></i></span>&nbsp;&nbsp;
+
+                        <dd class="wsSlp wideSelect">
+                            <select data-model="worldpartlandscapeSize" onchange="worldpartlandscapeSizeChange(this)">
+                                <option value="511">511X511</option>
+                                <option value="1021">1021X1021</option>
+                                <option value="1531">1531X1531</option>
+                                <option value="2041">2041X2041</option>
+                                <option value="2551">2551X2551</option>
+                                <option value="3061">3061X3061</option>
+                                <option value="3571">3571X3571</option>
+                                <option value="4081">4081X4081</option>
+                                <option value="4591">4591X4591</option>
+                                <option value="5101">5101X5101</option>
+                                <option value="5611">5611X5611</option>
+                                <option value="6121">6121X6121</option>
+                                <option value="6631">6631X6631</option>
+                                <option value="7141">7141X7141</option>
+                                <option value="7651">7651X7651</option>
+                                <option value="8161">8161X8161</option>
+                                <option value="8671">8671X8671</option>
+                                <option value="9181">9181X9181</option>
+                                <option value="9691">9691X9691</option>
+                                <option value="10201">10201X10201</option>
+                                <option value="10711">10711X10711</option>
+                                <option value="11221">11221X11221</option>
+                                <option value="11731">11731X11731</option>
+                                <option value="12241">12241X12241</option>
+                                <option value="12751">12751X12751</option>
+                                <option value="13261">13261X13261</option>
+                                <option value="13771">13771X13771</option>
+                                <option value="14281">14281X14281</option>
+                                <option value="14791">14791X14791</option>
+                                <option value="15301">15301X15301</option>
+                                <option value="15811">15811X15811</option>
+                                <option value="16321">16321X16321</option>
+                                <option value="16831">16831X16831</option>
+                                <option value="17341">17341X17341</option>
+                                <option value="17851">17851X17851</option>
+                                <option value="18361">18361X18361</option>
+                                <option value="18871">18871X18871</option>
+                                <option value="19381">19381X19381</option>
+                                <option value="19891">19891X19891</option>
+                                <option value="20401">20401X20401</option>
+                                <option value="20911">20911X20911</option>
+                                <option value="21421">21421X21421</option>
+                                <option value="21931">21931X21931</option>
+                                <option value="22441">22441X22441</option>
+                                <option value="22951">22951X22951</option>
+                                <option value="23461">23461X23461</option>
+                                <option value="23971">23971X23971</option>
+                                <option value="24481">24481X24481</option>
+                                <option value="24991">24991X24991</option>
+                                <option value="25501">25501X25501</option>
+                                <!--                                50-->
                                 <option value="0">none</option>
                             </select><i class="fas fa-chevron-down"></i>
                         </dd>
@@ -210,7 +270,8 @@
                     &nbsp;&nbsp;
                     <div>Zoom:</div>
                     &nbsp;&nbsp;
-                    <div><input type="number" max="22" min="0" step="1" data-model="heightmapZoomVal" id="heightmapzoomval"
+                    <div><input type="number" max="22" min="0" step="1" data-model="heightmapZoomVal"
+                                id="heightmapZoomVal"
                                 onchange="overrideHeightmapZoomChange(this.value)"></div>
                     &nbsp;&nbsp;
                     <div>Tile Count:</div>
@@ -259,7 +320,7 @@
                     <dd class="withCb">Enable World Partion:</dd>&nbsp;&nbsp;
                     <dd><input id="worldpart" type="checkbox"><i class="fas fa-check"></i></dd>&nbsp;&nbsp;
                     <dd>Grid Size:</dd>&nbsp;&nbsp;
-                    <dd><input data-model="worldpartiongridsize" id="worldpartiongridsize" type="number"></dd>&nbsp;&nbsp;
+                    <dd><input data-model="worldpartiongridsize" id="worldpartiongridsize" value="2" type="number"></dd>&nbsp;&nbsp;
                     <dd>Blur Radius:</dd>&nbsp;&nbsp;
                     <dd><input data-model="blurradius" id="blurradius" type="number"></dd>
                 </dl>
@@ -338,7 +399,9 @@
             </div>
             <dl>
                 <dt>Api key:</dt>
-                <dd><input data-model="apiKey" id="apiKey" type="password"><i class="far fa-eye" id="togglePassword" style="margin-left: -30px; cursor: pointer;"></i></dd>
+                <dd><input data-model="apiKey" id="apiKey" type="password"><i class="far fa-eye" id="togglePassword"
+                                                                              style="margin-left: -30px; cursor: pointer;"></i>
+                </dd>
             </dl>
             <dl>
                 <dt>Terrain Url:</dt>
@@ -361,16 +424,16 @@
                 <dd><input data-model="mapUrl" type="text"></dd>
             </dl>
             <dl>
-                <dt>Backend Server Url:</dt>
+                <dt>Desktop Server Url:</dt>
                 <dd>
-                    <input class="withCb2" id="backendServer" type="checkbox"><i class="fas fa-check"></i>
-                    &nbsp; <span>
-                    <input data-model="backendServerUrl" id="backendServerUrl" type="text"></span>
+                    <!--                    <input class="withCb2" id="backendServer" type="checkbox"><i class="fas fa-check"></i>-->
+                    <!--                    &nbsp; <span>-->
+                    <input data-model="desktopServerUrl" id="desktopServerUrl" type="text">
                 </dd>
             </dl>
             <dl>
-                <dt>Server Directory:</dt>
-                <dd><input data-model="serverDownloadDirectory" id="serverDownloadDirectory" type="text">
+                <dt>Desktop Directory:</dt>
+                <dd><input data-model="desktopDownloadDirectory" id="desktopDownloadDirectory" type="text">
                 </dd>
             </dl>
             <dl>
@@ -395,9 +458,9 @@
     </div>
 
 
-<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jimp/0.22.8/jimp.min.js"-->
-<!--            integrity="sha512-35IpHDqZJRT/3FJlRl03MG3FSyg9CdLKLNgbUR15MgxKF/8WcUxB7tQ5vROtr0ClQ5ij5MaQXd8UOU+8doXbwA=="-->
-<!--            crossorigin="anonymous" referrerpolicy="no-referrer"></script>-->
+    <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jimp/0.22.8/jimp.min.js"-->
+    <!--            integrity="sha512-35IpHDqZJRT/3FJlRl03MG3FSyg9CdLKLNgbUR15MgxKF/8WcUxB7tQ5vROtr0ClQ5ij5MaQXd8UOU+8doXbwA=="-->
+    <!--            crossorigin="anonymous" referrerpolicy="no-referrer"></script>-->
 
     <!--    <script type="text/javascript"-->
     <!--            src="https://cdn.jsdelivr.net/npm/gdal3.js@2.4.0/dist/package/gdal3.js"-->

@@ -39,15 +39,19 @@ async function manipulateImage(buff, blurradius, sealevel, flipx, flipy, landsca
     }
 
     exportBuffer = await mapImage.toBuffer()
-
     // Resample and scale
-    if (landscapeSize !== '0' || landscapeSize !== '1081') {
+    if (landscapeSize !== '0' && landscapeSize !== '1081') {
         if (isHeightmap === true) {
             if (sealevel === true) {
                 translateOptions = ['-ot', 'UInt16', '-of', 'PNG', '-scale', minPngValue, maxPngValue, ZrangeSeaLevel, maxPngValue, '-outsize', landscapeSize, landscapeSize, '-r', resizeMethod];
             } else {
                 translateOptions = ['-ot', 'UInt16', '-of', 'PNG', '-outsize', landscapeSize, landscapeSize, '-r', resizeMethod];
             }
+            exportBuffer = await processGdal(exportBuffer, 'heightmap.png', translateOptions, "png");
+        }
+    } else {
+        if (sealevel === true) {
+            translateOptions = ['-ot', 'UInt16', '-of', 'PNG', '-scale', minPngValue, maxPngValue, ZrangeSeaLevel, maxPngValue, '-r', resizeMethod];
             exportBuffer = await processGdal(exportBuffer, 'heightmap.png', translateOptions, "png");
         }
     }

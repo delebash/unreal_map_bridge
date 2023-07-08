@@ -7,9 +7,9 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import * as maptilersdk from "@maptiler/sdk";
-import "@maptiler/sdk/dist/maptiler-sdk.css";
 import {GeocodingControl} from "@maptiler/geocoding-control/maptilersdk";
-import "@maptiler/geocoding-control/style.css";
+import "@maptiler/sdk/dist/maptiler-sdk.css";
+import "@maptiler/geocoding-control/style.css"
 import {Grid} from 'ag-grid-community';
 import 'ag-grid-community/styles//ag-grid.css';
 import 'ag-grid-community/styles//ag-theme-alpine.css';
@@ -235,11 +235,20 @@ let grid
 init()
 
 async function init() {
-    userSettings = await loadUserSettings()
-    grid = await loadSettings();
-    initMap()
+    let bEnabled = checkFileApiSupport()
+    if (bEnabled === false) {
+        toggleModal('open', `This browser does not support File System Access API.  Try Edge or Chrome.`)
+    } else {
+        userSettings = await loadUserSettings()
+        grid = await loadSettings();
+        initMap()
+    }
 }
 
+function checkFileApiSupport() {
+    let bEnabled = fileUtils.checkFileApiSupport()
+    return bEnabled
+}
 
 let gridOptions = {
     columnDefs: [
@@ -296,7 +305,10 @@ function initMap() {
                 });
 
                 geocoder = new MapboxGeocoder({
-                    accessToken: mapboxgl.accessToken, mapboxgl: mapboxgl, marker: false
+                    accessToken: mapboxgl.accessToken,
+                    mapboxgl: mapboxgl,
+                    marker: false,
+                    placeholder: 'Try: Lng , Lat or Name'
                 });
                 //Add control once even on reload
                 if (geoCtrl.length === 0) {
@@ -321,10 +333,12 @@ function initMap() {
                     class: 'geocoder',
                     showResultsWhileTyping: true,
                     placeholder: 'Try: Lng , Lat or Name',
+                    enableReverse: true
 
                 });
                 document.getElementById('outdoors-v11').check = true
-                //Add control once even on reload
+
+                // Add control once even on reload
                 if (geoCtrl.length === 0) {
                     document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
                 }
@@ -405,6 +419,7 @@ function initMap() {
                 // scope can be set if bindings.js is loaded (because of docReady)
                 scope.waterDepth = parseInt(grid.waterDepth) || 50;
                 scope.landscapeSize = parseInt(grid.landscapeSize) || 2017;
+                scope.worldpartlandscapeSize = parseInt(grid.worldpartlandscapeSize) || 2041;
                 scope.exportType = parseInt(grid.exportType) || 'unrealHeightmap';
                 saveSettings();
             });
@@ -599,9 +614,9 @@ async function loadUserSettings() {
         scope.mapUrl = userSettings.maptilerMapUrl || 'https://api.maptiler.com/maps/'
 
     }
-    document.getElementById('backendServer').checked = userSettings.backendServer || false
-    scope.backendServerUrl = userSettings.backendServerUrl || 'http://localhost:5000/'
-    scope.serverDownloadDirectory = userSettings.serverDownloadDirectory || ''
+    // document.getElementById('backendServer').checked = userSettings.backendServer || false
+    scope.desktopServerUrl = userSettings.desktopServerUrl || 'http://localhost:5000/'
+    scope.desktopDownloadDirectory = userSettings.desktopDownloadDirectory || ''
     return userSettings
 }
 
@@ -623,15 +638,15 @@ async function saveUserSettings() {
         userSettings.maptilerSatelliteMapUrl = scope.satelliteMapUrl
         userSettings.maptilerMapUrl = scope.mapUrl
     }
-    userSettings.backendServer = document.getElementById('backendServer').checked
-    userSettings.backendServerUrl = scope.backendServerUrl
-    userSettings.serverDownloadDirectory = scope.serverDownloadDirectory
+    // userSettings.backendServer = document.getElementById('backendServer').checked
+    userSettings.desktopServerUrl = scope.desktopServerUrl
+    userSettings.desktopDownloadDirectory = scope.desktopDownloadDirectory
     idbKeyval.set('userSettings', userSettings)
     await loadUserSettings()
     if (map) {
         map.remove();
     }
-    init()
+    location.reload()
     // togglePanel(4)
 }
 
@@ -647,7 +662,6 @@ async function loadSettings() {
     // stored.heightContours = stored.heightContours || false;
     // stored.waterContours = stored.waterContours || false;
 
-    // TODO: do not set global lets!
     document.getElementById('waterDepth').value = parseInt(stored.waterDepth) || defaultWaterdepth;
     return stored;
 }
@@ -656,6 +670,7 @@ function saveSettings() {
     grid.zoom = map.getZoom();
     grid.waterDepth = parseInt(document.getElementById('waterDepth').value);
     grid.landscapeSize = scope.landscapeSize;
+    grid.worldpartlandscapeSize = scope.worldpartlandscapeSize;
     grid.exportType = scope.exportType;
     idbKeyval.set('grid', grid);
 }
@@ -851,7 +866,9 @@ async function downloadTiles(tilesUrl, isHeightmap = true, z = 14, overrideZoom 
 
         document.getElementById('satZoomVal').value = zoom
         document.getElementById('zoomlevel').innerHTML = zoom
-        document.getElementById('tilecount').innerHTML = mapUtils.getTileCount(zoom, extent).length.toString()
+        document.getElementById('satZoomTileCount').innerHTML = mapUtils.getTileCount(zoom, extent).length.toString()
+        document.getElementById('heightmapZoomTileCount').innerHTML = mapUtils.getTileCount(zoom, extent).length.toString()
+        document.getElementById('heightmapZoomVal').value = zoom
 
         let tileLng = mapUtils.tile2long(x, zoom);
         let tileLat = mapUtils.tile2lat(y, zoom);
@@ -958,25 +975,30 @@ async function workerProcess(config) {
     })
 }
 
-async function setupEventSource(satellite, heightmap) {
-    if (userSettings.backendServer === true && (satellite === true || heightmap === true)) {
-        let isRunning = await isServerRunning()
-        if (isRunning === false) {
-            toggleModal('open', `Backend server is checked in settings, but the server is not running.  Please see help to install and start the server or uncheck Backend server.`)
-            return
-        }
-        if (event_source === undefined) {
-            console.log('test')
-            event_source = new EventSource(userSettings.backendServerUrl + 'subscribe');
-            event_source.onmessage = function (event) {
-                let data = JSON.parse(event.data)
-                if (data.event === 'stitch_tiles' && data.count) {
-                    progressCount(data.count, data.total_count, data.process)
-                } else if (data.event === 'stitch_tiles') {
-                    processCount.innerHTML = data.process
+async function setupEventSource() {
+
+    // let isRunning = await isServerRunning()
+    // if (isRunning === false) {
+    //     toggleModal('open', `Backend server is checked in settings, but the server is not running.  Please see help to install and start the server or uncheck Backend server.`)
+    //     return
+    // }
+    if (event_source === undefined) {
+        console.log('test')
+        event_source = new EventSource(userSettings.desktopServerUrl + 'subscribe');
+        event_source.onmessage = function (event) {
+            let data = JSON.parse(event.data)
+            if (data.event === 'stitch_tiles' && data.count) {
+                let total_count
+                if (data.total_count) {
+                    total_count = data.total_count
+                } else {
+                    total_count = 'unknown'
                 }
-            };
-        }
+                progressCount(data.count, total_count, data.process)
+            } else if (data.event === 'stitch_tiles') {
+                processCount.innerHTML = data.process
+            }
+        };
     }
 }
 
@@ -986,12 +1008,19 @@ async function exportMap() {
     let overrideSatZoom = document.getElementById('overrideSatZoom').checked
     let heightmapZoomVal = document.getElementById('heightmapZoomVal').value
     let overrideHeightmapZoom = document.getElementById('overrideHeightmapZoom').checked
+    let ele_heightmap = document.getElementById('heightmap').checked
+    let satellite = document.getElementById('satellite').checked
+    let isRunning
 
-    if ((overrideSatZoom === true && satZoomVal > 14) || (overrideHeightmapZoom === true && heightmapZoomVal > 14)) {
-        let isRunning = await isServerRunning()
+    let bUseBackend = false
+    if (satZoomVal > 14 || heightmapZoomVal > 14) {
+        isRunning = await isServerRunning()
         if (isRunning === false) {
-            toggleModal('open', `To use a satellite or heightmap zoom level of greater than 14 you must use the backend server`)
+            toggleModal('open', `To use a zoom level of greater than 14 please download the desktop version, download link in help file.  Cannot connect to desktop server`)
             return
+        } else {
+            await setupEventSource(satellite, ele_heightmap)
+            bUseBackend = true
         }
     }
 
@@ -1009,19 +1038,24 @@ async function exportMap() {
 
     let convertedHeightmap, png, heightmap;
     let autoCalc = document.getElementById("autoCalcBaseHeight").checked
-    let ele_heightmap = document.getElementById('heightmap').checked
-    let satellite = document.getElementById('satellite').checked
+
     let mapimage = document.getElementById('mapimage').checked
     let weightmap = document.getElementById('weightmapdl').checked
     let geojson = document.getElementById('geojson').checked
     let sealevel = document.getElementById('sealevel').checked
     let flipx = document.getElementById('flipx').checked
     let flipy = document.getElementById('flipy').checked
+    let useworldpart = document.getElementById('useworldpart').checked
     let heightmapblurradius = document.getElementById('blurradius').value
     let weightmapblurradius = document.getElementById('weightmapblurradius').value
+    let landscapeSize = ''
 
+    if (useworldpart === true) {
+        landscapeSize = scope.worldpartlandscapeSize.toString()
+    } else {
+        landscapeSize = scope.landscapeSize.toString()
+    }
 
-    let landscapeSize = scope.landscapeSize.toString()
     let lat, lng
     lng = grid.lng.toFixed(5)
     lat = grid.lat.toFixed(5)
@@ -1047,8 +1081,6 @@ async function exportMap() {
     subDirName = `tile_lat_${lat}_lng_${lng}`
     const subDir = await dirHandle.getDirectoryHandle(subDirName, {create: true});
 
-    await setupEventSource(satellite, ele_heightmap)
-
     if (scope.exportType === 'unrealSend') {
         if (ele_heightmap !== true) {
             toggleModal('open', `Send to Unreal requires image download type heightmap to be checked`)
@@ -1065,18 +1097,31 @@ async function exportMap() {
             startTimer()
             setUrlInfo('height')
             let objTileCnt = mapUtils.getTileCountAdjusted(heightzoom, extent, overrideHeightmapZoom)
+            config = {}
+            let ZrangeSeaLevel = '32767'
+            let maxPngValue = '65535'
+            let minPngValue = '0'
+            let resizeMethod = 'bilinear'
+            let translateOptions = `-ot UInt16 -of PNG -scale ${minPngValue} ${maxPngValue} ${ZrangeSeaLevel} ${maxPngValue} -outsize ${landscapeSize} ${landscapeSize} -r ${resizeMethod}`
 
-            if (userSettings.backendServer === true) {
-                let data = {
-                    bbox: bboxTLBR,
-                    filename: heightmapFileName,
-                    zoom: parseInt(objTileCnt.zoom),
-                    access_token: urlType + '?' + urlKey + scope.apiKey,
-                    api_url: scope.satelliteMapUrl,
-                    base_dir: scope.serverDownloadDirectory,
-                    sub_dir: subDirName
-                }
-                await processFromBackend(data)
+            config.function = 'heightmap'
+            config.heightmapblurradius = heightmapblurradius
+            config.sealevel = sealevel
+            config.flipx = flipx
+            config.flipy = flipy
+            config.landscapeSize = landscapeSize
+            config.dirHandle = subDir
+            config.filename = heightmapFileName
+            config.bbox = bboxTLBR
+            config.zoom = parseInt(objTileCnt.zoom)
+            config.access_token = urlType + '?' + urlKey + scope.apiKey
+            config.api_url = scope.terrianUrl
+            config.base_dir = scope.desktopDownloadDirectory
+            config.sub_dir = subDirName
+            config.is_heightmap = true
+            if (bUseBackend === true) {
+                console.log('send backend')
+                await processFromBackend(config)
                 stopTimer()
             } else {
                 heightmap = await getHeightmap(heightzoom, overrideHeightmapZoom)
@@ -1092,18 +1137,10 @@ async function exportMap() {
                 console.log('start manipulating image')
                 progressMsg.innerHTML = 'Manipulating and resizing image'
                 startTimer(true)
-                config = {}
                 //Resample rescale
-                config.function = 'manipulateImage'
                 config.png = png
-                config.heightmapblurradius = heightmapblurradius
-                config.sealevel = sealevel
-                config.flipx = flipx
-                config.flipy = flipy
-                config.landscapeSize = landscapeSize
+                config.function = 'manipulateImage'
                 config.isHeightmap = true
-                config.dirHandle = subDir
-                config.filename = heightmapFileName
                 await workerProcess(config)
                 stopTimer()
             }
@@ -1114,30 +1151,35 @@ async function exportMap() {
             console.log('Processing satellite')
             progressMsg.innerHTML = 'Processing satellite'
             startTimer()
-
             setUrlInfo('jpg')
 
             let objTileCnt = mapUtils.getTileCountAdjusted(satzoom, extent, overrideSatZoom)
-            let filename = `satellite_zoom_${objTileCnt.zoom}.png`
-
-            if (userSettings.backendServer === true) {
-                let data = {
-                    bbox: bboxTLBR,
-                    filename: filename,
-                    zoom: parseInt(objTileCnt.zoom),
-                    access_token: urlType + '?' + urlKey + scope.apiKey,
-                    api_url: scope.satelliteMapUrl,
-                    base_dir: scope.serverDownloadDirectory,
-                    sub_dir: subDirName
-                }
-                await processFromBackend(data)
+            let satFilename = `satellite_zoom_${objTileCnt.zoom}.png`
+            config = {}
+            config.function = 'satellite'
+            config.dirHandle = subDir
+            config.heightmapblurradius = heightmapblurradius
+            config.sealevel = sealevel
+            config.flipx = flipx
+            config.flipy = flipy
+            config.landscapeSize = landscapeSize
+            config.filename = satFilename
+            config.bbox = bboxTLBR
+            config.zoom = parseInt(objTileCnt.zoom)
+            config.access_token = urlType + '?' + urlKey + scope.apiKey
+            config.api_url = scope.satelliteMapUrl
+            config.base_dir = scope.desktopDownloadDirectory
+            config.sub_dir = subDirName
+            config.is_heightmap = false
+            if (bUseBackend === true) {
+                console.log('send backend')
+                await processFromBackend(config)
                 stopTimer()
             } else {
                 let objTiles = await downloadTiles(scope.satelliteMapUrl, false, satzoom, overrideSatZoom)
                 console.log('Combining images')
                 progressMsg.innerHTML = 'Combining images'
                 startTimer()
-                config = {}
                 config.function = 'combineImages'
                 config.objTiles = objTiles
                 config.tileSize = tileSize
@@ -1145,17 +1187,13 @@ async function exportMap() {
                 config.lng = lng
                 config.lat = lat
                 config.zoom = objTiles.zoom
-                config.filename = filename
+                config.filename = satFilename
                 await workerProcess(config)
                 stopTimer()
             }
         }
         //Process mapimage
         if (mapimage === true) {
-            // let isString = false
-            // if (userSettings.backendServer === true) {
-            //     isString = true
-            // }
             console.log('Processing map image')
             progressMsg.innerHTML = 'Processing map image'
             startTimer()
@@ -1260,20 +1298,14 @@ async function exportMap() {
     }
 }
 
-// async function makeStream(objTiles){
-//     new Promise(async (resolve, reject) => {
-//
-//         resolve(stream)
-//     })
-// }
 
-function wait(milliseconds) {
-    return new Promise(resolve => setTimeout(resolve, milliseconds));
-}
+// function wait(milliseconds) {
+//     return new Promise(resolve => setTimeout(resolve, milliseconds));
+// }
 
 async function isServerRunning() {
     try {
-        const response = await fetch(userSettings.backendServerUrl, {
+        const response = await fetch(userSettings.desktopServerUrl, {
             method: "GET"
         })
         let result = await response.json()
@@ -1292,8 +1324,8 @@ async function isServerRunning() {
 async function processFromBackend(data) {
     try {
         let payload = JSON.stringify(data)
-        // console.log(payload)
-        const response = await fetch(userSettings.backendServerUrl + 'process_tiles', {
+        console.log(payload)
+        const response = await fetch(userSettings.desktopServerUrl + 'process_tiles', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -1392,6 +1424,10 @@ function exportTypeChange(e) {
 
 function landscapeSizeChange(e) {
     scope.landscapeSize = e.value
+}
+
+function worldpartlandscapeSizeChange(e) {
+    scope.worldpartlandscapeSize = e.value
 }
 
 async function serverTypeChange(e) {
@@ -1596,6 +1632,7 @@ window.overrideHeightmapZoomChange = overrideHeightmapZoomChange
 window.saveWeightmapGrid = saveWeightmapGrid
 window.deleteWeightmapGrid = deleteWeightmapGrid
 window.addWeightmapGrid = addWeightmapGrid
+window.worldpartlandscapeSizeChange = worldpartlandscapeSizeChange
 window.help = help
 
 

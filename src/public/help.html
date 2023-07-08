@@ -8,7 +8,7 @@
 <body>
 
 <div class="help">
-    <header><h2>Help</h2>
+    <header><h2>Help -- Download heightmap, satellite, weightmap images for use in Unreal or other 3D programs</h2>
         <hr>
     </header>
     <dl>
@@ -82,15 +82,16 @@
         <dt>Settings Panel:</dt>
         <dd>Main two things you need to set are your Api key and Download directory</dd>
         &nbsp;
-        <dd>Backend Server Url -- The backend server is for use when you need to
-            download satellite images with a zoom greater than 14. You will need to download the server
-            from <a href="https://github.com/delebash/map_bridge_backend_flask/releases">here</a>
-            Unzip and double click on the exe to start the server. Export image per normal, sat images will
+        <dd>Desktop Server Url -- The backend server is for use when you need to
+            download satellite images with a zoom greater than 14. You will need to download the desktop
+            version from <a href="https://github.com/delebash/unreal_map_bridge_desktop/releases">here</a>
+            Double click on the exe to start the application. Export image per normal, sat images will
             be processed on the backend. This could take a long time depending on how many tiles you are
             processing.
         </dd>
-        <dd>Server Directory: -- Directory to save images produced from the backend server such as
-        C:\map\sat_images</dd>
+        <dd>Desktop Directory: -- Directory to save images produced from the desktop app such as
+        C:\map\sat_images. If you are using the automatic heightmap import via the plugin make this directory
+        the same as Download Directory</dd>
 
         <dt>Weightmap Panel:</dt>
         <dd>These list to colors to match features from the Weightmap style to create your</dd>
