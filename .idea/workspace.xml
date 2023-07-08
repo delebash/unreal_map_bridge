@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="fixes for desktop version">
+    <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="help">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/public/help.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/help.html" afterDir="false" />
     </list>
@@ -120,7 +120,7 @@
       <workItem from="1688701633251" duration="18051000" />
       <workItem from="1688787717301" duration="600000" />
       <workItem from="1688802684781" duration="8240000" />
-      <workItem from="1688843853667" duration="492000" />
+      <workItem from="1688843853667" duration="1035000" />
     </task>
     <task id="LOCAL-00001" summary="various fixes, sat download">
       <created>1686959652958</created>
@@ -247,22 +247,6 @@
       <option name="presentableId" value="LOCAL-00018" />
       <option name="project" value="LOCAL" />
       <updated>1687202316359</updated>
-    </task>
-    <task id="LOCAL-00019" summary="add webworker to fix progress bar">
-      <option name="closed" value="true" />
-      <created>1687416373216</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1687416373216</updated>
-    </task>
-    <task id="LOCAL-00020" summary="fix web worker vite config worker config">
-      <option name="closed" value="true" />
-      <created>1687468068660</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1687468068660</updated>
     </task>
     <task id="LOCAL-00021" summary="fix combine tiles">
       <option name="closed" value="true" />
@@ -496,7 +480,23 @@
       <option name="project" value="LOCAL" />
       <updated>1688818622921</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="help">
+      <option name="closed" value="true" />
+      <created>1688844412430</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1688844412430</updated>
+    </task>
+    <task id="LOCAL-00051" summary="help">
+      <option name="closed" value="true" />
+      <created>1688844426205</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1688844426205</updated>
+    </task>
+    <option name="localTasksCounter" value="52" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -508,7 +508,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="fix url caching performance" />
     <MESSAGE value="fix sat zoom" />
     <MESSAGE value="add map download and geojson" />
     <MESSAGE value="fix weightmap" />
@@ -533,7 +532,8 @@
     <MESSAGE value="zoom level" />
     <MESSAGE value="add dist" />
     <MESSAGE value="fixes for desktop version" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixes for desktop version" />
+    <MESSAGE value="help" />
+    <option name="LAST_COMMIT_MESSAGE" value="help" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
