@@ -4,347 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="add dist">
-      <change afterPath="$PROJECT_DIR$/src/public/icons/10pin.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/9pin.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/advertising_column.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/aerialway.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/aerodrome.12.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/airfield.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/airport.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/alcohol.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/alcohol_shop.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/alpinehut.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/american_football.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/amusement_arcade.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/amusement_park.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/apartment.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/aquarium.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/archaeological_site.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/area.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/art.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/arts_centre.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/artwork.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/atm.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/attraction.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/audioguide.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/bag.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/bakery.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/bank.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/bar.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/bbq.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/beach_resort.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/beauty.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/bed.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/beer.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/bell_tower.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/bench.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/beverages.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/bicycle.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/bicycle_parking.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/bicycle_rental.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/bicycle_repair_station.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/bicycle_share.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/biergarten.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/bird_hide.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/board.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/boat_rental.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/bookmaker.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/books.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/bowl.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/bowling.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/bowling_alley.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/buddhist.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/bunker.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/bureau_de_change.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/bus_station.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/bus_stop.12.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/bus_stop.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/bust.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/butcher.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/cafe.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/camp_site.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/camping.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/car.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/car_parts.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/car_rental.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/car_repair.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/car_wash.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/caravan_park.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/carpet.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/casino.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/castle.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/cattle_grid.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/cave_entrance.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/cemetery.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/chalet.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/charging_station.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/charity.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/chemist.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/chimney.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/church.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/cinema.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/city_gate.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/clothes.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/clothing_store.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/coffee.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/college.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/commercial.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/communications_tower.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/community_centre.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/computer.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/confectionery.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/consulate.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/convenience.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/copyshop.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/cosmetics.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/courthouse.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/crane.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/cross.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/dairy.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/defibrillator.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/deli.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/dentist.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/department_store.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/diplomatic.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/diy.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/doctors.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/dog_park.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/drinking-water.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/drinking_water.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/electronics.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/elevator.12.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/elevator.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/embankment.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/embassy.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/emergency-phone.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/emergency_phone.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/excrement_bags.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/fabric.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/farm.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/farmyard.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/fast_food.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/ferry.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/ferry_terminal.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/fire_station.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/firepit.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/firestation.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/fishing.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/fitness.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/fitness_centre.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/florist.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/ford.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/fort.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/fortress.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/fountain.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/fuel.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/full-height_turnstile.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/furniture.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/garden_centre.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/gate.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/generator_wind.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/gift.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/golf.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/golf_pin.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/greengrocer.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/grocery.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/guest_house.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/guidepost.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/hairdresser.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/harbor.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/helipad.16.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/hifi.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/hinduist.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/historic.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/horse_riding.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/hospital.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/hostel.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/hot_spring.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/hotel.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/housenumber.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/houseware.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/hunting_stand.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/ice_cream.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/information.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/interior_decoration.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/internet_cafe.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/jewelry.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/jewish.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/kindergarten.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/kissing_gate.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/landmark.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/laundry.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/library.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/lighthouse.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/lodging.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/manor.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/map.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/marketplace.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/massage.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/mast.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/mast_communications.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/mast_lighting.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/medical_supply.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/memorial.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/miniature_golf.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/mobile_phone.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/monument.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/motel.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/motorcycle.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/motorcycle_parking.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/mountain.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/multifaith.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/museum.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/music.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/musical_instrument.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/muslim.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/newsagent.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/nightclub.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/obelisk.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/office.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/optician.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/outdoor.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/outdoor_seating.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/paint.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/palace.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/park.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/parking.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/parking_garage.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/parking_tickets.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/peak.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/perfumery.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/pet.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/pharmacy.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/photo.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/picnic.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/picnic_site.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/pitch.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/place_of_worship.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/plaque.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/playground.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/poi.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/police.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/post.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/post_box.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/post_office.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/postal_code.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/prison.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/pub.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/public_bath.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/public_bookcase.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/public_building.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/public_transport_tickets.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/recycling.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/rental_bicycle.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/rental_car.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/restaurant.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/road.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/saddle.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/sauna.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/school.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/scooter.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/seafood.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/second_hand.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/shelter.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/shinto.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/shintoist.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/shoe.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/shoes.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/shop.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/shower.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/shrine.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/sikhist.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/skateboard.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/slipway.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/snowmobile.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/soccer.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/social_facility.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/sports.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/spring.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/stadium.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/stationery.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/statue.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/stile.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/stone.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/storage_tank.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/street.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/suitcase.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/supermarket.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/taoist.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/taxi.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/tea.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/telephone.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/telescope_dish.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/telescope_dome.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/tennis.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/terminal.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/theatre.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/ticket.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/tobacco.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/toilets.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/toll_booth.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/tower_cantilever_communication.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/tower_cooling.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/tower_dish.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/tower_dome.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/tower_generic.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/tower_lattice.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/tower_lattice_communication.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/tower_lattice_lighting.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/tower_lighting.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/tower_observation.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/town_hall.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/townhall.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/toys.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/trade.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/traffic_light.13.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/train_station.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/tramway.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/travel_agency.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/tyres.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/variety_store.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/vehicle_inspection.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/veterinary.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/video.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/video_games.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/viewpoint.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/volcano.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/waste_basket.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/waste_disposal.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/watches.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/water_park.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/water_tower.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/water_well.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/waterfall.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/wheelchair.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/wilderness_hut.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/windmill.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/icons/zoo.svg" afterDir="false" />
+    <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="fixes for desktop version">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/UPNG.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/default-babe7699.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/fa-brands-400-20c4a58b.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/fa-brands-400-74833209.woff2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/fa-regular-400-528d022d.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/fa-regular-400-8e7e5ea1.woff2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/fa-solid-900-67a65763.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/fa-solid-900-7152a693.woff2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/fa-v4compatibility-0515a423.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/fa-v4compatibility-694a17c3.woff2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/favicon-10aedeea.ico" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/index-e8fef770.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/style-1ceaaa61.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/worker-f4742dcd.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/binding.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/help.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/jszip.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/pako.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/javascript/image-utiles.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/javascript/image-utiles.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/public/help.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/help.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/vite.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -457,7 +118,7 @@
       <workItem from="1688701594903" duration="32000" />
       <workItem from="1688701633251" duration="18051000" />
       <workItem from="1688787717301" duration="600000" />
-      <workItem from="1688802684781" duration="6238000" />
+      <workItem from="1688802684781" duration="7438000" />
     </task>
     <task id="LOCAL-00001" summary="various fixes, sat download">
       <created>1686959652958</created>
@@ -785,7 +446,15 @@
       <option name="project" value="LOCAL" />
       <updated>1688529681116</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="fixes for desktop version">
+      <option name="closed" value="true" />
+      <created>1688817157170</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1688817157170</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -797,7 +466,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="download directory" />
     <MESSAGE value="fix url caching performance" />
     <MESSAGE value="fix sat zoom" />
     <MESSAGE value="add map download and geojson" />
@@ -822,7 +490,8 @@
     <MESSAGE value="filename" />
     <MESSAGE value="zoom level" />
     <MESSAGE value="add dist" />
-    <option name="LAST_COMMIT_MESSAGE" value="add dist" />
+    <MESSAGE value="fixes for desktop version" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixes for desktop version" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
