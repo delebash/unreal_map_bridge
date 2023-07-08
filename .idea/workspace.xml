@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="fixes for desktop version">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/public/help.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/help.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,7 +119,8 @@
       <workItem from="1688701594903" duration="32000" />
       <workItem from="1688701633251" duration="18051000" />
       <workItem from="1688787717301" duration="600000" />
-      <workItem from="1688802684781" duration="7438000" />
+      <workItem from="1688802684781" duration="8240000" />
+      <workItem from="1688843853667" duration="492000" />
     </task>
     <task id="LOCAL-00001" summary="various fixes, sat download">
       <created>1686959652958</created>
@@ -454,7 +456,47 @@
       <option name="project" value="LOCAL" />
       <updated>1688817157170</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="fixes for desktop version">
+      <option name="closed" value="true" />
+      <created>1688818507166</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1688818507166</updated>
+    </task>
+    <task id="LOCAL-00046" summary="fixes for desktop version">
+      <option name="closed" value="true" />
+      <created>1688818550068</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1688818550068</updated>
+    </task>
+    <task id="LOCAL-00047" summary="fixes for desktop version">
+      <option name="closed" value="true" />
+      <created>1688818561916</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1688818561916</updated>
+    </task>
+    <task id="LOCAL-00048" summary="fixes for desktop version">
+      <option name="closed" value="true" />
+      <created>1688818609559</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1688818609559</updated>
+    </task>
+    <task id="LOCAL-00049" summary="fixes for desktop version">
+      <option name="closed" value="true" />
+      <created>1688818622921</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1688818622921</updated>
+    </task>
+    <option name="localTasksCounter" value="50" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
