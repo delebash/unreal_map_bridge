@@ -4,344 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="help">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/UPNG.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/default-babe7699.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/fa-brands-400-20c4a58b.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/fa-brands-400-74833209.woff2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/fa-regular-400-528d022d.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/fa-regular-400-8e7e5ea1.woff2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/fa-solid-900-67a65763.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/fa-solid-900-7152a693.woff2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/fa-v4compatibility-0515a423.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/fa-v4compatibility-694a17c3.woff2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/favicon-10aedeea.ico" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/index-1ceaaa61.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/index-da93040e.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/worker-68179e03.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/binding.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/help.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/10pin.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/9pin.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/advertising_column.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/aerialway.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/aerodrome.12.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/airfield.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/airport.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/alcohol.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/alcohol_shop.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/alpinehut.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/american_football.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/amusement_arcade.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/amusement_park.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/apartment.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/aquarium.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/archaeological_site.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/area.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/art.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/arts_centre.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/artwork.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/atm.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/attraction.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/audioguide.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/bag.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/bakery.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/bank.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/bar.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/bbq.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/beach_resort.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/beauty.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/bed.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/beer.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/bell_tower.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/bench.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/beverages.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/bicycle.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/bicycle_parking.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/bicycle_rental.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/bicycle_repair_station.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/bicycle_share.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/biergarten.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/bird_hide.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/board.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/boat_rental.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/bookmaker.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/books.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/bowl.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/bowling.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/bowling_alley.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/buddhist.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/bunker.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/bureau_de_change.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/bus_station.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/bus_stop.12.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/bus_stop.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/bust.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/butcher.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/cafe.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/camp_site.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/camping.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/car.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/car_parts.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/car_rental.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/car_repair.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/car_wash.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/caravan_park.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/carpet.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/casino.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/castle.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/cattle_grid.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/cave_entrance.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/cemetery.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/chalet.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/charging_station.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/charity.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/chemist.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/chimney.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/church.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/cinema.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/city_gate.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/clothes.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/clothing_store.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/coffee.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/college.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/commercial.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/communications_tower.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/community_centre.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/computer.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/confectionery.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/consulate.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/convenience.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/copyshop.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/cosmetics.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/courthouse.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/crane.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/cross.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/dairy.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/defibrillator.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/deli.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/dentist.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/department_store.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/diplomatic.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/diy.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/doctors.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/dog_park.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/drinking-water.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/drinking_water.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/electronics.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/elevator.12.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/elevator.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/embankment.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/embassy.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/emergency-phone.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/emergency_phone.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/excrement_bags.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/fabric.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/farm.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/farmyard.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/fast_food.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/ferry.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/ferry_terminal.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/fire_station.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/firepit.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/firestation.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/fishing.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/fitness.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/fitness_centre.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/florist.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/ford.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/fort.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/fortress.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/fountain.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/fuel.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/full-height_turnstile.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/furniture.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/garden_centre.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/gate.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/generator_wind.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/gift.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/golf.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/golf_pin.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/greengrocer.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/grocery.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/guest_house.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/guidepost.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/hairdresser.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/harbor.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/helipad.16.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/hifi.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/hinduist.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/historic.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/horse_riding.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/hospital.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/hostel.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/hot_spring.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/hotel.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/housenumber.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/houseware.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/hunting_stand.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/ice_cream.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/information.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/interior_decoration.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/internet_cafe.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/jewelry.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/jewish.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/kindergarten.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/kissing_gate.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/landmark.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/laundry.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/library.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/lighthouse.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/lodging.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/manor.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/map.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/marketplace.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/massage.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/mast.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/mast_communications.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/mast_lighting.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/medical_supply.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/memorial.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/miniature_golf.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/mobile_phone.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/monument.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/motel.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/motorcycle.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/motorcycle_parking.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/mountain.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/multifaith.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/museum.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/music.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/musical_instrument.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/muslim.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/newsagent.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/nightclub.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/obelisk.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/office.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/optician.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/outdoor.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/outdoor_seating.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/paint.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/palace.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/park.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/parking.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/parking_garage.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/parking_tickets.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/peak.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/perfumery.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/pet.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/pharmacy.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/photo.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/picnic.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/picnic_site.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/pitch.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/place_of_worship.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/plaque.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/playground.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/poi.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/police.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/post.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/post_box.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/post_office.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/postal_code.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/prison.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/pub.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/public_bath.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/public_bookcase.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/public_building.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/public_transport_tickets.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/recycling.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/rental_bicycle.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/rental_car.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/restaurant.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/road.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/saddle.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/sauna.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/school.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/scooter.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/seafood.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/second_hand.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/shelter.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/shinto.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/shintoist.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/shoe.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/shoes.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/shop.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/shower.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/shrine.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/sikhist.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/skateboard.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/slipway.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/snowmobile.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/soccer.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/social_facility.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/sports.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/spring.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/stadium.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/stationery.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/statue.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/stile.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/stone.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/storage_tank.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/street.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/suitcase.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/supermarket.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/taoist.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/taxi.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/tea.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/telephone.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/telescope_dish.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/telescope_dome.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/tennis.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/terminal.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/theatre.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/ticket.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/tobacco.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/toilets.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/toll_booth.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/tower_cantilever_communication.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/tower_cooling.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/tower_dish.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/tower_dome.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/tower_generic.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/tower_lattice.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/tower_lattice_communication.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/tower_lattice_lighting.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/tower_lighting.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/tower_observation.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/town_hall.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/townhall.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/toys.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/trade.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/traffic_light.13.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/train_station.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/tramway.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/travel_agency.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/tyres.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/variety_store.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/vehicle_inspection.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/veterinary.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/video.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/video_games.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/viewpoint.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/volcano.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/waste_basket.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/waste_disposal.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/watches.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/water_park.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/water_tower.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/water_well.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/waterfall.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/wheelchair.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/wilderness_hut.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/windmill.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/icons/zoo.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/jszip.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/pako.js" beforeDir="false" />
+    <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="display resolution">
       <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -456,7 +120,7 @@
       <workItem from="1688787717301" duration="600000" />
       <workItem from="1688802684781" duration="8240000" />
       <workItem from="1688843853667" duration="1504000" />
-      <workItem from="1688861504140" duration="3170000" />
+      <workItem from="1688861504140" duration="3288000" />
     </task>
     <task id="LOCAL-00001" summary="various fixes, sat download">
       <created>1686959652958</created>
@@ -583,14 +247,6 @@
       <option name="presentableId" value="LOCAL-00018" />
       <option name="project" value="LOCAL" />
       <updated>1687202316359</updated>
-    </task>
-    <task id="LOCAL-00023" summary="timer">
-      <option name="closed" value="true" />
-      <created>1687475796365</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1687475796365</updated>
     </task>
     <task id="LOCAL-00024" summary="add tile subdiretory">
       <option name="closed" value="true" />
@@ -832,7 +488,15 @@
       <option name="project" value="LOCAL" />
       <updated>1688844958893</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="display resolution">
+      <option name="closed" value="true" />
+      <created>1688865356692</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1688865356693</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -844,7 +508,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="fix sat zoom" />
     <MESSAGE value="add map download and geojson" />
     <MESSAGE value="fix weightmap" />
     <MESSAGE value="help section" />
@@ -869,7 +532,8 @@
     <MESSAGE value="add dist" />
     <MESSAGE value="fixes for desktop version" />
     <MESSAGE value="help" />
-    <option name="LAST_COMMIT_MESSAGE" value="help" />
+    <MESSAGE value="display resolution" />
+    <option name="LAST_COMMIT_MESSAGE" value="display resolution" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

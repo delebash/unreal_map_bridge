@@ -1501,7 +1501,7 @@ function overrideHeightmapZoomChange(zoom) {
     let count = tiles.length
     document.getElementById('heightmapZoomTileCount').innerHTML = count.toString()
     if (zoom > 14) {
-        document.getElementById('heightresolution').innerHTML = `Expected heigth resolution if zoom > 14 Height: ${obj.totalHeight} Width: ${obj.totalWidth}`
+        document.getElementById('heightresolution').innerHTML = `Expected height resolution if zoom > 14 Height: ${obj.totalHeight} Width: ${obj.totalWidth}`
     }
 }
 
