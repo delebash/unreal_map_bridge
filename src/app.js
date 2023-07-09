@@ -1013,7 +1013,7 @@ async function exportMap() {
     let isRunning
 
     let bUseBackend = false
-    if (satZoomVal > 14 || heightmapZoomVal > 14) {
+    if (satZoomVal > 11 || heightmapZoomVal > 11) {
         isRunning = await isServerRunning()
         if (isRunning === false) {
             toggleModal('open', `To use a zoom level of greater than 14 please download the desktop version, download link in help file.  Cannot connect to desktop server`)
@@ -1324,7 +1324,6 @@ async function isServerRunning() {
 async function processFromBackend(data) {
     try {
         let payload = JSON.stringify(data)
-        console.log(payload)
         const response = await fetch(userSettings.desktopServerUrl + 'process_tiles', {
             method: "POST",
             headers: {
@@ -1465,18 +1464,45 @@ function toggleModal(mode, msg) {
     }
 }
 
+function getTilesResolutionSize(tiles) {
+    let tl_tiles = tiles[0]
+    let br_tiles = tiles[tiles.length - 1]
+    let x_tile_range = [tl_tiles.x, br_tiles.x]
+    let y_tile_range = [tl_tiles.y, br_tiles.y]
+    let edge_length_x = x_tile_range[1] - x_tile_range[0]
+    let edge_length_y = y_tile_range[1] - y_tile_range[0]
+    edge_length_x = Math.max(1, edge_length_x)
+    edge_length_y = Math.max(1, edge_length_y)
+    let width = 512, height = 512
+    let total_width = width * edge_length_x
+    let total_height = height * edge_length_y
+    let obj = {}
+    obj.totalHeight = total_height
+    obj.totalWidth = total_width
+    return obj
+}
+
 function overrideSatZoomChange(zoom) {
     let extent = getExtent(grid.lng, grid.lat, mapSize / 1080 * 1081);
     let tiles = mapUtils.getTileCount(zoom, extent)
+    let obj = getTilesResolutionSize(tiles)
     let count = tiles.length
     document.getElementById('satZoomTileCount').innerHTML = count.toString()
+    if (zoom > 14) {
+        document.getElementById('satresolution').innerHTML = `Expected sat resolution if zoom > 14 Height: ${obj.totalHeight} Width: ${obj.totalWidth}`
+    }
 }
+
 
 function overrideHeightmapZoomChange(zoom) {
     let extent = getExtent(grid.lng, grid.lat, mapSize / 1080 * 1081);
     let tiles = mapUtils.getTileCount(zoom, extent)
+    let obj = getTilesResolutionSize(tiles)
     let count = tiles.length
     document.getElementById('heightmapZoomTileCount').innerHTML = count.toString()
+    if (zoom > 14) {
+        document.getElementById('heightresolution').innerHTML = `Expected heigth resolution if zoom > 14 Height: ${obj.totalHeight} Width: ${obj.totalWidth}`
+    }
 }
 
 async function saveImage(dirHandle, imageBytes, save_fileName, file_type) {
