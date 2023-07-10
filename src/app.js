@@ -1013,7 +1013,7 @@ async function exportMap() {
     let isRunning
 
     let bUseBackend = false
-    if (satZoomVal > 11 || heightmapZoomVal > 11) {
+    if (satZoomVal > 14 || heightmapZoomVal > 14) {
         isRunning = await isServerRunning()
         if (isRunning === false) {
             toggleModal('open', `To use a zoom level of greater than 14 please download the desktop version, download link in help file.  Cannot connect to desktop server`)

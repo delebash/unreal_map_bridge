@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="display resolution">
+    <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="landscapesizes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -122,7 +122,8 @@
       <workItem from="1688802684781" duration="8240000" />
       <workItem from="1688843853667" duration="1504000" />
       <workItem from="1688861504140" duration="3574000" />
-      <workItem from="1688867063601" duration="1673000" />
+      <workItem from="1688867063601" duration="1824000" />
+      <workItem from="1688960518075" duration="27000" />
     </task>
     <task id="LOCAL-00001" summary="various fixes, sat download">
       <created>1686959652958</created>
@@ -249,22 +250,6 @@
       <option name="presentableId" value="LOCAL-00018" />
       <option name="project" value="LOCAL" />
       <updated>1687202316359</updated>
-    </task>
-    <task id="LOCAL-00025" summary="add tile subdiretory">
-      <option name="closed" value="true" />
-      <created>1687476843021</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1687476843021</updated>
-    </task>
-    <task id="LOCAL-00026" summary="add tile subdiretory">
-      <option name="closed" value="true" />
-      <created>1687478962643</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1687478962643</updated>
     </task>
     <task id="LOCAL-00027" summary="backend stitching">
       <option name="closed" value="true" />
@@ -498,7 +483,23 @@
       <option name="project" value="LOCAL" />
       <updated>1688865486349</updated>
     </task>
-    <option name="localTasksCounter" value="56" />
+    <task id="LOCAL-00056" summary="landscapesizes">
+      <option name="closed" value="true" />
+      <created>1688868822347</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1688868822347</updated>
+    </task>
+    <task id="LOCAL-00057" summary="landscapesizes">
+      <option name="closed" value="true" />
+      <created>1688868834881</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1688868834881</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -510,7 +511,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="add map download and geojson" />
     <MESSAGE value="fix weightmap" />
     <MESSAGE value="help section" />
     <MESSAGE value="README.md" />
@@ -535,7 +535,8 @@
     <MESSAGE value="fixes for desktop version" />
     <MESSAGE value="help" />
     <MESSAGE value="display resolution" />
-    <option name="LAST_COMMIT_MESSAGE" value="display resolution" />
+    <MESSAGE value="landscapesizes" />
+    <option name="LAST_COMMIT_MESSAGE" value="landscapesizes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
