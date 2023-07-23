@@ -153,12 +153,24 @@
                         <div><dd><input type="number" min="0" max="10" step="1" id="streamDepth"></dd></div>
                     </div>
                 </div>
+                <br>
+                <dl>
+                    <dt>Level correction:</dt>
+                    <dd class="wideSelect">
+                        <select id="levelCorrection">
+                            <option value="0">None</option>
+                            <option value="1">Testing</option>
+                            <option value="2">Coastline &amp; plains</option>
+                            <option value="3">Agressive coast &amp; plains</option>
+                            <option value="9">Plains &amp; dramatic mountains</option>
+                        </select>
+                    </dd>
+                </dl>
+                <button class="footer2" onclick="previewHeightmap()"><i class="fas fa-sync-alt"></i>Preview</button>
             </div>
-            <br>
-            <div class="footer">
-                <button class="refresh" onclick="previewHeightmap()"><i class="fas fa-sync-alt"></i>Preview</button>
 
-            </div>
+
+
         </div>
     </div>
 
@@ -436,10 +448,9 @@
                     <dd>Landscape Name:</dd>&nbsp;&nbsp;
                     <dd><input data-model="landscapename" id="landscapename" type="text"></dd>
                 </dl>
+                <br>
+                <button class="footer2" onclick="exportMap()"><i class="fas fa-sync-alt"></i>Export</button>
             </div>
-        </div>
-        <div class="footer">
-            <button onclick="exportMap()"><i class="fas fa-sync-alt"></i>Export</button>
         </div>
     </div>
 
@@ -549,11 +560,12 @@
                 <dd><input data-model="downloadDirectory" type="text">
                     <button onclick="openDirectory()">Select Directory</button>
                 </dd>
+
             </dl>
+            <br>
+            <button class="footer2" onclick="saveUserSettings()"><i class="fas fa-check"></i>Save</button>
         </div>
-        <div class="footer">
-            <button onclick="saveUserSettings()"><i class="fas fa-check"></i>Save</button>
-        </div>
+
     </div>
 
     <div class="panel slide-out hidden" id="weightmapPanel">

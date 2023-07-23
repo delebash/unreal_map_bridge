@@ -265,7 +265,7 @@ dt {
     position: absolute;
     top: 0;
     transform: translateX(-100%);
-    width: 23.5em;
+    width: 24em;
 }
 
 #mapSettingsPanel {
@@ -950,9 +950,13 @@ progress::-ms-fill {
     border-radius: 3px;
 }
 
-.refresh {
-    margin-top: .25em;
+.footer2 {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    margin-top: 0;
     padding-top: 0;
+    margin-left: auto;
 }
 
 .progressMsg {

@@ -6,11 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/javascript/map-utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/javascript/map-utils.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/vite.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -136,7 +134,7 @@
       <workItem from="1690097176948" duration="2958000" />
       <workItem from="1690122757924" duration="3133000" />
       <workItem from="1690126089391" duration="5276000" />
-      <workItem from="1690147910151" duration="1790000" />
+      <workItem from="1690147910151" duration="6545000" />
     </task>
     <task id="LOCAL-00001" summary="various fixes, sat download">
       <created>1686959652958</created>
@@ -263,14 +261,6 @@
       <option name="presentableId" value="LOCAL-00018" />
       <option name="project" value="LOCAL" />
       <updated>1687202316359</updated>
-    </task>
-    <task id="LOCAL-00029" summary="backend stitching">
-      <option name="closed" value="true" />
-      <created>1688054607415</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1688054607415</updated>
     </task>
     <task id="LOCAL-00030" summary="bugs">
       <option name="closed" value="true" />
@@ -512,7 +502,15 @@
       <option name="project" value="LOCAL" />
       <updated>1690099714567</updated>
     </task>
-    <option name="localTasksCounter" value="60" />
+    <task id="LOCAL-00060" summary="fixed streams vector tiles">
+      <option name="closed" value="true" />
+      <created>1690150218448</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1690150218448</updated>
+    </task>
+    <option name="localTasksCounter" value="61" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -524,7 +522,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="help section" />
     <MESSAGE value="README.md" />
     <MESSAGE value="sendtounreal" />
     <MESSAGE value="fix mapimage download" />
@@ -549,7 +546,8 @@
     <MESSAGE value="display resolution" />
     <MESSAGE value="landscapesizes" />
     <MESSAGE value="fixed selection, added back water draw" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed selection, added back water draw" />
+    <MESSAGE value="fixed streams vector tiles" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed streams vector tiles" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -419,7 +419,7 @@ function initMap() {
             });
 
             // map.on('dblclick',function (e){
-            //     var coordinates = e.lngLat;
+            //     let coordinates = e.lngLat;
             //     new mapboxgl.Popup()
             //         .setLngLat(coordinates)
             //         .setHTML('you clicked here: <br/>' + coordinates)
@@ -436,6 +436,7 @@ function initMap() {
                 scope.landscapeSize = parseInt(grid.landscapeSize) || 2017;
                 scope.worldpartlandscapeSize = parseInt(grid.worldpartlandscapeSize) || 2041;
                 scope.exportType = parseInt(grid.exportType) || 'unrealHeightmap';
+
                 saveSettings();
             });
 
@@ -678,6 +679,8 @@ async function loadSettings() {
     stored.zoom = parseFloat(stored.zoom) || 11.0;
     stored.minHeight = parseFloat(stored.minHeight) || 0;
     stored.maxHeight = parseFloat(stored.maxHeight) || 0;
+
+
     // stored.heightContours = stored.heightContours || false;
     // stored.waterContours = stored.waterContours || false;
 
@@ -701,7 +704,6 @@ function saveSettings() {
     grid.blurPasses = parseInt(document.getElementById('blurPasses').value);
     grid.blurPostPasses = parseInt(document.getElementById('blurPostPasses').value);
     grid.streamDepth = parseInt(document.getElementById('streamDepth').value);
-
     idbKeyval.set('grid', grid);
 }
 
@@ -1030,7 +1032,8 @@ function convertHeightmap(heightmap, watermap) {
 
     // level correction, for specific needs
     // to smooth plains and dramatize mountains or level a mountanus coastline
-    //  workingmap = levelMap(workingmap, grid.minHeight + waterDepth, grid.maxHeight, scope.levelCorrection);
+    let levelCorrection = parseInt(document.getElementById('levelCorrection').value)
+    workingmap = levelMap(workingmap, grid.minHeight + waterDepth, grid.maxHeight, levelCorrection);
 
     // smooth the plains and wateredges in a number of passes
     let passes = parseInt(document.getElementById('blurPasses').value);
@@ -1102,6 +1105,108 @@ function convertHeightmap(heightmap, watermap) {
     return citiesmap;
 }
 
+function interpolateArray(data, fitCount) {
+
+    let linearInterpolate = function (before, after, atPoint) {
+        return before + (after - before) * atPoint;
+    };
+
+    let newData = new Array();
+    let springFactor = new Number((data.length - 1) / (fitCount - 1));
+    newData[0] = data[0]; // for new allocation
+    for (let i = 1; i < fitCount - 1; i++) {
+        let tmp = i * springFactor;
+        let before = new Number(Math.floor(tmp)).toFixed();
+        let after = new Number(Math.ceil(tmp)).toFixed();
+        let atPoint = tmp - before;
+        newData[i] = linearInterpolate(data[before], data[after], atPoint);
+    }
+    newData[fitCount - 1] = data[data.length - 1]; // for new allocation
+    return newData;
+}
+
+function levelMap(map, min, max, style) {
+    let curve;
+
+    switch (style) {
+        case 1: // reserved for testing
+            curve = [0.1, 1, 1.9];
+            break;
+        case 2: // coastline and plains
+            curve = [0.15, 0.45, 0.75, 1.1, 1.4, 1.7, 1.9, 1.9];
+            break;
+        case 3: // agressive coastline and plains
+            curve = [0.1, 0.2, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6];
+            break;
+        case 9:
+            curve = [0.1, 0.2, 0.5, 1, 1.3, 1.7, 2.5];
+            break;
+        default:
+            console.log('no map leveling');
+            return map;
+    }
+
+    const interpolatedCurve = interpolateArray(curve, 256);
+
+    const maxY = map.length;
+    const maxX = map[0].length;
+    const elevationStep = Math.round((max - min) / interpolatedCurve.length);
+
+    // calculate the minimum level for each index in the curve
+    let levels = [min]; // size of the levels array will be 1 larger then the curve
+    let lastLevel = min;
+    for (let i = 0; i < interpolatedCurve.length; i++) {
+        levels.push(Math.round((lastLevel + elevationStep * interpolatedCurve[i]) * 10) / 10);
+        lastLevel = levels[i + 1];
+    }
+
+    // debugging
+    //let debug = [];
+    //for(let i = 0; i < interpolatedCurve.length; i++) {
+    //    debug.push([i, interpolatedCurve[i], levels[i]]);
+    //}
+    //exportToCSV(debug);
+
+    const leveledMap = mapUtils.Create2DArray(maxY, 0);
+
+    let highestHight = 0;
+
+    for (let y = 0; y < maxY; y++) {
+        for (let x = 0; x < maxX; x++) {
+            let h = map[y][x];
+
+            if (h - min > 0) {
+                // calcualte the index based on the position in the heights array
+                let idx = Math.min(interpolatedCurve.length - 1, Math.floor((h - min) / elevationStep));
+                h = levels[idx] + ((h - levels[idx]) * interpolatedCurve[idx]);
+                h = Math.round(h * 10) / 10;
+            }
+            leveledMap[y][x] = h;
+
+            if (h > highestHight) highestHight = h;
+        }
+    }
+
+    console.log(`min ${min} max ${max} highest high ${highestHight}`);
+    // after releveling the map, it is possible that the highest point has become higher
+    // rescale back to original min max
+    let rescale = 10;
+    if (highestHight > max) {
+        rescale = Math.floor((max - min) / highestHight * 100) / 10; // little speed gain, by taking calc out the loop
+        for (let y = 0; y < maxY; y++) {
+            for (let x = 0; x < maxX; x++) {
+                let h = leveledMap[y][x];
+                if (h - min > 0) {
+                    leveledMap[y][x] = Math.round(h * rescale) / 10;
+                }
+            }
+        }
+    }
+
+    console.log(`leveled map with style ${style}, rescale ${rescale / 10}`);
+    return leveledMap;
+}
+
 function filterMap(map, fromLevel, toLevel, kernel) {
     const maxY = map.length;
     const maxX = map[0].length;
@@ -1155,7 +1260,7 @@ async function previewHeightmap() {
 }
 
 // async function downloadVtiles(tileCnt, x, y,zoom) {
-//     var vTiles = mapUtils.Create2DArray(tileCnt);
+//     let vTiles = mapUtils.Create2DArray(tileCnt);
 //
 //     for (let i = 0; i < tileCnt; i++) {
 //         for (let j = 0; j < tileCnt; j++) {
@@ -1624,6 +1729,7 @@ function worldpartlandscapeSizeChange(e) {
     scope.worldpartlandscapeSize = e.value
 }
 
+
 async function serverTypeChange(e) {
     scope.serverType = e.value
     await loadUserSettings()
@@ -1856,5 +1962,6 @@ window.deleteWeightmapGrid = deleteWeightmapGrid
 window.addWeightmapGrid = addWeightmapGrid
 window.worldpartlandscapeSizeChange = worldpartlandscapeSizeChange
 window.help = help
+
 
 
