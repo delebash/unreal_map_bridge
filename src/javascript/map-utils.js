@@ -3,8 +3,9 @@ import tib from "tiles-in-bbox";
 import mapboxgl from 'mapbox-gl';
 import VectorTile from '@mapbox/vector-tile'
 import Protobuf from 'pbf';
-let vectTile = VectorTile.VectorTile
-let cache, downloadCount = 0
+
+let vectTile = await VectorTile.VectorTile
+let cache
 caches.open('tiles').then((data) => cache = data);
 
 
@@ -198,13 +199,14 @@ async function downloadToTile(toPng, url, x = 0, y = 0, toString = false) {
         }
     }
 }
+
 function toWatermap(vTiles, length) {
     // extract feature geometry from VectorTileFeature in VectorTile.
     // draw the polygons of the water area from the feature geometries and return as a water area map.
-// console.log(vTiles)
+
     let tileCnt = vTiles.length;
     let canvas = document.getElementById('wMap-canvas');
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', {willReadFrequently: true});
 
     canvas.width = length;
     canvas.height = length;
@@ -216,7 +218,7 @@ function toWatermap(vTiles, length) {
     ctx.fillRect(0, 0, length, length);
     ctx.fillStyle = '#000000';
     ctx.beginPath();
-
+    console.log(vTiles)
     for (let ty = 0; ty < tileCnt; ty++) {
         for (let tx = 0; tx < tileCnt; tx++) {
             if (typeof vTiles[ty][tx] !== "boolean") {
@@ -262,15 +264,17 @@ function toWatermap(vTiles, length) {
 
     let watermap = Create2DArray(length, 1);
     let img = ctx.getImageData(0, 0, length, length);
-    // console.log(img)
+
     for (let i = 0; i < length; i++) {
         for (let j = 0; j < length; j++) {
             let index = i * length * 4 + j * 4;
             watermap[i][j] = img.data[index] / 255;     // 0 => 255 : 0 => 1    0 = water, 1 = land
         }
     }
+
     return watermap;
 }
+
 function sanatizeMap(map, xOffset, yOffset) {
     const citiesmapSize = 1081;
     let sanatizedMap = Create2DArray(citiesmapSize, 0);
@@ -300,6 +304,7 @@ function sanatizeMap(map, xOffset, yOffset) {
 
     return sanatizedMap;
 }
+
 function sanatizeWatermap(map, xOffset, yOffset) {
     const citiesmapSize = 1081;
     let watermap = Create2DArray(citiesmapSize, 0);
@@ -310,7 +315,6 @@ function sanatizeWatermap(map, xOffset, yOffset) {
             watermap[y - yOffset][x - xOffset] = h;
         }
     }
-
     return watermap;
 }
 
@@ -328,7 +332,7 @@ async function downloadPbfToTile(url) {
             if (response.ok) {
                 let res = response.clone();
                 let data = await response.arrayBuffer();
-                let tile = new VectorTile(new Protobuf(new Uint8Array(data)));
+                let tile = new vectTile(new Protobuf(new Uint8Array(data)));
                 cache.put(url, res);
                 return tile;
             } else {

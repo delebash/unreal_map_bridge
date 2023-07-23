@@ -1223,7 +1223,6 @@ async function setupEventSource() {
     //     return
     // }
     if (event_source === undefined) {
-        console.log('test')
         event_source = new EventSource(userSettings.desktopServerUrl + 'subscribe');
         event_source.onmessage = function (event) {
             let data = JSON.parse(event.data)
