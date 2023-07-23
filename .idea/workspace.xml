@@ -6,7 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="landscapesizes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/javascript/map-utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/javascript/map-utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,8 +29,8 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="PackageJsonUpdateNotifier">
-    <dismissed value="$PROJECT_DIR$/package.json" />
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2RCa3NO2sW2K28IOLYXwCyHGdn1" />
   <component name="ProjectViewState">
@@ -41,7 +46,8 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;F:/3DProjects/github/DansProjects/unreal_map_bridge/src/public&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;F:/github/DansProjects/unreal_map_bridge/src/public&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -53,11 +59,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\github\DansProjects\unreal_map_bridge\src\public" />
       <recent name="F:\3DProjects\github\DansProjects\unreal_map_bridge\src\public" />
       <recent name="F:\3DProjects\github\DansProjects\unreal_map_bridge\src\images" />
       <recent name="F:\3DProjects\github\DansProjects\unreal_map_bridge\dist\assets" />
       <recent name="F:\3DProjects\github\DansProjects\unreal_map_bridge\dist" />
-      <recent name="F:\3DProjects\github\DansProjects\unreal_map_bridge\src\javascript" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="F:\3DProjects\github\DansProjects\unreal_map_bridge\src\public" />
@@ -124,6 +130,10 @@
       <workItem from="1688861504140" duration="3574000" />
       <workItem from="1688867063601" duration="1824000" />
       <workItem from="1688960518075" duration="27000" />
+      <workItem from="1690033195677" duration="12172000" />
+      <workItem from="1690053847643" duration="2918000" />
+      <workItem from="1690066059974" duration="22965000" />
+      <workItem from="1690097176948" duration="954000" />
     </task>
     <task id="LOCAL-00001" summary="various fixes, sat download">
       <created>1686959652958</created>

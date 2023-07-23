@@ -64,6 +64,8 @@
 
 <div class="fill wrapper">
     <div class="content" id="map"></div>
+    <canvas id="wMap-canvas" width="400" height="400" ></canvas> <!-- for debug -->
+
     <div class="panel slide-out hidden" id="infoPanel">
         <div class="geocoder" id="geocoder"></div>
         <div class="previewImage">
@@ -127,8 +129,32 @@
                     <dd><input data-model="waterDepth" id="waterDepth" max="60" min="0" step="1" type="range"></dd>
                     <dd><input data-model="waterDepth" max="60" min="0" step="1" type="number"></dd>
                     <dd><abbr>m</abbr></dd>
+                    <dt class="withCb">Streams:</dt>
+                    <dd><input type="checkbox" id="drawStrm"><i class="fas fa-check"></i></dd>
                 </dl>
+                <header><h4>Smoothing &amp; leveling</h4>
+                    <hr>
+                </header>
+                <div class="row">
+                    <div>
+                        <div class="vertinput">To (m)</div>
+                        <div><dd><input type="number" min="0" max="250" step="10" id="plainsHeight"></dd></div>
+                    </div>
+                    <div>
+                        <div class="vertinput">Passes</div>
+                        <div><dd><input type="number" min="0" max="25" step="1" id="blurPasses"></dd></div>
+                    </div>
+                    <div>
+                        <div class="vertinput">Post pas.</div>
+                        <div><dd><input type="number" min="0" max="10" step="1" id="blurPostPasses"></dd></div>
+                    </div>
+                    <div>
+                        <div class="vertinput">Stream depth</div>
+                        <div><dd><input type="number" min="0" max="10" step="1" id="streamDepth"></dd></div>
+                    </div>
+                </div>
             </div>
+            <br>
             <div class="footer">
                 <button class="refresh" onclick="previewHeightmap()"><i class="fas fa-sync-alt"></i>Preview</button>
 
@@ -490,6 +516,10 @@
                 <dd><input data-model="stylesUrl" type="text"></dd>
             </dl>
             <dl>
+                <dt>Vector Url:</dt>
+                <dd><input data-model="vectorUrl" type="text"></dd>
+            </dl>
+            <dl>
                 <dt>Weightmap Url:</dt>
                 <dd><input data-model="weightMapUrl" type="text"></dd>
             </dl>
@@ -550,6 +580,7 @@
     <script src="jszip.js"></script>
     <script src="pako.js"></script>
     <script src="binding.js"></script>
+
     <script type="module" src="app.js">
 
     </script>

@@ -94,10 +94,15 @@ dt {
     font-weight: normal;
 }
 
+/*.row {*/
+/*    display: flex;*/
+/*    flex-direction: row;*/
+
+/*}*/
 .row {
     display: flex;
     flex-direction: row;
-
+    justify-content: space-between;
 }
 
 .column {
@@ -412,6 +417,10 @@ dt {
 }
 
 .settings header,
+.settings header h4 {
+    flex: 0 0 auto;
+    margin-bottom: 0;
+}
 .footer {
     display: flex;
     flex-direction: row;

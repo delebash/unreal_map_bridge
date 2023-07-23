@@ -1,7 +1,9 @@
 import imageUtils from "./image-utiles.js";
 import tib from "tiles-in-bbox";
 import mapboxgl from 'mapbox-gl';
-
+import VectorTile from '@mapbox/vector-tile'
+import Protobuf from 'pbf';
+let vectTile = VectorTile.VectorTile
 let cache, downloadCount = 0
 caches.open('tiles').then((data) => cache = data);
 
@@ -193,6 +195,148 @@ async function downloadToTile(toPng, url, x = 0, y = 0, toString = false) {
             }
         } catch (e) {
             console.log(e.message);
+        }
+    }
+}
+function toWatermap(vTiles, length) {
+    // extract feature geometry from VectorTileFeature in VectorTile.
+    // draw the polygons of the water area from the feature geometries and return as a water area map.
+// console.log(vTiles)
+    let tileCnt = vTiles.length;
+    let canvas = document.getElementById('wMap-canvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = length;
+    canvas.height = length;
+
+    let coef = length / (tileCnt * 4096);     // vTiles[][].layers.water.feature(0).extent = 4096 (default)
+
+    // water
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, length, length);
+    ctx.fillStyle = '#000000';
+    ctx.beginPath();
+
+    for (let ty = 0; ty < tileCnt; ty++) {
+        for (let tx = 0; tx < tileCnt; tx++) {
+            if (typeof vTiles[ty][tx] !== "boolean") {
+                if (vTiles[ty][tx].layers.water) {
+                    let geo = vTiles[ty][tx].layers.water.feature(0).loadGeometry();
+
+                    for (let i = 0; i < geo.length; i++) {
+                        ctx.moveTo(Math.round(geo[i][0].x * coef + (tx * length / tileCnt)), Math.round(geo[i][0].y * coef + (ty * length / tileCnt)));
+                        for (let j = 1; j < geo[i].length; j++) {
+                            ctx.lineTo(Math.round(geo[i][j].x * coef + (tx * length / tileCnt)), Math.round(geo[i][j].y * coef + (ty * length / tileCnt)));
+                        }
+                    }
+                }
+            }
+        }
+    }
+    ctx.closePath();
+    ctx.fill();
+
+    if (document.getElementById('drawStrm').checked) {
+        // waterway
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+
+        for (let ty = 0; ty < tileCnt; ty++) {
+            for (let tx = 0; tx < tileCnt; tx++) {
+                if (typeof vTiles[ty][tx] !== "boolean") {
+                    if (vTiles[ty][tx].layers.waterway) {
+                        let geo = vTiles[ty][tx].layers.waterway.feature(0).loadGeometry();
+                        for (let i = 0; i < geo.length; i++) {
+                            ctx.moveTo(Math.round(geo[i][0].x * coef + (tx * length / tileCnt)), Math.round(geo[i][0].y * coef + (ty * length / tileCnt)));
+                            for (let j = 1; j < geo[i].length; j++) {
+                                ctx.lineTo(Math.round(geo[i][j].x * coef + (tx * length / tileCnt)), Math.round(geo[i][j].y * coef + (ty * length / tileCnt)));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        ctx.stroke();
+    }
+
+    let watermap = Create2DArray(length, 1);
+    let img = ctx.getImageData(0, 0, length, length);
+    // console.log(img)
+    for (let i = 0; i < length; i++) {
+        for (let j = 0; j < length; j++) {
+            let index = i * length * 4 + j * 4;
+            watermap[i][j] = img.data[index] / 255;     // 0 => 255 : 0 => 1    0 = water, 1 = land
+        }
+    }
+    return watermap;
+}
+function sanatizeMap(map, xOffset, yOffset) {
+    const citiesmapSize = 1081;
+    let sanatizedMap = Create2DArray(citiesmapSize, 0);
+
+    let lowestPositve = 100000;
+
+    // pass 1: normalize the map, and determine the lowestPositve
+    for (let y = yOffset; y < yOffset + citiesmapSize; y++) {
+        for (let x = xOffset; x < xOffset + citiesmapSize; x++) {
+            let h = map[y][x];
+            if (h >= 0 && h < lowestPositve) {
+                lowestPositve = h;
+            }
+            sanatizedMap[y - yOffset][x - xOffset] = h;
+        }
+    }
+
+    // pass 2: fix negative heights artifact in mapbox maps
+    for (let y = 0; y < citiesmapSize; y++) {
+        for (let x = 0; x < citiesmapSize; x++) {
+            let h = sanatizedMap[y][x];
+            if (h < 0) {
+                sanatizedMap[y][x] = lowestPositve;
+            }
+        }
+    }
+
+    return sanatizedMap;
+}
+function sanatizeWatermap(map, xOffset, yOffset) {
+    const citiesmapSize = 1081;
+    let watermap = Create2DArray(citiesmapSize, 0);
+
+    for (let y = yOffset; y < yOffset + citiesmapSize; y++) {
+        for (let x = xOffset; x < yOffset + citiesmapSize; x++) {
+            let h = map[y][x];
+            watermap[y - yOffset][x - xOffset] = h;
+        }
+    }
+
+    return watermap;
+}
+
+async function downloadPbfToTile(url) {
+    const cachedRes = await caches.match(url);
+    if (cachedRes && cachedRes.ok) {
+        console.log('pbf: load from cache');
+        let data = await cachedRes.arrayBuffer();
+        let tile = new vectTile(new Protobuf(new Uint8Array(data)));
+        return tile;
+    } else {
+        console.log('pbf: load by fetch, cache downloaded file');
+        try {
+            const response = await fetch(url);
+            if (response.ok) {
+                let res = response.clone();
+                let data = await response.arrayBuffer();
+                let tile = new VectorTile(new Protobuf(new Uint8Array(data)));
+                cache.put(url, res);
+                return tile;
+            } else {
+                throw new Error('download Pbf error:', response.status);
+            }
+        } catch (e) {
+            console.log(e.message);
+            return true;
         }
     }
 }
@@ -428,7 +572,11 @@ export default {
     getTileCountAdjusted,
     deleteCaches,
     convertMapboxMaptilerStyles,
-    Create2DArray
+    Create2DArray,
+    downloadPbfToTile,
+    toWatermap,
+    sanatizeMap,
+    sanatizeWatermap
 }
 
 

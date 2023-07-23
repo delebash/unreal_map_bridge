@@ -24,7 +24,20 @@ const myWorker = new Worker(new URL('./javascript/worker', import.meta.url), {
     type: 'module'
 })
 
-const defaultWaterdepth = 50
+const defaultWaterdepth = 40
+const meanKernel = [
+    [1, 1, 1],
+    [1, 1, 1],
+    [1, 1, 1]
+];
+
+const sharpenKernel = [
+    [-0.00391, -0.01563, -0.02344, -0.01563, -0.00391],
+    [-0.01563, -0.06250, -0.09375, -0.06250, -0.01563],
+    [-0.02344, -0.09375, +1.85980, -0.09375, -0.02344],
+    [-0.01563, -0.06250, -0.09375, -0.06250, -0.01563],
+    [-0.00391, -0.01563, -0.02344, -0.01563, -0.00391]
+];
 const pbElement = document.getElementById('progress');
 const previewImage = document.getElementById("previewImage");
 const progressMsg = document.getElementById('progressMsg')
@@ -40,7 +53,7 @@ const processCount = document.getElementById('processCount')
 const processStatus = document.getElementById('processStatus')
 const togglePassword = document.querySelector('#togglePassword');
 const apiKey = document.querySelector('#apiKey');
-
+let cache;
 
 togglePassword.addEventListener('click', function (e) {
     // toggle the type attribute
@@ -50,7 +63,7 @@ togglePassword.addEventListener('click', function (e) {
     this.classList.toggle('fa-eye-slash');
 });
 
-let distance, urlKey, urlType, map, geocoder, heightmapFileName, subDirName
+let distance, urlKey, urlType, map, geocoder, heightmapFileName, subDirName, vectorType
 
 let promiseArray = [];
 let mapSize = 50;
@@ -286,7 +299,7 @@ function initWeightmapGrid() {
 
 function initMap() {
     try {
-
+        caches.open('tiles').then((data) => cache = data);
         console.log('init')
         let geoCtrl = document.getElementsByClassName('mapboxgl-ctrl-geocoder')
 
@@ -295,6 +308,7 @@ function initMap() {
                 mapboxgl.accessToken = scope.apiKey
                 urlKey = 'access_token='
                 urlType = '@2x.png'
+                vectorType = '.vector.pbf'
                 map = new mapboxgl.Map({
                     container: 'map',                               // Specify the container ID
                     // style: 'mapbox://styles/mapbox/outdoors-v11',   // Specify which map style to use
@@ -318,6 +332,7 @@ function initMap() {
                 maptilersdk.config.apiKey = scope.apiKey;
                 urlKey = 'key='
                 urlType = '.webp'
+                vectorType = '.pbf'
                 map = new maptilersdk.Map({
                     container: 'map', // container's id or the HTML element to render the map
                     style: maptilersdk.MapStyle.OUTDOOR,
@@ -594,6 +609,7 @@ async function loadUserSettings() {
         scope.apiKey = userSettings.mapboxApiKey || ''
         scope.terrianUrl = userSettings.mapboxTerrianUrl || 'https://api.mapbox.com/v4/mapbox.terrain-rgb/'
         scope.stylesUrl = userSettings.mapboxStylesUrl || 'mapbox://styles/mapbox/'
+        scope.vectorUrl = userSettings.mapboxVectorUrl || 'https://api.mapbox.com/v4/mapbox.mapbox-streets-v8/'
         scope.weightMapUrl = userSettings.mapboxWeightMapUrl || ''
         scope.satelliteMapUrl = userSettings.mapboxSatelliteMapUrl || 'https://api.mapbox.com/v4/mapbox.satellite/'
         scope.mapUrl = userSettings.mapboxMapUrl || 'https://api.mapbox.com/styles/v1/'
@@ -609,6 +625,7 @@ async function loadUserSettings() {
         scope.apiKey = userSettings.maptilerApiKey || ''
         scope.terrianUrl = userSettings.maptilerTerrianUrl || 'https://api.maptiler.com/tiles/terrain-rgb-v2/'
         scope.stylesUrl = userSettings.maptilerStylesUrl || 'https://api.maptiler.com/maps/outdoor/style.json'
+        scope.vectorUrl = userSettings.maptilerVectorUrl || 'https://api.maptiler.com/tiles/v3/'
         scope.weightMapUrl = userSettings.maptilerWeightMapUrl || ''
         scope.satelliteMapUrl = userSettings.maptilerSatelliteMapUrl || 'https://api.maptiler.com/tiles/satellite-v2/'
         scope.mapUrl = userSettings.maptilerMapUrl || 'https://api.maptiler.com/maps/'
@@ -629,6 +646,7 @@ async function saveUserSettings() {
         userSettings.mapboxWeightMapUrl = scope.weightMapUrl
         userSettings.mapboxSatelliteMapUrl = scope.satelliteMapUrl
         userSettings.mapboxMapUrl = scope.mapUrl
+        userSettings.mapboxVectorUrl = scope.vectorUrl
         userSettings.weightmapColors = gridOptions.rowData
     } else {
         userSettings.maptilerApiKey = scope.apiKey
@@ -637,6 +655,7 @@ async function saveUserSettings() {
         userSettings.maptilerWeightMapUrl = scope.weightMapUrl
         userSettings.maptilerSatelliteMapUrl = scope.satelliteMapUrl
         userSettings.maptilerMapUrl = scope.mapUrl
+        userSettings.maptilerVectorUrl = scope.vectorUrl
     }
     // userSettings.backendServer = document.getElementById('backendServer').checked
     userSettings.desktopServerUrl = scope.desktopServerUrl
@@ -663,6 +682,11 @@ async function loadSettings() {
     // stored.waterContours = stored.waterContours || false;
 
     document.getElementById('waterDepth').value = parseInt(stored.waterDepth) || defaultWaterdepth;
+    document.getElementById('drawStrm').checked = stored.drawStreams || false;
+    document.getElementById('blurPasses').value = parseInt(stored.blurPasses) || 0;
+    document.getElementById('blurPostPasses').value = parseInt(stored.blurPostPasses) || 0;
+    document.getElementById('plainsHeight').value = parseInt(stored.plainsHeight) || 0;
+    document.getElementById('streamDepth').value = parseInt(stored.streamDepth) || 0;
     return stored;
 }
 
@@ -672,6 +696,12 @@ function saveSettings() {
     grid.landscapeSize = scope.landscapeSize;
     grid.worldpartlandscapeSize = scope.worldpartlandscapeSize;
     grid.exportType = scope.exportType;
+    grid.drawStreams = document.getElementById('drawStrm').checked;
+    grid.plainsHeight = parseInt(document.getElementById('plainsHeight').value);
+    grid.blurPasses = parseInt(document.getElementById('blurPasses').value);
+    grid.blurPostPasses = parseInt(document.getElementById('blurPostPasses').value);
+    grid.streamDepth = parseInt(document.getElementById('streamDepth').value);
+
     idbKeyval.set('grid', grid);
 }
 
@@ -839,17 +869,22 @@ function stopTimer() {
     overlayOff()
 }
 
+
 async function getHeightmap(z = 14, overrideZoom = false) {
     return new Promise(async (resolve, reject) => {
 
-        let obj = await downloadTiles(scope.terrianUrl, true, z, overrideZoom)
-        let heightmap = mapUtils.toHeightmap(obj.tiles, obj.distance, mapSize);
-        let heights = mapUtils.calcMinMaxHeight(heightmap);
+        let objTiles = await downloadTiles(scope.terrianUrl, true, z, overrideZoom)
+        objTiles.heightmap = mapUtils.toHeightmap(objTiles.tiles, objTiles.distance, mapSize);
+        objTiles.xOffset = Math.round(objTiles.leftDistance / objTiles.distance * objTiles.heightmap.length);
+        objTiles.yOffset = Math.round(objTiles.topDistance / objTiles.distance * objTiles.heightmap.length);
+
+        objTiles.sanatizedMap = mapUtils.sanatizeMap(objTiles.heightmap, objTiles.xOffset, objTiles.yOffset);
+        let heights = mapUtils.calcMinMaxHeight(objTiles.heightmap);
         grid.minHeight = heights.min;
         grid.maxHeight = heights.max;
         prev_lng = document.getElementById('lng').innerHTML
         prev_lat = document.getElementById('lat').innerHTML
-        heightmap ? resolve(heightmap) : reject('timout');
+        objTiles ? resolve(objTiles) : reject('timout');
     })
 }
 
@@ -864,6 +899,7 @@ async function downloadTiles(tilesUrl, isHeightmap = true, z = 14, overrideZoom 
         let tileCnt = objTileCnt.tileCnt
         let objTiles = {}
 
+
         document.getElementById('satZoomVal').value = zoom
         document.getElementById('zoomlevel').innerHTML = zoom
         document.getElementById('satZoomTileCount').innerHTML = mapUtils.getTileCount(zoom, extent).length.toString()
@@ -876,8 +912,11 @@ async function downloadTiles(tilesUrl, isHeightmap = true, z = 14, overrideZoom 
         let tileLng2 = mapUtils.tile2long(x + tileCnt, zoom);
         let tileLat2 = mapUtils.tile2lat(y + tileCnt, zoom);
         let tiles
+        let vTiles
         // get the length of one side of the tiles extent
         distance = turf.distance(turf.point([tileLng, tileLat]), turf.point([tileLng2, tileLat2]), {units: 'kilometers'}) / Math.SQRT2;
+        let topDistance = turf.distance(turf.point([tileLng, tileLat]), turf.point([tileLng, extent.topleft[1]]), {units: 'kilometers'});
+        let leftDistance = turf.distance(turf.point([tileLng, tileLat]), turf.point([extent.topleft[0], tileLat]), {units: 'kilometers'});
         if (isHeightmap === true) {
             // create the tiles empty array
             tiles = mapUtils.Create2DArray(tileCnt);
@@ -897,7 +936,6 @@ async function downloadTiles(tilesUrl, isHeightmap = true, z = 14, overrideZoom 
                     promiseArray.push(mapUtils.downloadToTile(true, url).then((png) => {
                         tiles[i][j] = png
                         progressCount(count++, totalCount, 'downloading');
-
                     }));
                 } else {
                     promiseArray.push(mapUtils.downloadToTile(false, url, (x + j), (y + i)).then((tile) => {
@@ -908,10 +946,35 @@ async function downloadTiles(tilesUrl, isHeightmap = true, z = 14, overrideZoom 
             }
         }
 
+
         await Promise.all(promiseArray);
+
+        if (isHeightmap === true) {
+            promiseArray = []
+            vTiles = mapUtils.Create2DArray(tileCnt);
+            tilesUrl = scope.vectorUrl
+            for (let i = 0; i < tileCnt; i++) {
+                for (let j = 0; j < tileCnt; j++) {
+                    let url = tilesUrl + zoom + '/' + (x + j) + '/' + (y + i) + vectorType + '?' + urlKey + scope.apiKey;
+                    promiseArray.push(mapUtils.downloadPbfToTile(url).then((data) => {
+                        vTiles[i][j] = data
+                        progressCount(count++, totalCount, 'downloading vector tiles');
+                    }));
+                }
+            }
+        }
+        await Promise.all(promiseArray)
+
         objTiles.tiles = tiles
+        objTiles.vTiles = vTiles
         objTiles.distance = distance
+        objTiles.topDistance = topDistance
+        objTiles.leftDistance = leftDistance
         objTiles.zoom = objTileCnt.zoom
+        objTiles.x = x
+        objTiles.y = y
+        objTiles.zoom = zoom
+        objTiles.tileCnt = objTileCnt.tileCnt
         objTiles ? resolve(objTiles) : reject('timout');
     });
 }
@@ -939,23 +1002,200 @@ function setUrlInfo(val) {
     }
 }
 
+function convertHeightmap(heightmap, watermap) {
+    const citiesmapSize = 1081;
+
+    // cities has L/H byte order
+    let citiesmap = new Uint8ClampedArray(2 * citiesmapSize * citiesmapSize);
+    let workingmap = mapUtils.Create2DArray(citiesmapSize, 0);
+
+    // correct the waterDepth for the scaling.
+    // in the final pass, it will be scaled back. Round to 1 decimal
+    let waterDepth = Math.round(scope.waterDepth / parseFloat(scope.heightScale) * 100 * 10) / 10;
+    // watermap: => normalized depth between 0 => deepest water, 1 => land
+
+    for (let y = 0; y < citiesmapSize; y++) {
+        for (let x = 0; x < citiesmapSize; x++) {
+            // stay with ints as long as possible
+            let height = (heightmap[y][x] - scope.baseLevel * 10);
+
+            // raise the land by the amount of water depth
+            // a height lower than baselevel is considered to be the below sea level and the height is set to 0
+            // water depth is unaffected by height scale
+            // the map is unscaled at this point, so high mountains above 1024 meter can be present
+            let calcHeight = (height + Math.round(waterDepth * 10 * watermap[y][x])) / 10;
+            workingmap[y][x] = Math.max(0, calcHeight);
+        }
+    }
+
+    // level correction, for specific needs
+    // to smooth plains and dramatize mountains or level a mountanus coastline
+    //  workingmap = levelMap(workingmap, grid.minHeight + waterDepth, grid.maxHeight, scope.levelCorrection);
+
+    // smooth the plains and wateredges in a number of passes
+    let passes = parseInt(document.getElementById('blurPasses').value);
+    let postPasses = parseInt(document.getElementById('blurPostPasses').value);
+    let plainsHeight = parseInt(document.getElementById('plainsHeight').value);
+    for (let l = 0; l < passes; l++) {
+        workingmap = filterMap(workingmap, 0, plainsHeight + waterDepth, meanKernel);
+    }
+
+    // sharpen the mountains, for more dramatic effect
+    for (let l = 0; l < postPasses; l++) {
+        workingmap = filterMap(workingmap, plainsHeight + waterDepth, grid.maxHeight, sharpenKernel);
+    }
+
+    // if there where enough passes, all the small streams on the plains are faded.
+    // so redraw them, with little extra depth
+    let streamDepth = parseInt(document.getElementById('streamDepth').value);
+    let highestWaterHeight = 0;
+    if (document.getElementById('drawStrm').checked) {
+        for (let y = 0; y < citiesmapSize; y++) {
+            for (let x = 0; x < citiesmapSize; x++) {
+                let height = workingmap[y][x];
+                if (height > highestWaterHeight) {
+                    highestWaterHeight = height;
+                }
+                // prevent drawing below the seabed
+                if (height > streamDepth) {
+                    workingmap[y][x] = height - (1 - watermap[y][x]) * streamDepth;
+                }
+            }
+        }
+    }
+
+    // tilt the map in the direction of gravity, so water always flows to the lowest point
+    //  let tiltHeight = parseInt(document.getElementById('tiltHeight').value);
+    // correct the tiltHeight for the scale. In the final pass, it will be corrected back
+    //tiltHeight = Math.round(tiltHeight / parseFloat(scope.heightScale) * 100 * 10) / 10;
+    //workingmap = tiltMap(workingmap, scope.gravityCenter, tiltHeight);
+
+    // finally, finish the drawn streams with a light smoothing
+    // the streams are drawn over the entire map, so post process the entire map
+    for (let l = 0; l < postPasses; l++) {
+        workingmap = filterMap(workingmap, 0, highestWaterHeight, meanKernel);
+    }
+
+    // convert the normalized and smoothed map to a cities skylines map/
+    // As this is the final step, take scale into account
+    for (let y = 0; y < citiesmapSize; y++) {
+        for (let x = 0; x < citiesmapSize; x++) {
+            // get the value in 1/10meyers and scale and convert to cities skylines 16 bit int
+            let h = Math.round(workingmap[y][x] / 100 * parseFloat(scope.heightScale) / 0.015625);
+
+            if (h > 65535) h = 65535;
+
+            // calculate index in image
+            let index = y * citiesmapSize * 2 + x * 2;
+
+            // cities used hi/low 16 bit
+            citiesmap[index + 0] = h >> 8;
+            citiesmap[index + 1] = h & 255;
+        }
+    }
+
+
+    // log the correct bounding rect to the console
+    let bounds = getExtent(grid.lng, grid.lat, mapSize);
+    console.log(bounds.topleft[0], bounds.topleft[1], bounds.bottomright[0], bounds.bottomright[1]);
+
+    return citiesmap;
+}
+
+function filterMap(map, fromLevel, toLevel, kernel) {
+    const maxY = map.length;
+    const maxX = map[0].length;
+
+    // kernel size must be uneven!
+    const kernelDist = parseInt((kernel.length - 1) / 2);
+
+    const filteredMap = mapUtils.Create2DArray(maxY, 0);
+
+    for (let y = 0; y < maxY; y++) {
+        for (let x = 0; x < maxX; x++) {
+            let h = map[y][x];
+            if (h >= fromLevel && h < fromLevel + toLevel) {
+                let sum = 0;
+                let cnt = 0;
+                for (let i = -kernelDist; i <= kernelDist; i++) {
+                    for (let j = -kernelDist; j <= kernelDist; j++) {
+                        if (y + i >= 0 && y + i < maxY && x + j >= 0 && x + j < maxX) {
+                            cnt += kernel[i + kernelDist][j + kernelDist];
+                            sum += map[y + i][x + j] * kernel[i + kernelDist][j + kernelDist];
+                        }
+                    }
+                }
+                if (cnt) h = sum / cnt;
+            }
+            filteredMap[y][x] = h;
+        }
+    }
+
+    return filteredMap;
+}
+
 async function previewHeightmap() {
     progressMsg.innerHTML = 'Processing heightmap'
     startTimer()
-    let convertedHeightmap, png, heightmap, imgUrl;
+    let convertedHeightmap, png, imgUrl;
     setUrlInfo('height')
     let autoCalc = document.getElementById("autoCalcBaseHeight").checked
-    heightmap = await getHeightmap()
+    let objTiles = await getHeightmap()
+    let watermap = mapUtils.sanatizeWatermap(mapUtils.toWatermap(objTiles.vTiles, objTiles.heightmap.length), objTiles.xOffset, objTiles.yOffset);
     if (autoCalc === true) {
         await autoCalculateBaseHeight()
     }
-    convertedHeightmap = convertHeightmap(heightmap);
+
+    convertedHeightmap = convertHeightmap(objTiles.sanatizedMap, watermap);
     png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
-    imgUrl = download('heightmap.png', png, true);
+    imgUrl = download('testheightmap.png', png, true);
     previewImage.src = imgUrl
     updateInfopanel()
     stopTimer()
 }
+
+// async function downloadVtiles(tileCnt, x, y,zoom) {
+//     var vTiles = mapUtils.Create2DArray(tileCnt);
+//
+//     for (let i = 0; i < tileCnt; i++) {
+//         for (let j = 0; j < tileCnt; j++) {
+//             incPb(pbElement);
+//             let url = 'https://api.mapbox.com/v4/mapbox.mapbox-streets-v8/' + zoom + '/' + (x + j) + '/' + (y + i) + '.vector.pbf?access_token=' + mapboxgl.accessToken;
+//             let woQUrl = 'https://api.mapbox.com/v4/mapbox.mapbox-streets-v8/' + zoom + '/' + (x + j) + '/' + (y + i) + '.vector.pbf';
+//
+//             await downloadPbfToTile(url, woQUrl).then((data) => vTiles[i][j] = data);
+//         }
+//     }
+//     return vTiles
+// }
+
+// async function downloadPbfToTile(url, withoutQueryUrl = url) {
+//     const cachedRes = await caches.match(url, {ignoreSearch: true});
+//     if (cachedRes && cachedRes.ok) {
+//         console.log('pbf: load from cache');
+//         let data = await cachedRes.arrayBuffer();
+//         let tile = new VectorTile(new Protobuf(new Uint8Array(data)));
+//         return tile;
+//     } else {
+//         console.log('pbf: load by fetch, cache downloaded file');
+//         try {
+//             const response = await fetch(url);
+//             if (response.ok) {
+//                 let res = response.clone();
+//                 let data = await response.arrayBuffer();
+//                 let tile = new VectorTile(new Protobuf(new Uint8Array(data)));
+//                 cache.put(withoutQueryUrl, res);
+//                 return tile;
+//             } else {
+//                 throw new Error('download Pbf error:', response.status);
+//             }
+//         } catch (e) {
+//             console.log(e.message);
+//             return true;
+//         }
+//     }
+// }
+
 
 async function workerProcess(config) {
     return new Promise(async (resolve, reject) => {
@@ -1036,7 +1276,7 @@ async function exportMap() {
         return
     }
 
-    let convertedHeightmap, png, heightmap;
+    let convertedHeightmap, png;
     let autoCalc = document.getElementById("autoCalcBaseHeight").checked
 
     let mapimage = document.getElementById('mapimage').checked
@@ -1124,11 +1364,12 @@ async function exportMap() {
                 await processFromBackend(config)
                 stopTimer()
             } else {
-                heightmap = await getHeightmap(heightzoom, overrideHeightmapZoom)
+                let objTiles = await getHeightmap(heightzoom, overrideHeightmapZoom)
+                let watermap = mapUtils.sanatizeWatermap(mapUtils.toWatermap(objTiles.vTiles, objTiles.heightmap.length), objTiles.xOffset, objTiles.yOffset);
                 if (autoCalc === true) {
                     await autoCalculateBaseHeight()
                 }
-                convertedHeightmap = convertHeightmap(heightmap);
+                convertedHeightmap = convertHeightmap(objTiles.sanatizedMap, watermap);
                 png = UPNG.encodeLL([convertedHeightmap], 1081, 1081, 1, 0, 16);
                 console.log('finished convert heightmap')
                 updateInfopanel()
@@ -1343,51 +1584,6 @@ async function autoCalculateBaseHeight() {
     await setHeightScale()
 }
 
-function convertHeightmap(heightmap_source) {
-    const heightmapSize = 1081;
-
-    // height has L/H byte order
-    let heightmap = new Uint8ClampedArray(2 * heightmapSize * heightmapSize);
-    let workingmap = mapUtils.Create2DArray(heightmapSize, 0);
-
-    // correct the waterDepth for the scaling.
-    // in the final pass, it will be scaled back. Round to 1 decimal
-    //  let waterDepth = Math.round(scope.waterDepth /  parseFloat(scope.heightScale) * 100 * 10) / 10;
-
-    // watermap: => normalized depth between 0 => deepest water, 1 => land
-
-    for (let y = 0; y < heightmapSize; y++) {
-        for (let x = 0; x < heightmapSize; x++) {
-            // stay with ints as long as possible
-            let height = (heightmap_source[y][x] - scope.baseLevel * 10);
-
-            // raise the land by the amount of water depth
-            // a height lower than baselevel is considered to be the below sea level and the height is set to 0
-            // water depth is unaffected by height scale
-            // the map is unscaled at this point, so high mountains above 1024 meter can be present
-            let calcHeight = (height + Math.round(scope.waterDepth * 10)) / 10;
-            workingmap[y][x] = Math.max(0, calcHeight);
-
-            //convert to 16 bit hi/low 255
-            let h = Math.round(workingmap[y][x] / 100 * parseFloat(scope.heightScale) / 0.015625);
-
-            if (h > 65535) h = 65535;
-
-            // calculate index in image
-            let index = y * heightmapSize * 2 + x * 2;
-
-            // height used hi/low 16 bit
-            heightmap[index + 0] = h >> 8;
-            heightmap[index + 1] = h & 255;
-        }
-    }
-
-    // log the correct bounding rect to the console
-    let bounds = getExtent(grid.lng, grid.lat, mapSize);
-    console.log(bounds.topleft[0], bounds.topleft[1], bounds.bottomright[0], bounds.bottomright[1]);
-
-    return heightmap;
-}
 
 function download(filename, data, url = false) {
     let a = window.document.createElement('a');
@@ -1638,6 +1834,7 @@ function readChunks(reader) {
         },
     };
 }
+
 
 window.toggleModal = toggleModal
 window.togglePanel = togglePanel
