@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="fix reverse geocoder, update deps">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/assets/index-2958db98.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/dist/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -143,6 +145,8 @@
       <workItem from="1691432807335" duration="1049000" />
       <workItem from="1691433873764" duration="43000" />
       <workItem from="1691433924158" duration="32000" />
+      <workItem from="1691433962789" duration="227000" />
+      <workItem from="1691435200336" duration="1743000" />
     </task>
     <task id="LOCAL-00001" summary="various fixes, sat download">
       <created>1686959652958</created>
@@ -269,22 +273,6 @@
       <option name="presentableId" value="LOCAL-00018" />
       <option name="project" value="LOCAL" />
       <updated>1687202316359</updated>
-    </task>
-    <task id="LOCAL-00032" summary="release with backend server">
-      <option name="closed" value="true" />
-      <created>1688063684854</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1688063684854</updated>
-    </task>
-    <task id="LOCAL-00033" summary="release with backend server">
-      <option name="closed" value="true" />
-      <created>1688065539303</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1688065539303</updated>
     </task>
     <task id="LOCAL-00034" summary="fix sse">
       <option name="closed" value="true" />
@@ -518,7 +506,23 @@
       <option name="project" value="LOCAL" />
       <updated>1690155052544</updated>
     </task>
-    <option name="localTasksCounter" value="63" />
+    <task id="LOCAL-00063" summary="fix reverse geocoder, update deps">
+      <option name="closed" value="true" />
+      <created>1691433971362</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1691433971362</updated>
+    </task>
+    <task id="LOCAL-00064" summary="fix reverse geocoder, update deps">
+      <option name="closed" value="true" />
+      <created>1691433991045</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1691433991045</updated>
+    </task>
+    <option name="localTasksCounter" value="65" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
