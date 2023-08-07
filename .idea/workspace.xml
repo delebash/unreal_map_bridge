@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="">
+    <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="fix reverse geocoder, update deps">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,6 +26,13 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/package.json" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: -1
+}</component>
   <component name="ProjectId" id="2RCa3NO2sW2K28IOLYXwCyHGdn1" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -44,7 +48,7 @@
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;F:/github/DansProjects/unreal_map_bridge/test2.txt&quot;,
+    &quot;last_opened_file_path&quot;: &quot;F:/github/DansProjects/unreal_map_bridge&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -134,7 +138,11 @@
       <workItem from="1690097176948" duration="2958000" />
       <workItem from="1690122757924" duration="3133000" />
       <workItem from="1690126089391" duration="5276000" />
-      <workItem from="1690147910151" duration="6545000" />
+      <workItem from="1690147910151" duration="7243000" />
+      <workItem from="1690227447617" duration="5000" />
+      <workItem from="1691432807335" duration="1049000" />
+      <workItem from="1691433873764" duration="43000" />
+      <workItem from="1691433924158" duration="32000" />
     </task>
     <task id="LOCAL-00001" summary="various fixes, sat download">
       <created>1686959652958</created>
@@ -261,22 +269,6 @@
       <option name="presentableId" value="LOCAL-00018" />
       <option name="project" value="LOCAL" />
       <updated>1687202316359</updated>
-    </task>
-    <task id="LOCAL-00030" summary="bugs">
-      <option name="closed" value="true" />
-      <created>1688055538010</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1688055538010</updated>
-    </task>
-    <task id="LOCAL-00031" summary="fav">
-      <option name="closed" value="true" />
-      <created>1688062427988</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1688062427988</updated>
     </task>
     <task id="LOCAL-00032" summary="release with backend server">
       <option name="closed" value="true" />
@@ -510,7 +502,23 @@
       <option name="project" value="LOCAL" />
       <updated>1690150218448</updated>
     </task>
-    <option name="localTasksCounter" value="61" />
+    <task id="LOCAL-00061" summary="added leveling back">
+      <option name="closed" value="true" />
+      <created>1690154974664</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1690154974664</updated>
+    </task>
+    <task id="LOCAL-00062" summary="dist">
+      <option name="closed" value="true" />
+      <created>1690155052544</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1690155052544</updated>
+    </task>
+    <option name="localTasksCounter" value="63" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -519,12 +527,20 @@
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName="package.json" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="README.md" />
-    <MESSAGE value="sendtounreal" />
-    <MESSAGE value="fix mapimage download" />
     <MESSAGE value="add webworker to fix progress bar" />
     <MESSAGE value="fix web worker vite config worker config" />
     <MESSAGE value="fix combine tiles" />
@@ -547,7 +563,10 @@
     <MESSAGE value="landscapesizes" />
     <MESSAGE value="fixed selection, added back water draw" />
     <MESSAGE value="fixed streams vector tiles" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed streams vector tiles" />
+    <MESSAGE value="added leveling back" />
+    <MESSAGE value="dist" />
+    <MESSAGE value="fix reverse geocoder, update deps" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix reverse geocoder, update deps" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
