@@ -18,6 +18,7 @@ import idbKeyval from "./javascript/idb-keyval-iife.js";
 import fileUtils from "./javascript/fs-helpers.js"
 import mapUtils from './javascript/map-utils.js'
 import {setIntervalAsync, clearIntervalAsync} from 'set-interval-async';
+import imageUtiles from "./javascript/image-utiles.js";
 
 
 const myWorker = new Worker(new URL('./javascript/worker', import.meta.url), {
@@ -53,7 +54,7 @@ const processCount = document.getElementById('processCount')
 const processStatus = document.getElementById('processStatus')
 const togglePassword = document.querySelector('#togglePassword');
 const apiKey = document.querySelector('#apiKey');
-let cache;
+let cache, geojsonStyleObj = null;
 
 togglePassword.addEventListener('click', function (e) {
     // toggle the type attribute
@@ -316,6 +317,7 @@ function initMap() {
                     center: [grid.lng, grid.lat],                   // Specify the starting position [lng, lat]
                     zoom: grid.zoom,                                // Specify the starting zoom
                     preserveDrawingBuffer: true,
+                    attributionControl: false
                 });
 
                 /* Given a query in the form "lng, lat" or "lat, lng"
@@ -670,6 +672,7 @@ async function loadUserSettings() {
         scope.satelliteMapUrl = userSettings.mapboxSatelliteMapUrl || 'https://api.mapbox.com/v4/mapbox.satellite/'
         scope.mapUrl = userSettings.mapboxMapUrl || 'https://api.mapbox.com/styles/v1/'
 
+
         let weightmapColors = userSettings.weightmapColors || []
         if (weightmapColors.length === 0) {
             userSettings.weightmapColors = rows
@@ -688,8 +691,11 @@ async function loadUserSettings() {
 
     }
     // document.getElementById('backendServer').checked = userSettings.backendServer || false
+
     scope.desktopServerUrl = userSettings.desktopServerUrl || 'http://localhost:5000/'
     scope.desktopDownloadDirectory = userSettings.desktopDownloadDirectory || ''
+    scope.GeojsonUrl = userSettings.GeojsonUrl || ''
+    scope.GeojsonLayerStyle = userSettings.GeojsonLayerStyle || ''
     return userSettings
 }
 
@@ -702,6 +708,7 @@ async function saveUserSettings() {
         userSettings.mapboxWeightMapUrl = scope.weightMapUrl
         userSettings.mapboxSatelliteMapUrl = scope.satelliteMapUrl
         userSettings.mapboxMapUrl = scope.mapUrl
+
         userSettings.mapboxVectorUrl = scope.vectorUrl
         userSettings.weightmapColors = gridOptions.rowData
     } else {
@@ -716,6 +723,8 @@ async function saveUserSettings() {
     // userSettings.backendServer = document.getElementById('backendServer').checked
     userSettings.desktopServerUrl = scope.desktopServerUrl
     userSettings.desktopDownloadDirectory = scope.desktopDownloadDirectory
+    userSettings.GeojsonUrl = scope.GeojsonUrl
+    userSettings.GeojsonLayerStyle = scope.GeojsonLayerStyle
     idbKeyval.set('userSettings', userSettings)
     await loadUserSettings()
     if (map) {
@@ -811,6 +820,9 @@ function togglePanel(index) {
         case 5:
             initWeightmapGrid()
             break;
+        case 6:
+            // none
+            break;
     }
 }
 
@@ -876,8 +888,14 @@ function incPb(el, value = 1) {
     }
 }
 
-function setMapStyle(el) {
-    const layerId = el.id;
+function setMapStyle(el, styleid) {
+    let layerId
+    if (el !== null) {
+        layerId = el.id;
+    } else {
+        layerId = styleid
+    }
+
     if (scope.serverType === 'mapbox') {
         if (layerId === 'weightmap') {
             map.setStyle('mapbox://styles/' + scope.weightMapUrl);
@@ -1995,6 +2013,177 @@ function readChunks(reader) {
     };
 }
 
+async function loadGeojson() {
+    try {
+        if (map.getLayer("geojson-layer")) {
+            map.removeLayer("geojson-layer");
+        }
+
+        if (map.getSource("geojson")) {
+            map.removeSource("geojson");
+        }
+        let obj = {}
+        //https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/geojson/vancouver-blocks.json
+        let response = await fetch(scope.GeojsonUrl);
+        let geojson_data = await response.json();
+        let source = {
+            type: 'geojson',
+            // Use a URL for the value for the `data` property.
+            data: geojson_data
+        }
+        map.addSource('geojson', source);
+        let layerStyle = JSON.parse(scope.GeojsonLayerStyle)
+        map.addLayer(layerStyle)
+        obj.source = source
+        obj.layer = layerStyle
+        // togglePanel(6)
+        return obj
+    } catch (e) {
+        console.log(e)
+        toggleModal('open', e)
+    }
+}
+
+async function geoJsonScreenShot(panelid) {
+
+    if (geojsonStyleObj === null) {
+        geojsonStyleObj = await loadGeojson()
+    }
+    let nostyle = {version: 8, sources: {}, layers: []}
+    map.setStyle(nostyle)
+    let style = 'nostyle'
+
+    map.on('style.load', async function () {
+        if (style === 'nostyle') {
+            // map.setLayoutProperty('startsquare', 'visibility', 'none');
+            // map.setLayoutProperty('grid', 'visibility', 'none');
+            // const sideBar = document.getElementById('sideBar')
+            // sideBar.style.display = "none";
+            map.addSource('geojson', geojsonStyleObj.source);
+            map.addLayer(geojsonStyleObj.layer)
+            let bbox2 = turf.bbox(geojsonStyleObj.source.data);
+            map.fitBounds(bbox2, {padding: 10})
+            await captureScreen(panelid);
+            style = ''
+            // sideBar.style.display = "block"
+            // map.setLayoutProperty('startsquare', 'visibility', 'visible');
+            // map.setLayoutProperty('grid', 'visibility', 'visible');
+            setMapStyle(null, 'streets-v11');
+        }
+    })
+}
+
+async function captureScreen(panelid) {
+    let dirHandle = await userSettings.dirHandle
+    try {
+
+        if (await fileUtils.verifyPermission(dirHandle, true) === false) {
+            console.error(`User did not grant permission to '${dirHandle.name}'`);
+            return;
+        }
+    } catch (e) {
+        toggleModal('open', `Please choose a download directory in the settings panel`)
+        togglePanel(4)
+        console.log(e)
+        return
+    }
+
+    togglePanel(panelid)
+    let transparent = document.getElementById('transparent').checked
+    let resizeimage = document.getElementById('resizeimage').checked
+
+    map.setLayoutProperty('startsquare', 'visibility', 'none');
+    map.setLayoutProperty('grid', 'visibility', 'none');
+    const sideBar = document.getElementById('sideBar')
+    sideBar.style.display = "none";
+
+    const logo = document.getElementsByClassName('mapboxgl-ctrl-logo')
+    const canvas = document.createElement("canvas");
+    const srcContext = canvas.getContext("2d");
+    const video = document.createElement("video");
+    let dstCanvas = document.createElement("canvas");
+    let dstContext = dstCanvas.getContext("2d");
+    let lng = grid.lng.toFixed(5)
+    let lat = grid.lat.toFixed(5)
+    subDirName = ''
+    subDirName = `tile_lat_${lat}_lng_${lng}`
+    let buffer, tempImage
+
+    let subDir = await dirHandle.getDirectoryHandle(subDirName, {create: true});
+
+    try {
+        logo[0].style.cssText = 'display:none !important';
+        // logo.style.setProperty('display', 'none', 'important');
+        const captureStream = await navigator.mediaDevices.getDisplayMedia();
+        video.srcObject = captureStream;
+        await new Promise((resolve) => {
+            video.onloadedmetadata = resolve;
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await video.play();
+
+        const displayWidth = window.innerWidth;
+        const displayHeight = window.innerHeight;
+        const screenLeft = window.screenLeft;
+        const screenTop = window.screenTop;
+        const windowLeft = window.outerWidth - window.innerWidth - screenLeft;
+        const windowTop = window.outerHeight - window.innerHeight - screenTop;
+        dstCanvas.width = displayWidth
+        dstCanvas.height = displayHeight;
+        // 224, 230, 238
+        let transparentColor = {
+            r: 224,
+            g: 230,
+            b: 238
+        };
+        canvas.width = displayWidth;
+        canvas.height = displayHeight;
+        srcContext.drawImage(video, windowLeft, windowTop, displayWidth, displayHeight, 0, 0, displayWidth, displayHeight);
+
+        if (transparent === true) {
+            let pixels = srcContext.getImageData(0, 0, displayWidth, displayHeight);
+            for (let i = 0, len = pixels.data.length; i < len; i += 4) {
+                let r = pixels.data[i];
+                let g = pixels.data[i + 1];
+                let b = pixels.data[i + 2];
+
+                // if the pixel matches our transparent color, set alpha to 0
+                if (r === transparentColor.r && g === transparentColor.g && b === transparentColor.b) {
+                    pixels.data[i + 3] = 0;
+                }
+            }
+            dstContext.putImageData(pixels, 0, 0);
+            tempImage = await imageUtiles.loadImageFromCanvas(dstCanvas)
+        } else {
+            tempImage = await imageUtiles.loadImageFromCanvas(canvas)
+        }
+
+        if (resizeimage === true) {
+            tempImage = tempImage.resize({width: scope.landscapeSize, height: scope.landscapeSize})
+        }
+        buffer = await tempImage.toBuffer()
+        captureStream.getTracks().forEach(track => track.stop());
+
+        sideBar.style.display = "block"
+        map.setLayoutProperty('startsquare', 'visibility', 'visible');
+        map.setLayoutProperty('grid', 'visibility', 'visible');
+
+        if (window === window.top) {
+            await saveImage(subDir, buffer, 'screenshot.png', "png")
+        } else {
+            console.error("Error: screenshot");
+            sideBar.style.display = "block"
+            map.setLayoutProperty('startsquare', 'visibility', 'visible');
+            map.setLayoutProperty('grid', 'visibility', 'visible');
+        }
+    } catch (err) {
+        console.error("Error: " + err);
+        sideBar.style.display = "block"
+        map.setLayoutProperty('startsquare', 'visibility', 'visible');
+        map.setLayoutProperty('grid', 'visibility', 'visible');
+    }
+}
 
 window.toggleModal = toggleModal
 window.togglePanel = togglePanel
@@ -2017,6 +2206,9 @@ window.deleteWeightmapGrid = deleteWeightmapGrid
 window.addWeightmapGrid = addWeightmapGrid
 window.worldpartlandscapeSizeChange = worldpartlandscapeSizeChange
 window.help = help
+window.geoJsonScreenShot = geoJsonScreenShot
+window.captureScreen = captureScreen
+window.loadGeojson = loadGeojson
 
 
 

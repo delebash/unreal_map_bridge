@@ -3,11 +3,19 @@ import tib from "tiles-in-bbox";
 import mapboxgl from 'mapbox-gl';
 import VectorTile from '@mapbox/vector-tile'
 import Protobuf from 'pbf';
+import {MapboxLayer} from '@deck.gl/mapbox';
+import {GeoJsonLayer, PolygonLayer} from '@deck.gl/layers';
+import mbxClient from '@mapbox/mapbox-sdk';
+import mbxStatic from '@mapbox/mapbox-sdk/services/static';
+import simplify from 'simplify-geojson';
+import * as turf from '@turf/turf'
+import html2canvas from "html2canvas";
 
 let vectTile = await VectorTile.VectorTile
 let cache
 caches.open('tiles').then((data) => cache = data);
 
+//const mapboxClient = mapboxSdk({ accessToken: 'pk.eyJ1IjoiZGVsZWJhc2giLCJhIjoiY2t1YWxkODF0MGh2NjJxcXA4czBpdXlmdyJ9.D_ngzR7j4vU1CILtpNLg4Q' })
 
 function getTileInfo(lng, lat, multiple, x, y, z, bbox) {
     // let tileInfo = {}
@@ -560,7 +568,6 @@ function Create2DArray(rows, def = null) {
     return arr;
 }
 
-
 export default {
     getTileInfo,
     getFeaturesFromBB,
@@ -582,6 +589,186 @@ export default {
     sanatizeMap,
     sanatizeWatermap
 }
+
+
+// let geoJsonLayer = null
+// if (checked === true) {
+//     geoJsonLayer = new MapboxLayer({
+//         id: 'geojson-layer',
+//         type: GeoJsonLayer,
+//         data: data_url,
+//         opacity: 0.8,
+//         stroked: false,
+//         filled: true,
+//         extruded: true,
+//         wireframe: true,
+//         getElevation: 10,
+//         getFillColor: [255, 0, 0],
+//         getLineColor: [255, 255, 255],
+//         pickable: true
+//     })
+//     map.addLayer(geoJsonLayer)
+// } else {
+//     map.removeLayer('geojson-layer')
+// }
+
+
+// let mylayer = JSON.stringify(addLayerStyle)
+// console.log(mylayer)
+// let url = 'https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/-123.0249569,49.2407190,11/500x300?access_token=pk.eyJ1IjoiZGVsZWJhc2giLCJhIjoiY2t1YWxkODF0MGh2NjJxcXA4czBpdXlmdyJ9.D_ngzR7j4vU1CILtpNLg4Q&addlayer=' + mylayer
+// console.log(url)
+// map.setLayoutProperty('grid', 'visibility', 'none');
+// map.setLayoutProperty('startsquare', 'visibility', 'none');
+
+
+// let img = new Image();
+
+
+// const addLayerStyle = {
+//     id: 'traffic',
+//     type: 'line',
+//     source: {
+//         type: 'vector',
+//         url: 'mapbox://mapbox.mapbox-traffic-v1'
+//     },
+//     'source-layer': 'traffic',
+//     paint: {
+//         'line-color': [
+//             'match',
+//             ['get', 'congestion'],
+//             'heavy',
+//             '#2c7fb8',
+//             'moderate',
+//             '#7fcdbb',
+//             'low',
+//             '#edf8b1',
+//             'white'
+//         ],
+//         'line-width': 3
+//     }
+// };
+
+//  addLayerStyle = {
+//     id: 'traffic',
+//     type: 'points',
+//      source: {
+//          type: 'geojson',
+//          data: 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/geojson/vancouver-blocks.json'
+//      },
+//     'source-layer': 'traffic',
+//     paint: {
+//         'line-color': [
+//             'match',
+//             ['get', 'congestion'],
+//             'heavy',
+//             '#2c7fb8',
+//             'moderate',
+//             '#7fcdbb',
+//             'low',
+//             '#edf8b1',
+//             'white'
+//         ],
+//         'line-width': 3
+//     }
+// };
+
+
+// const baseClient = mbxClient({ accessToken: 'pk.eyJ1IjoiZGVsZWJhc2giLCJhIjoiY2w5Mzk3Y3ZtMDIzcjNvb2VkNGdpZWlmMyJ9.UbghdrLAQHobXZdGR-eGmg' });
+// const staticService = mbxStatic(baseClient);
+// const request = staticService.getStaticImage({
+//     ownerId: 'mapbox',
+//     styleId: 'outdoors-v11',
+//     width: 1280,
+//     height: 1280,
+//     position: {
+//         coordinates: [-73.99, 40.73],
+//         zoom: 12
+//     },
+//     addlayer: addLayerStyle,
+//     before_layer: 'road'
+// });
+// const staticImageUrl = request.url()
+// console.log(staticImageUrl)
+
+// const baseClient = mbxClient({ accessToken: 'pk.eyJ1IjoiZGVsZWJhc2giLCJhIjoiY2w5Mzk3Y3ZtMDIzcjNvb2VkNGdpZWlmMyJ9.UbghdrLAQHobXZdGR-eGmg' });
+// const staticService = mbxStatic(baseClient);
+// const request = staticService.getStaticImage({
+//     ownerId: 'mapbox',
+//     styleId: 'light-v10',
+//     width: 500,
+//     height: 350,
+//     position: {
+//         coordinates: [-73.99, 40.73],
+//         zoom: 12
+//     },
+//     addlayer: addLayerStyle,
+//     before_layer: 'road'
+// });
+// const staticImageUrl = request.url();
+// console.log(staticImageUrl)
+// let geo = {
+//     "type": "FeatureCollection",
+//     "features": [{
+//         "type": "Feature",
+//         "geometry": {
+//             "type": "Polygon",
+//             "coordinates": [
+//                 [
+//                     [-98.38294, 47.06659],
+//                     [-98.38322, 47.05229],
+//                     [-98.36687, 47.05221],
+//                     [-98.36675, 47.06654],
+//                     [-98.38294, 47.06659]
+//                 ]
+//             ]
+//         },
+//         "properties": {
+//             "title": ""
+//         }
+//     }]
+// }
+
+
+//let url2 = 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/geojson/vancouver-blocks.json'
+
+//  let response = await fetch(url2)
+//  let my_json =  await response.json()
+// let simplified = simplify(my_json, .001)
+//  //console.log(my_json)
+//  let mydata = JSON.stringify(simplified)
+//  mydata = encodeURIComponent(mydata)
+//  let url = `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/geojson(${mydata})/-123.0249569,49.2407190,11/500x300?access_token=pk.eyJ1IjoiZGVsZWJhc2giLCJhIjoiY2t1YWxkODF0MGh2NjJxcXA4czBpdXlmdyJ9.D_ngzR7j4vU1CILtpNLg4Q`
+//  console.log(url)
+// let mydata = encodeURIComponent(data)
+// let mydata = JSON.stringify({
+//     "type": "Feature",
+//     "properties": {
+//         "marker-size": "small",
+//         "marker-symbol": "airport",
+//         "marker-color": "#0000FF"
+//     },
+//     "geometry": {
+//         "type": "MultiPoint",
+//         "coordinates": [[1, 2], [2, 1], [3,2], [1,3]]
+//     }
+// })
+//  mydata = encodeURIComponent(mydata)
+// console.log(mydata)
+// let url = `https://api.mapbox.com/styles/v1/mapbox/outdoors-v11/static/geojson(${mydata})/[-123.51358360073972,49.021013344389424,-122.82412054058746,49.471084046345055]/1280x1280?access_token=pk.eyJ1IjoiZGVsZWJhc2giLCJhIjoiY2w5Mzk3Y3ZtMDIzcjNvb2VkNGdpZWlmMyJ9.UbghdrLAQHobXZdGR-eGmg&attribution=false&logo=false`
+//
+// url= `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/geojson(${mydata})/-73.99,40.70,12/500x300?access_token=pk.eyJ1IjoiZGVsZWJhc2giLCJhIjoiY2t1YWxkODF0MGh2NjJxcXA4czBpdXlmdyJ9.D_ngzR7j4vU1CILtpNLg4Q`
+// console.log(url)
+// let response = await fetch(url);
+// let myblob = await response.blob()
+// const imageUrl = URL.createObjectURL(myblob);
+// const imageElement = document.createElement("img");
+// imageElement.src = imageUrl;
+// const container = document.getElementById("image-container");
+// container.appendChild(imageElement);
+
+// let geojson_layer = map.getLayer('geojson-layer')
+// let objTile = await downloadToTile(true, url)
+// console.log(geojson_layer)
 
 
 // async function downloadTiles(tileCount) {

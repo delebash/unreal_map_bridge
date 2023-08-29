@@ -74,6 +74,14 @@ async function loadImageFromArray(imageArray, options = {}) {
     }
 }
 
+async function loadImageFromCanvas(canvas) {
+    try {
+        let image = await Image.fromCanvas(canvas)
+        return image
+    } catch (e) {
+        console.log(e)
+    }
+}
 
 /**
  * Convert image to specified bit and color
@@ -107,5 +115,6 @@ async function processGdal(buff, filename, translateOptions, file_type) {
 export default {
     manipulateImage,
     loadImageFromArray,
-    convertImage
+    convertImage,
+    loadImageFromCanvas
 }

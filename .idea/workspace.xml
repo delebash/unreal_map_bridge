@@ -6,8 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="fix reverse geocoder, update deps">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/index-2958db98.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/dist/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/javascript/image-utiles.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/javascript/image-utiles.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/javascript/map-utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/javascript/map-utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/public/binding.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/binding.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/vite.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,8 +39,7 @@
     <dismissed value="$PROJECT_DIR$/package.json" />
   </component>
   <component name="ProjectColorInfo">{
-  &quot;customColor&quot;: &quot;&quot;,
-  &quot;associatedIndex&quot;: -1
+  &quot;associatedIndex&quot;: 0
 }</component>
   <component name="ProjectId" id="2RCa3NO2sW2K28IOLYXwCyHGdn1" />
   <component name="ProjectViewState">
@@ -146,7 +152,17 @@
       <workItem from="1691433873764" duration="43000" />
       <workItem from="1691433924158" duration="32000" />
       <workItem from="1691433962789" duration="227000" />
-      <workItem from="1691435200336" duration="1743000" />
+      <workItem from="1691435200336" duration="2051000" />
+      <workItem from="1692365809640" duration="591000" />
+      <workItem from="1692376372423" duration="1215000" />
+      <workItem from="1692474044185" duration="196000" />
+      <workItem from="1692507874982" duration="22000" />
+      <workItem from="1692507970194" duration="69000" />
+      <workItem from="1692565179432" duration="2000" />
+      <workItem from="1693167323347" duration="2000" />
+      <workItem from="1693190145529" duration="10749000" />
+      <workItem from="1693234934688" duration="38934000" />
+      <workItem from="1693336554250" duration="4000" />
     </task>
     <task id="LOCAL-00001" summary="various fixes, sat download">
       <created>1686959652958</created>
@@ -273,22 +289,6 @@
       <option name="presentableId" value="LOCAL-00018" />
       <option name="project" value="LOCAL" />
       <updated>1687202316359</updated>
-    </task>
-    <task id="LOCAL-00034" summary="fix sse">
-      <option name="closed" value="true" />
-      <created>1688081351813</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1688081351813</updated>
-    </task>
-    <task id="LOCAL-00035" summary="remove unused deps">
-      <option name="closed" value="true" />
-      <created>1688082889328</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1688082889328</updated>
     </task>
     <task id="LOCAL-00036" summary="password">
       <option name="closed" value="true" />
@@ -522,7 +522,23 @@
       <option name="project" value="LOCAL" />
       <updated>1691433991045</updated>
     </task>
-    <option name="localTasksCounter" value="65" />
+    <task id="LOCAL-00065" summary="fix reverse geocoder, update deps">
+      <option name="closed" value="true" />
+      <created>1691437265480</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1691437265480</updated>
+    </task>
+    <task id="LOCAL-00066" summary="fix reverse geocoder, update deps">
+      <option name="closed" value="true" />
+      <created>1691437272970</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1691437272970</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
