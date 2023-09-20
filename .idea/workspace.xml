@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="update dist, deps">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="dist">
       <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -159,7 +157,7 @@
       <workItem from="1693337558953" duration="315000" />
       <workItem from="1693337904448" duration="601000" />
       <workItem from="1693425140513" duration="609000" />
-      <workItem from="1695240146604" duration="10758000" />
+      <workItem from="1695240146604" duration="11229000" />
     </task>
     <task id="LOCAL-00001" summary="various fixes, sat download">
       <created>1686959652958</created>
@@ -286,30 +284,6 @@
       <option name="presentableId" value="LOCAL-00018" />
       <option name="project" value="LOCAL" />
       <updated>1687202316359</updated>
-    </task>
-    <task id="LOCAL-00040" summary="add dist">
-      <option name="closed" value="true" />
-      <created>1688523031293</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1688523031293</updated>
-    </task>
-    <task id="LOCAL-00041" summary="add dist">
-      <option name="closed" value="true" />
-      <created>1688523127271</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1688523127271</updated>
-    </task>
-    <task id="LOCAL-00042" summary="add dist">
-      <option name="closed" value="true" />
-      <created>1688529401316</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1688529401316</updated>
     </task>
     <task id="LOCAL-00043" summary="add dist">
       <option name="closed" value="true" />
@@ -535,7 +509,31 @@
       <option name="project" value="LOCAL" />
       <updated>1695249383266</updated>
     </task>
-    <option name="localTasksCounter" value="71" />
+    <task id="LOCAL-00071" summary="fixe map size">
+      <option name="closed" value="true" />
+      <created>1695251682916</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1695251682917</updated>
+    </task>
+    <task id="LOCAL-00072" summary="dist">
+      <option name="closed" value="true" />
+      <created>1695251739031</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1695251739031</updated>
+    </task>
+    <task id="LOCAL-00073" summary="dist">
+      <option name="closed" value="true" />
+      <created>1695251752758</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1695251752758</updated>
+    </task>
+    <option name="localTasksCounter" value="74" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -558,7 +556,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="remove logs" />
     <MESSAGE value="timer" />
     <MESSAGE value="add tile subdiretory" />
     <MESSAGE value="backend stitching" />
@@ -578,12 +575,13 @@
     <MESSAGE value="fixed selection, added back water draw" />
     <MESSAGE value="fixed streams vector tiles" />
     <MESSAGE value="added leveling back" />
-    <MESSAGE value="dist" />
     <MESSAGE value="fix reverse geocoder, update deps" />
     <MESSAGE value="import geojson, screenshot" />
     <MESSAGE value="fix map size change&#10;add unreal xyz scale" />
     <MESSAGE value="update dist, deps" />
-    <option name="LAST_COMMIT_MESSAGE" value="update dist, deps" />
+    <MESSAGE value="fixe map size" />
+    <MESSAGE value="dist" />
+    <option name="LAST_COMMIT_MESSAGE" value="dist" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

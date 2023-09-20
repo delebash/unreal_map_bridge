@@ -440,14 +440,12 @@ function initMap() {
                         map.scrollZoom.disable();
 
                         let size = Number(Number(scope.mapSize).toFixed(2));
-                        console.log(size)
                         if (scrollDirection === 1) {
                             size += .1
                         } else {
                             size -= .1
                         }
                         size = Number(Number(size).toFixed(2));
-                        //console.log(size)
                         scope.mapSize = size
                         let mapSize = document.getElementById('mapSizeText')
                         mapSize.value = scope.mapSize
