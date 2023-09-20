@@ -86,6 +86,10 @@
                         <dd class="unit" id="lat"></dd>
                         <dd><abbr>&#176;</abbr></dd>
                     </div>
+                    <div>
+                        <dt>X,Y,Z Scale:</dt>
+                        <dd id="xyzscale"></dd>
+                    </div>
                 </dl>
                 <dl class="height">
                     <div>
@@ -103,11 +107,9 @@
             <div class="settings">
                 <dl>
                     <dt>Map size:</dt>
-                    <dd><input data-model="mapSize" id="mapSize" max="1000" min="4" onkeyup="changeMapsize(this)"
-                               onmouseup="changeMapsize(this)"
+                    <dd><input id="mapSizeRange" data-model="mapSize" id="mapSize" max="1000" min="4" onchange="changeMapsize(this)"
                                step="0.01" type="range"></dd>
-                    <dd><input data-model="mapSize" max="69.12" min="17.28" onkeyup="changeMapsize(this)"
-                               onmouseup="changeMapsize(this)"
+                    <dd><input id="mapSizeText" max="1000" min="4" onchange="changeMapsize(this)"
                                step="0.01" type="number"></dd>
                     <dd><abbr>km</abbr></dd>
                     <dt class="withUnit withCb2">Auto calculate Base & Height:</dt>

@@ -15,10 +15,11 @@
     <!--          referrerpolicy="no-referrer" rel="stylesheet"/>-->
     <!--    <link href="https://cdn.jsdelivr.net/npm/destyle.css@1.0.15/destyle.css" rel="stylesheet"/>-->
     <!--    <link href="styles.css" rel="stylesheet" type="text/css">-->
-  <script type="module" crossorigin src="/assets/index-8d51d3f9.js"></script>
-  <link rel="stylesheet" href="/assets/index-90475adb.css">
+  <script type="module" crossorigin src="/assets/index-337ea5d7.js"></script>
+  <link rel="stylesheet" href="/assets/index-bdc856b8.css">
 </head>
 <body class="row">
+
 <div class="modal" id="modal">
     <div class="modal-content">
         <span class="close-button" id="close-button" onclick="toggleModal('close','')">×</span>
@@ -36,13 +37,14 @@
         <progress class="refreshprogress" id="progress" max="1000" value="0"></progress>
     </div>
 </div>
-<div class="sideBar column">
+<div class="sideBar column" id="sideBar">
     <ul class="fill">
         <li><a onclick="togglePanel(0)" title="Info"><i class="icon fas fa-info-circle"></i></a></li>
         <li><a onclick="togglePanel(1)" title="Export Options"><i class="icon fas fa-file-export"
         ></i></a></li>
         <li><a onclick="togglePanel(2)" title="Change map style"><i class="icon fas fa-layer-group"></i></a></li>
         <li><a onclick="togglePanel(3)" title="Set lng/lat"><i class="icon fas fa-map-marker-alt"></i></a></li>
+        <li><a onclick="togglePanel(6)" title="Import Geojson"><i class="icon fas fa-solid fa-upload"></i></a></li>
         <li><a onclick="zoomIn()" title="Zoom in"><i class="fas fa-search-plus"></i></a></li>
         <li><a onclick="zoomOut()" title="Zoom out"><i class="fas fa-search-minus"></i></a></li>
         <li><a onclick="togglePanel(4)" title="Settings"><i class="icon fas fa-gear"></i></a></li>
@@ -64,9 +66,9 @@
     <br>
 </div>
 
-<div class="fill wrapper">
+<div class="fill wrapper" id="fillwrapper">
     <div class="content" id="map"></div>
-    <canvas id="wMap-canvas" width="400" height="400" ></canvas> <!-- for debug -->
+    <canvas id="wMap-canvas" width="400" height="400"></canvas> <!-- for debug -->
 
     <div class="panel slide-out hidden" id="infoPanel">
         <div class="geocoder" id="geocoder"></div>
@@ -140,19 +142,27 @@
                 <div class="row">
                     <div>
                         <div class="vertinput">To (m)</div>
-                        <div><dd><input type="number" min="0" max="250" step="10" id="plainsHeight"></dd></div>
+                        <div>
+                            <dd><input type="number" min="0" max="250" step="10" id="plainsHeight"></dd>
+                        </div>
                     </div>
                     <div>
                         <div class="vertinput">Passes</div>
-                        <div><dd><input type="number" min="0" max="25" step="1" id="blurPasses"></dd></div>
+                        <div>
+                            <dd><input type="number" min="0" max="25" step="1" id="blurPasses"></dd>
+                        </div>
                     </div>
                     <div>
                         <div class="vertinput">Post pas.</div>
-                        <div><dd><input type="number" min="0" max="10" step="1" id="blurPostPasses"></dd></div>
+                        <div>
+                            <dd><input type="number" min="0" max="10" step="1" id="blurPostPasses"></dd>
+                        </div>
                     </div>
                     <div>
                         <div class="vertinput">Stream depth</div>
-                        <div><dd><input type="number" min="0" max="10" step="1" id="streamDepth"></dd></div>
+                        <div>
+                            <dd><input type="number" min="0" max="10" step="1" id="streamDepth"></dd>
+                        </div>
                     </div>
                 </div>
                 <br>
@@ -170,7 +180,6 @@
                 </dl>
                 <button class="footer2" onclick="previewHeightmap()"><i class="fas fa-sync-alt"></i>Preview</button>
             </div>
-
 
 
         </div>
@@ -358,8 +367,12 @@
                                 <option value="0">none</option>
                             </select><i class="fas fa-chevron-down"></i>
                         </dd>
-                        <dd><div id="satresolution"></div></dd>
-                        <dd><div id="heightresolution"></div></dd>
+                        <dd>
+                            <div id="satresolution"></div>
+                        </dd>
+                        <dd>
+                            <div id="heightresolution"></div>
+                        </dd>
                     </dl>
                 </div>
                 <br>
@@ -450,6 +463,9 @@
                     <dd>Landscape Name:</dd>&nbsp;&nbsp;
                     <dd><input data-model="landscapename" id="landscapename" type="text"></dd>
                 </dl>
+                <br>
+                <button class="footer2" onclick="captureScreen(1)"><i class="fas fa-sync-alt"></i>Screen Shot
+                </button>
                 <br>
                 <button class="footer2" onclick="exportMap()"><i class="fas fa-sync-alt"></i>Export</button>
             </div>
@@ -567,7 +583,6 @@
             <br>
             <button class="footer2" onclick="saveUserSettings()"><i class="fas fa-check"></i>Save</button>
         </div>
-
     </div>
 
     <div class="panel slide-out hidden" id="weightmapPanel">
@@ -579,22 +594,42 @@
         </div>
     </div>
 
+    <div class="panel slide-out hidden" id="geoJsonPanel">
+        <div class="table">
+            <h3>Import Geojson file:</h3>
+            <dl>
+                <dt>Geojson Url:</dt>
+                <dd><input data-model="GeojsonUrl" type="text">
+                </dd>
+            </dl>
+            <dl>
+                <dt>Mapbox Style Object</dt>
+                <dd> <textarea id="GeojsonStyle" data-model="GeojsonLayerStyle" cols="55" rows="30">
+            </textarea></dd>
+                <dt class="withCb">Transparent</dt>
+                <dd><input type="checkbox" id="transparent"><i class="fas fa-check"></i></dd>
+                &nbsp;&nbsp;&nbsp;&nbsp;<dt class="withCb">Resize</dt>
+                <dd><input type="checkbox" id="resizeimage"><i class="fas fa-check"></i></dd>
+            </dl>
+            <button onclick="loadGeojson()"><i class="fas fa-check"></i>Load Geojson</button>
+            <button onclick="saveUserSettings()"><i class="fas fa-check"></i>Save Settings</button>
+            <button onclick="geoJsonScreenShot(6)"><i class="fas fa-check"></i>Geojson Screenshot</button>
+        </div>
+        <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jimp/0.22.8/jimp.min.js"-->
+        <!--            integrity="sha512-35IpHDqZJRT/3FJlRl03MG3FSyg9CdLKLNgbUR15MgxKF/8WcUxB7tQ5vROtr0ClQ5ij5MaQXd8UOU+8doXbwA=="-->
+        <!--            crossorigin="anonymous" referrerpolicy="no-referrer"></script>-->
 
-    <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jimp/0.22.8/jimp.min.js"-->
-    <!--            integrity="sha512-35IpHDqZJRT/3FJlRl03MG3FSyg9CdLKLNgbUR15MgxKF/8WcUxB7tQ5vROtr0ClQ5ij5MaQXd8UOU+8doXbwA=="-->
-    <!--            crossorigin="anonymous" referrerpolicy="no-referrer"></script>-->
+        <!--    <script type="text/javascript"-->
+        <!--            src="https://cdn.jsdelivr.net/npm/gdal3.js@2.4.0/dist/package/gdal3.js"-->
+        <!--            integrity="sha384-XlqVvSG4V8zz8Kdw95OpRdsWyJnWE5QUZy++BeAIEVb+f2n5RM7jdbZh5lm0pHWk"-->
+        <!--            crossorigin="anonymous"-->
+        <!--    ></script>-->
 
-    <!--    <script type="text/javascript"-->
-    <!--            src="https://cdn.jsdelivr.net/npm/gdal3.js@2.4.0/dist/package/gdal3.js"-->
-    <!--            integrity="sha384-XlqVvSG4V8zz8Kdw95OpRdsWyJnWE5QUZy++BeAIEVb+f2n5RM7jdbZh5lm0pHWk"-->
-    <!--            crossorigin="anonymous"-->
-    <!--    ></script>-->
+        <script src="UPNG.js"></script>
+        <script src="jszip.js"></script>
+        <script src="pako.js"></script>
+        <script src="binding.js"></script>
 
-    <script src="UPNG.js"></script>
-    <script src="jszip.js"></script>
-    <script src="pako.js"></script>
-    <script src="binding.js"></script>
-
-    
+        
 </body>
 </html>

@@ -443,11 +443,11 @@ function initMap() {
                         } else {
                             size -= 1
                         }
-                        if (size >= 4 && size <= 1000) {
-                            scope.mapSize = size
-                            let mapSize = document.getElementById('mapSize')
-                            changeMapsize(mapSize)
-                        }
+                        // if (size >= 4 && size <= 1000) {
+                        scope.mapSize = size
+                        let mapSize = document.getElementById('mapSize')
+                        changeMapsize(mapSize)
+                        // }
                     } else {
                         map.scrollZoom.enable();
                     }
@@ -835,6 +835,59 @@ function updateInfopanel() {
     document.getElementById('lat').innerHTML = grid.lat.toFixed(5);
     document.getElementById('minh').innerHTML = grid.minHeight;
     document.getElementById('maxh').innerHTML = grid.maxHeight;
+    document.getElementById('xyzscale').innerHTML = calculateScale();
+}
+
+function calculateScale() {
+
+    let zScale = getUnrealZScale(grid.maxHeight, grid.minHeight)
+    zScale = zScale.toFixed(4)
+    let xyscale = getUnrealXYScale()
+    xyscale = xyscale.toFixed(4)
+    return `${xyscale},${xyscale},${zScale}`
+}
+
+function getUnrealXYScale() {
+    //Xy Scale
+    // let extent = getExtent(grid.lng, grid.lat, mapSize);
+    // console.log(extent.topleft[0], extent.topleft[1], extent.bottomright[0], extent.bottomright[1]);
+    //
+    // const topLeft = turf.point([extent.topleft[0], extent.topleft[1]]);
+    // const topRight = turf.point([extent.topleft[0], extent.bottomright[1]]);
+    // let distance = turf.distance(topLeft, topRight, 'kilometers').toFixed(2);
+    // console.log(distance)
+
+    let km = scope.mapSize
+    let landscapeSize
+    let useworldpart = document.getElementById('useworldpart').checked
+    // let km = this.tile_info.distance * 1000
+    if (useworldpart === true) {
+        landscapeSize = scope.worldpartlandscapeSize
+    } else {
+        landscapeSize = scope.landscapeSize
+    }
+
+    let xyscale = (km / landscapeSize) * 100
+    return xyscale
+}
+
+function getUnrealZScale(maxElevation, minElevation) {
+    let cm, zscale
+    let sealevel = document.getElementById('sealevel').checked
+    if (sealevel === true) {
+        cm = (maxElevation * 100)
+    } else {
+
+        if (minElevation < 0) {
+            minElevation = 0
+        }
+        let elevation = maxElevation - minElevation
+        cm = (elevation * 100)
+    }
+
+    zscale = cm * 0.001953125
+
+    return zscale
 }
 
 function zoomIn() {
@@ -846,9 +899,15 @@ function zoomOut() {
 }
 
 function changeMapsize(el) {
-    if (el.value < 4) {
-        el.value = 4
+
+    if (el.id === "mapSizeRange") {
+        let ele2 = document.getElementById('mapSizeText')
+        ele2.value = el.value
+    } else if (el.id === "mapSizeText") {
+        scope.mapSize = el.value
     }
+
+
     mapSize = el.value / 1;
     vmapSize = mapSize * 1.05;
     tileSize = mapSize / 9;

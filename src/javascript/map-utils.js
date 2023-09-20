@@ -446,7 +446,10 @@ function calcMinMaxHeight(heightmap) {
 
     return heights;
 }
-
+function getDistance(extent){
+    let bounds = getExtent(grid.lng, grid.lat, mapSize);
+    console.log(bounds.topleft[0], bounds.topleft[1], bounds.bottomright[0], bounds.bottomright[1]);
+}
 function getTileCount(zoom, extent) {
     let bbox = {
         bottom: extent.bottomright[1],
