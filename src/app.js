@@ -436,18 +436,22 @@ function initMap() {
 
                     e.preventDefault();
                     if (e.shiftKey) {
+
                         map.scrollZoom.disable();
-                        let size = scope.mapSize
+
+                        let size = Number(Number(scope.mapSize).toFixed(2));
+                        console.log(size)
                         if (scrollDirection === 1) {
-                            size += 1
+                            size += .1
                         } else {
-                            size -= 1
+                            size -= .1
                         }
-                        // if (size >= 4 && size <= 1000) {
+                        size = Number(Number(size).toFixed(2));
+                        //console.log(size)
                         scope.mapSize = size
-                        let mapSize = document.getElementById('mapSize')
+                        let mapSize = document.getElementById('mapSizeText')
+                        mapSize.value = scope.mapSize
                         changeMapsize(mapSize)
-                        // }
                     } else {
                         map.scrollZoom.enable();
                     }
@@ -906,7 +910,6 @@ function changeMapsize(el) {
     } else if (el.id === "mapSizeText") {
         scope.mapSize = el.value
     }
-
 
     mapSize = el.value / 1;
     vmapSize = mapSize * 1.05;
