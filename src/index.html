@@ -107,7 +107,8 @@
             <div class="settings">
                 <dl>
                     <dt>Map size:</dt>
-                    <dd><input id="mapSizeRange" data-model="mapSize" id="mapSize" max="1000" min="4" onchange="changeMapsize(this)"
+                    <dd><input id="mapSizeRange" data-model="mapSize" id="mapSize" max="1000" min="4"
+                               onchange="changeMapsize(this)"
                                step="0.1" type="range" value="=50"></dd>
                     <dd><input id="mapSizeText" max="1000" min="4" onchange="changeMapsize(this)"
                                step="0.1" type="number" value="50"></dd>
@@ -233,7 +234,6 @@
                         </dd>
                         <span class="withCb">Use World Partition:</span>&nbsp;&nbsp;
                         <span><input id="useworldpart" type="checkbox"><i class="fas fa-check"></i></span>&nbsp;&nbsp;
-
                         <dd class="wsSlp wideSelect">
                             <select data-model="worldpartlandscapeSize" onchange="worldpartlandscapeSizeChange(this)">
                                 <option value="511">511X511</option>
@@ -363,10 +363,12 @@
                                 <option value="64261">64261X64261</option>
                                 <option value="64771">64771X64771</option>
                                 <option value="65281">65281X65281</option>
-
                                 <option value="0">none</option>
                             </select><i class="fas fa-chevron-down"></i>
                         </dd>
+                        <div></div>
+                        <div>X,Y,Z Scale:</div>&nbsp;&nbsp;
+                        <span id="exportxyzscale"></span>
                         <dd>
                             <div id="satresolution"></div>
                         </dd>

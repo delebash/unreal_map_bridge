@@ -4,8 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="dist">
+    <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="remove test log">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/assets/index-2f6a765f.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/dist/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,7 +161,8 @@
       <workItem from="1693337558953" duration="315000" />
       <workItem from="1693337904448" duration="601000" />
       <workItem from="1693425140513" duration="609000" />
-      <workItem from="1695240146604" duration="11229000" />
+      <workItem from="1695240146604" duration="12469000" />
+      <workItem from="1695306391536" duration="2498000" />
     </task>
     <task id="LOCAL-00001" summary="various fixes, sat download">
       <created>1686959652958</created>
@@ -284,14 +289,6 @@
       <option name="presentableId" value="LOCAL-00018" />
       <option name="project" value="LOCAL" />
       <updated>1687202316359</updated>
-    </task>
-    <task id="LOCAL-00043" summary="add dist">
-      <option name="closed" value="true" />
-      <created>1688529681116</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1688529681116</updated>
     </task>
     <task id="LOCAL-00044" summary="fixes for desktop version">
       <option name="closed" value="true" />
@@ -533,7 +530,15 @@
       <option name="project" value="LOCAL" />
       <updated>1695251752758</updated>
     </task>
-    <option name="localTasksCounter" value="74" />
+    <task id="LOCAL-00074" summary="remove test log">
+      <option name="closed" value="true" />
+      <created>1695252068786</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1695252068786</updated>
+    </task>
+    <option name="localTasksCounter" value="75" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -556,7 +561,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="timer" />
     <MESSAGE value="add tile subdiretory" />
     <MESSAGE value="backend stitching" />
     <MESSAGE value="bugs" />
@@ -581,7 +585,8 @@
     <MESSAGE value="update dist, deps" />
     <MESSAGE value="fixe map size" />
     <MESSAGE value="dist" />
-    <option name="LAST_COMMIT_MESSAGE" value="dist" />
+    <MESSAGE value="remove test log" />
+    <option name="LAST_COMMIT_MESSAGE" value="remove test log" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -831,13 +831,13 @@ function togglePanel(index) {
 
 function updateInfopanel() {
     let rhs = 17.28 / mapSize * 100;
-
+    calculateScale();
     // document.getElementById('rHeightscale').innerHTML = rhs.toFixed(1);
     document.getElementById('lng').innerHTML = grid.lng.toFixed(5);
     document.getElementById('lat').innerHTML = grid.lat.toFixed(5);
     document.getElementById('minh').innerHTML = grid.minHeight;
     document.getElementById('maxh').innerHTML = grid.maxHeight;
-    document.getElementById('xyzscale').innerHTML = calculateScale();
+
 }
 
 function calculateScale() {
@@ -846,7 +846,9 @@ function calculateScale() {
     zScale = zScale.toFixed(4)
     let xyscale = getUnrealXYScale()
     xyscale = xyscale.toFixed(4)
-    return `${xyscale},${xyscale},${zScale}`
+    let scale_str = `${xyscale},${xyscale},${zScale}`
+    document.getElementById('xyzscale').innerHTML = scale_str
+    document.getElementById('exportxyzscale').innerHTML = scale_str
 }
 
 function getUnrealXYScale() {
@@ -868,8 +870,8 @@ function getUnrealXYScale() {
     } else {
         landscapeSize = scope.landscapeSize
     }
-
-    let xyscale = (km / landscapeSize) * 100
+    let distance = km * 1000
+    let xyscale = (distance / landscapeSize) * 100
     return xyscale
 }
 
@@ -1856,10 +1858,12 @@ function exportTypeChange(e) {
 
 function landscapeSizeChange(e) {
     scope.landscapeSize = e.value
+    calculateScale()
 }
 
 function worldpartlandscapeSizeChange(e) {
     scope.worldpartlandscapeSize = e.value
+    calculateScale()
 }
 
 
