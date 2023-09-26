@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="remove test log">
+    <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="build">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/index-2f6a765f.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/assets/index-a0596a24.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/dist/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.html" afterDir="false" />
     </list>
@@ -73,6 +74,11 @@
     <key name="MoveFile.RECENT_KEYS">
       <recent name="F:\3DProjects\github\DansProjects\unreal_map_bridge\src\public" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="debug" type="JavascriptDebugType" uri="http://localhost:5173" useFirstLineBreakpoints="true">
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -162,7 +168,9 @@
       <workItem from="1693337904448" duration="601000" />
       <workItem from="1693425140513" duration="609000" />
       <workItem from="1695240146604" duration="12469000" />
-      <workItem from="1695306391536" duration="2498000" />
+      <workItem from="1695306391536" duration="2947000" />
+      <workItem from="1695702285850" duration="1970000" />
+      <workItem from="1695704307541" duration="1870000" />
     </task>
     <task id="LOCAL-00001" summary="various fixes, sat download">
       <created>1686959652958</created>
@@ -289,30 +297,6 @@
       <option name="presentableId" value="LOCAL-00018" />
       <option name="project" value="LOCAL" />
       <updated>1687202316359</updated>
-    </task>
-    <task id="LOCAL-00044" summary="fixes for desktop version">
-      <option name="closed" value="true" />
-      <created>1688817157170</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1688817157170</updated>
-    </task>
-    <task id="LOCAL-00045" summary="fixes for desktop version">
-      <option name="closed" value="true" />
-      <created>1688818507166</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1688818507166</updated>
-    </task>
-    <task id="LOCAL-00046" summary="fixes for desktop version">
-      <option name="closed" value="true" />
-      <created>1688818550068</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1688818550068</updated>
     </task>
     <task id="LOCAL-00047" summary="fixes for desktop version">
       <option name="closed" value="true" />
@@ -538,7 +522,31 @@
       <option name="project" value="LOCAL" />
       <updated>1695252068786</updated>
     </task>
-    <option name="localTasksCounter" value="75" />
+    <task id="LOCAL-00075" summary="fix scale">
+      <option name="closed" value="true" />
+      <created>1695309113530</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1695309113530</updated>
+    </task>
+    <task id="LOCAL-00076" summary="fix scale">
+      <option name="closed" value="true" />
+      <created>1695309126300</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1695309126300</updated>
+    </task>
+    <task id="LOCAL-00077" summary="build">
+      <option name="closed" value="true" />
+      <created>1695309181135</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1695309181135</updated>
+    </task>
+    <option name="localTasksCounter" value="78" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -561,8 +569,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="add tile subdiretory" />
-    <MESSAGE value="backend stitching" />
     <MESSAGE value="bugs" />
     <MESSAGE value="fav" />
     <MESSAGE value="release with backend server" />
@@ -586,7 +592,9 @@
     <MESSAGE value="fixe map size" />
     <MESSAGE value="dist" />
     <MESSAGE value="remove test log" />
-    <option name="LAST_COMMIT_MESSAGE" value="remove test log" />
+    <MESSAGE value="fix scale" />
+    <MESSAGE value="build" />
+    <option name="LAST_COMMIT_MESSAGE" value="build" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -595,6 +603,21 @@
           <url>file://$PROJECT_DIR$/src/app.js</url>
           <line>18</line>
           <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/app.js</url>
+          <line>2013</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/app.js</url>
+          <line>2018</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/app.js</url>
+          <line>2014</line>
+          <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

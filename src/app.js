@@ -47,7 +47,7 @@ const eGridDiv = document.querySelector('#myGrid');
 const modal = document.getElementById("modal");
 const modalMsg = document.getElementById("modalMsg");
 const zoom = document.getElementById("zoom");
-const worldpart = document.getElementById('worldpart').checked
+// const worldpart = document.getElementById('worldpart').checked
 const worldpartiongridsize = document.getElementById('worldpartiongridsize').value
 const landscapename = document.getElementById('landscapename').value
 const processCount = document.getElementById('processCount')
@@ -1771,7 +1771,7 @@ async function exportMap() {
             stopTimer()
         }
         if (scope.exportType === 'unrealSend') {
-            await sendToUnreal()
+            await sendToUnreal(landscapeSize,useworldpart)
         }
     } else {
         toggleModal('open', `Please select at least one image type to download`)
@@ -1979,7 +1979,7 @@ width=900,height=600,left=500,top=100`;
     open('help.html', 'help', params);
 }
 
-async function sendToUnreal() {
+async function sendToUnreal(landscapesize,useworldpart) {
     startTimer('Sending to Unreal', true)
     console.log('sendtounreal')
     let host = 'http://localhost:30010/', call = 'remote/object/call', data = {}, dataJson, result,
@@ -2015,7 +2015,7 @@ async function sendToUnreal() {
         if (bpPath) {
             //Mapbox_BP is in scene and we can continue
             let wpGridSize
-            if (worldpart === true) {
+            if (useworldpart === true) {
                 wpGridSize = worldpartiongridsize
             } else {
                 wpGridSize = 0
@@ -2026,7 +2026,7 @@ async function sendToUnreal() {
                 "functionName": "GenerateMapboxLandscape",
                 "parameters": {
                     "LandscapeName": landscapename,
-                    "LandscapeSize": scope.landscapeSize.toString(),
+                    "LandscapeSize": landscapesize.toString() ,
                     "TileHeightmapFileName": subDirName + '/' + heightmapFileName,
                     "TileGeojsonFileName": "",
                     "TileInfoFileName": "",

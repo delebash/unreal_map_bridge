@@ -12,8 +12,8 @@
     "vite": "^4.4.9"
   },
   "dependencies": {
-    "@deck.gl/layers": "^8.9.29",
-    "@deck.gl/mapbox": "^8.9.29",
+    "@deck.gl/layers": "^8.9.30",
+    "@deck.gl/mapbox": "^8.9.30",
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
     "@fortawesome/fontawesome-free": "^6.4.2",
