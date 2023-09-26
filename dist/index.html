@@ -15,7 +15,7 @@
     <!--          referrerpolicy="no-referrer" rel="stylesheet"/>-->
     <!--    <link href="https://cdn.jsdelivr.net/npm/destyle.css@1.0.15/destyle.css" rel="stylesheet"/>-->
     <!--    <link href="styles.css" rel="stylesheet" type="text/css">-->
-  <script type="module" crossorigin src="/assets/index-63c88dfa.js"></script>
+  <script type="module" crossorigin src="/assets/index-07da23c9.js"></script>
   <link rel="stylesheet" href="/assets/index-bdc856b8.css">
 </head>
 <body class="row">
@@ -229,17 +229,17 @@
                                 <option value="2017">2017x2017</option>
                                 <option value="1513">1513x1513</option>
                                 <option value="1009">1009x1009</option>
-                                <option value="0">1081x1081 -- Default Resolution</option>
+                                <option value="1081">1081x1081 -- Default Resolution</option>
                                 <option value="505">505x505</option>
-                                <option value="0">none</option>
                             </select><i class="fas fa-chevron-down"></i>
                         </dd>
                         <span class="withCb">Use World Partition:</span>&nbsp;&nbsp;
-                        <span><input id="useworldpart" type="checkbox"><i class="fas fa-check"></i></span>&nbsp;&nbsp;
+                        <span><input id="useworldpart" type="checkbox" onchange="useworldpartChange(this)"><i class="fas fa-check"></i></span>&nbsp;&nbsp;
                         <dd class="wsSlp wideSelect">
                             <select data-model="worldpartlandscapeSize" onchange="worldpartlandscapeSizeChange(this)">
                                 <option value="511">511X511</option>
                                 <option value="1021">1021X1021</option>
+                                <option value="1081">1081x1081 -- Default Resolution</option>
                                 <option value="1531">1531X1531</option>
                                 <option value="2041">2041X2041</option>
                                 <option value="2551">2551X2551</option>
@@ -365,7 +365,6 @@
                                 <option value="64261">64261X64261</option>
                                 <option value="64771">64771X64771</option>
                                 <option value="65281">65281X65281</option>
-                                <option value="0">none</option>
                             </select><i class="fas fa-chevron-down"></i>
                         </dd>
                         <div></div>

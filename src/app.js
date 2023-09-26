@@ -1865,7 +1865,9 @@ function worldpartlandscapeSizeChange(e) {
     scope.worldpartlandscapeSize = e.value
     calculateScale()
 }
-
+function useworldpartChange(e) {
+    calculateScale()
+}
 
 async function serverTypeChange(e) {
     scope.serverType = e.value
@@ -2273,6 +2275,7 @@ window.help = help
 window.geoJsonScreenShot = geoJsonScreenShot
 window.captureScreen = captureScreen
 window.loadGeojson = loadGeojson
+window.useworldpartChange = useworldpartChange
 
 
 
