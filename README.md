@@ -4,8 +4,6 @@ Front end app for UnrealMapboxBridgePlugin https://github.com/delebash/UnrealMap
 
 The web app can be used without the Plugin.  It just creates and downloads heightmap images to your computer. You can manually import these images into Unreal using the Landscape Tools.  The plugin part just automates the import into Unreal for convenience
 
-# Unreal Map Bridge 
-
 This project allows you to create an Unreal landscape from a real world location on a map.
 This project is not affiliated with Mapbox or Maptiler it is just something I wanted to do. Cheers!
 
