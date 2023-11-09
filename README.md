@@ -12,7 +12,7 @@ This project is not affiliated with Mapbox or Maptiler it is just something I wa
 ![image](https://user-images.githubusercontent.com/2220160/177798094-7e1b613d-7f27-402d-b966-5a07288cf6b8.png)
 
 
-## Tutorial Playlist
+## Tutorial Playlist for old app but some basics still apply read the help on the website for current instructions.
 
 https://www.youtube.com/playlist?list=PLFCVXzupw1r_7ExUSGDxHGHU-gPRxOGeZ
 
