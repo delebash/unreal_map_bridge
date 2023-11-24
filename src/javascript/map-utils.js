@@ -3,8 +3,7 @@ import tib from "tiles-in-bbox";
 import mapboxgl from 'mapbox-gl';
 import VectorTile from '@mapbox/vector-tile'
 import Protobuf from 'pbf';
-import {MapboxLayer} from '@deck.gl/mapbox';
-import {GeoJsonLayer, PolygonLayer} from '@deck.gl/layers';
+
 import mbxClient from '@mapbox/mapbox-sdk';
 import mbxStatic from '@mapbox/mapbox-sdk/services/static';
 import simplify from 'simplify-geojson';
@@ -523,6 +522,12 @@ function convertMapboxMaptilerStyles(key, layerId) {
         [
             {
                 mapbox: 'streets-v11',
+                maptiler: 'STREETS',
+                maptiler_map: 'streets-v2',
+                diff: false
+            },
+            {
+                mapbox: 'standard-beta',
                 maptiler: 'STREETS',
                 maptiler_map: 'streets-v2',
                 diff: false

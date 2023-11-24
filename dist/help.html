@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Help</title>
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="help">
+    <header><h2>Help -- Download heightmap, satellite, weightmap images for use in Unreal or other 3D programs</h2>
+        <hr>
+    </header>
+    <dl>
+        <dt>Getting Started:</dt>
+        <dd>1. Get an api key from <a href="https://www.mapbox.com">Mapbox</a> or <a href="https://www.maptiler.com">Maptiler</a>
+            free account
+        </dd>
+        <dd>2. Open the Settings Panel and select either mapbox or maptiler from the Server Type dropdown</dd>
+        <dd>3. Paste your api key</dd>
+        <dd>4. Select a download directory</dd>
+        <dd>5. Click the Save Button</dd>
+
+        <dt>Map Controls:</dt>
+        <dd>1. Left click to select an area</dd>
+        <dd>2. Shift scroll to increase decrease the selection area</dd>
+        <dd>3. Use mouse scroll to change your viewpoint, this does not change the heightmap size</dd>
+        <dd>4. Left click and hold to move around the map</dd>
+        <dd>5. Right click and hold to pan and tilt</dd>
+
+        <dt>Info Panel:</dt>
+        <dd>Search box -- find a location by name and move the selection to that location</dd>
+        <dd>Map size -- increase decrease selection area</dd>
+        <dd>Auto calculate Base & Height -- Automatically chooses the best settings for heightmap creation</dd>
+        <dd>Base Level -- Changes the start altitude for your heightmap, More white means your start altitude is
+            higher
+        </dd>
+        <dd>Height Scale -- Changes the scale of your height</dd>
+        <dd>Water depth -- Slightly modifies height</dd>
+        <dd>Preview -- Loads the preview image based on your settings</dd>
+
+        <dt>Export Options Panel:</dt>
+        <dd><u>Export Settings:</u></dd>
+        <dd>1. Export type -- Choose download png to manually download the heightmap to your directory</dd>
+        <dd>or choose import heightmap to automatically import into Unreal requires <a
+                href="https://github.com/delebash/UnrealMapboxBridgePlugin">Bridge Plugin</a></dd>
+        <dd>3. Landscape Size -- resize the image to create the the size of your landscape in Unreal</dd>
+
+        <dd><u>Export type:</u></dd>
+        <dd>Override satellite zoom level -- higher zoom level equals better resolution, try 13 to start</dd>
+        <dd>The higher the zoom level means you will download more files, check your Tile count after you enter your
+            zoom level
+        </dd>
+        <dd>Too high of a zoom level could mean downloading thousands of files</dd>
+        <dd><u>Select image types to download:</u></dd>
+        <dd>Check one or all of the options</dd>
+
+        <dd><u>Manipulate heightmap: -- only applies to heightmap</u></dd>
+        <dd>Sea level -- Adjusts the heightmap so when you import into Unreal the map is at sea level -- default
+            checked
+        </dd>
+        <dd>Flip X -- Flips the image on the X axis</dd>
+        <dd>Flip Y -- Flips the image on the Y axis</dd>
+
+        <dd><u>Other Settings:</u></dd>
+        <dd>Enable World Partition -- Only applies when you Automatically import your heightmap into Unreal using the
+            plugin
+        </dd>
+        <dd>Grid Size -- Same setting in Unreal when you import your landscape with World Partition</dd>
+        <dd>Blur radius -- Applies a blur to your heightmap, can help smooth out your Unreal landscape</dd>
+        <dd>The higher the number the more smoothing is applied</dd>
+        <dd>Weightmap Blur -- Applies smoothing to your Weightmap images. Higher value equals more blur</dd>
+        <dd>Landscape Name -- Name of your landscape when you use the automatic import into Unreal</dd>
+        <dd>Export Button -- Start the creation of your selected image types -- Note sometimes the progress bar</dd>
+        <dd>Will freeze. Just be patient and wait for it to disappear. Downloading Weightmaps can take some extra time
+        </dd>
+        <dt>Change map style Panel: -- changes what type of map you want to view</dt>
+
+        <dt>Set lng/lat Panel:</dt>
+        <dd>Manually input lng/lat and move the selection to that location</dd>
+
+        <dt>Settings Panel:</dt>
+        <dd>Api Key -- Paste the api key you got from either mapbox or maptiler</dd>
+        &nbsp;<dd>Weightmap Url -- Click <a href="https://api.mapbox.com/styles/v1/delebash/clfzz7dot000001qilz330eyt.html?title=copy&access_token=pk.eyJ1IjoiZGVsZWJhc2giLCJhIjoiY2xvZ2MyZDV5MHR5YzJrcnJpcHd4ZXBzMiJ9.4z3qEfAWtyoVv1m1pJZ4Fg&zoomwheel=true&fresh=true#16.54/27.987686/-80.590789/0/7">Copy Mapbox Weightmap Style</a> to copy this style to your mapbox account and then paste your new style address in text box below in the format name/style id example:</dd>
+        <dd>Desktop Server Url -- The backend server is for use when you need to
+            download satellite images with a zoom greater than 14. You will need to download the desktop
+            version from <a href="https://github.com/delebash/unreal_map_bridge_desktop/releases">here</a>
+            Double click on the exe to start the application. Export image per normal, sat images will
+            be processed on the backend. This could take a long time depending on how many tiles you are
+            processing.
+        </dd>
+        <dd>Desktop Directory: -- Directory to save images produced from the desktop app such as
+        C:\map\sat_images. If you are using the automatic heightmap import via the plugin make this directory
+        the same as Download Directory</dd>
+
+        <dt>Weightmap Panel:</dt>
+        <dd>These list to colors to match features from the Weightmap style to create your</dd>
+        <dd>weightmap images. For now don't change and this only works in Mapbox</dd>
+        <dd>Just copy your user name/map id from Mapbox Studio Share button style url</dd>
+        <dd>The number on the left bar is your current viewing zoom level:</dd>
+        <dd>Use this to get an idea of what you will see when you download your satellite image with that zoom level
+        </dd>
+    </dl>
+</div>
+
+</body>
+</html>
