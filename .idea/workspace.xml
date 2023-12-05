@@ -4,13 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="dis, help">
+    <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="update to gl-js 3 rc, add mapbox standard style, update deps">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/javascript/map-utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/javascript/map-utils.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,7 +175,8 @@
       <workItem from="1699536303992" duration="18000" />
       <workItem from="1699561030051" duration="1005000" />
       <workItem from="1700522512208" duration="27000" />
-      <workItem from="1700843260935" duration="1059000" />
+      <workItem from="1700843260935" duration="1528000" />
+      <workItem from="1700847086910" duration="28000" />
     </task>
     <task id="LOCAL-00001" summary="various fixes, sat download">
       <created>1686959652958</created>
@@ -307,14 +303,6 @@
       <option name="presentableId" value="LOCAL-00018" />
       <option name="project" value="LOCAL" />
       <updated>1687202316359</updated>
-    </task>
-    <task id="LOCAL-00050" summary="help">
-      <option name="closed" value="true" />
-      <created>1688844412430</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1688844412430</updated>
     </task>
     <task id="LOCAL-00051" summary="help">
       <option name="closed" value="true" />
@@ -556,7 +544,15 @@
       <option name="project" value="LOCAL" />
       <updated>1698878236172</updated>
     </task>
-    <option name="localTasksCounter" value="81" />
+    <task id="LOCAL-00081" summary="update to gl-js 3 rc, add mapbox standard style, update deps">
+      <option name="closed" value="true" />
+      <created>1700844673511</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1700844673512</updated>
+    </task>
+    <option name="localTasksCounter" value="82" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -579,7 +575,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="fix sse" />
     <MESSAGE value="remove unused deps" />
     <MESSAGE value="password" />
     <MESSAGE value="filename" />
@@ -604,7 +599,8 @@
     <MESSAGE value="fixed wp landscape size" />
     <MESSAGE value="add calcscale to useworldpart check" />
     <MESSAGE value="dis, help" />
-    <option name="LAST_COMMIT_MESSAGE" value="dis, help" />
+    <MESSAGE value="update to gl-js 3 rc, add mapbox standard style, update deps" />
+    <option name="LAST_COMMIT_MESSAGE" value="update to gl-js 3 rc, add mapbox standard style, update deps" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -616,17 +612,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/app.js</url>
-          <line>2016</line>
+          <line>2015</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/app.js</url>
-          <line>2021</line>
+          <line>2020</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/app.js</url>
-          <line>2017</line>
+          <line>2016</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
