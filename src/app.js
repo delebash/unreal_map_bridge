@@ -1085,25 +1085,26 @@ async function downloadTiles(tilesUrl, isHeightmap = true, z = 14, overrideZoom 
 
 
         await Promise.all(promiseArray);
-
-        if (isHeightmap === true) {
-            promiseArray = []
-            vTiles = mapUtils.Create2DArray(tileCnt);
-            tilesUrl = scope.vectorUrl
-            for (let i = 0; i < tileCnt; i++) {
-                for (let j = 0; j < tileCnt; j++) {
-                    let url = tilesUrl + zoom + '/' + (x + j) + '/' + (y + i) + vectorType + '?' + urlKey + scope.apiKey;
-                    promiseArray.push(mapUtils.downloadPbfToTile(url).then((data) => {
-                        vTiles[i][j] = data
-                        progressCount(count++, totalCount, 'downloading vector tiles');
-                    }));
+        if (grid.drawStreams === true) {
+            if (isHeightmap === true) {
+                promiseArray = []
+                vTiles = mapUtils.Create2DArray(tileCnt);
+                tilesUrl = scope.vectorUrl
+                for (let i = 0; i < tileCnt; i++) {
+                    for (let j = 0; j < tileCnt; j++) {
+                        let url = tilesUrl + zoom + '/' + (x + j) + '/' + (y + i) + vectorType + '?' + urlKey + scope.apiKey;
+                        promiseArray.push(mapUtils.downloadPbfToTile(url).then((data) => {
+                            vTiles[i][j] = data
+                            progressCount(count++, totalCount, 'downloading vector tiles');
+                        }));
+                    }
                 }
             }
+            await Promise.all(promiseArray)
+            objTiles.vTiles = vTiles
         }
-        await Promise.all(promiseArray)
 
         objTiles.tiles = tiles
-        objTiles.vTiles = vTiles
         objTiles.distance = distance
         objTiles.topDistance = topDistance
         objTiles.leftDistance = leftDistance
@@ -1155,12 +1156,17 @@ function convertHeightmap(heightmap, watermap) {
         for (let x = 0; x < citiesmapSize; x++) {
             // stay with ints as long as possible
             let height = (heightmap[y][x] - scope.baseLevel * 10);
+            let calcHeight
 
             // raise the land by the amount of water depth
             // a height lower than baselevel is considered to be the below sea level and the height is set to 0
             // water depth is unaffected by height scale
             // the map is unscaled at this point, so high mountains above 1024 meter can be present
-            let calcHeight = (height + Math.round(waterDepth * 10 * watermap[y][x])) / 10;
+            if (grid.drawStreams === true) {
+                calcHeight = (height + Math.round(waterDepth * 10 * watermap[y][x])) / 10;
+            } else {
+                calcHeight = (height + Math.round(waterDepth * 10)) / 10;
+            }
             workingmap[y][x] = Math.max(0, calcHeight);
         }
     }
@@ -1187,7 +1193,7 @@ function convertHeightmap(heightmap, watermap) {
     // so redraw them, with little extra depth
     let streamDepth = parseInt(document.getElementById('streamDepth').value);
     let highestWaterHeight = 0;
-    if (document.getElementById('drawStrm').checked) {
+    if (grid.drawStreams === true) {
         for (let y = 0; y < citiesmapSize; y++) {
             for (let x = 0; x < citiesmapSize; x++) {
                 let height = workingmap[y][x];
@@ -1377,11 +1383,15 @@ function filterMap(map, fromLevel, toLevel, kernel) {
 async function previewHeightmap() {
     progressMsg.innerHTML = 'Processing heightmap'
     startTimer()
-    let convertedHeightmap, png, imgUrl;
+    let convertedHeightmap, png, imgUrl, watermap;
     setUrlInfo('height')
     let autoCalc = document.getElementById("autoCalcBaseHeight").checked
     let objTiles = await getHeightmap()
-    let watermap = mapUtils.sanatizeWatermap(mapUtils.toWatermap(objTiles.vTiles, objTiles.heightmap.length), objTiles.xOffset, objTiles.yOffset);
+    if (grid.drawStreams === true) {
+        watermap = mapUtils.sanatizeWatermap(mapUtils.toWatermap(objTiles.vTiles, objTiles.heightmap.length), objTiles.xOffset, objTiles.yOffset);
+    } else {
+        watermap = []
+    }
     if (autoCalc === true) {
         await autoCalculateBaseHeight()
     }
@@ -1604,7 +1614,12 @@ async function exportMap() {
                 stopTimer()
             } else {
                 let objTiles = await getHeightmap(heightzoom, overrideHeightmapZoom)
-                let watermap = mapUtils.sanatizeWatermap(mapUtils.toWatermap(objTiles.vTiles, objTiles.heightmap.length), objTiles.xOffset, objTiles.yOffset);
+                let watermap
+                if (document.getElementById('drawStrm').checked) {
+                    watermap = mapUtils.sanatizeWatermap(mapUtils.toWatermap(objTiles.vTiles, objTiles.heightmap.length), objTiles.xOffset, objTiles.yOffset);
+                } else {
+                    watermap = []
+                }
                 if (autoCalc === true) {
                     await autoCalculateBaseHeight()
                 }
@@ -1771,7 +1786,7 @@ async function exportMap() {
             stopTimer()
         }
         if (scope.exportType === 'unrealSend') {
-            await sendToUnreal(landscapeSize,useworldpart)
+            await sendToUnreal(landscapeSize, useworldpart)
         }
     } else {
         toggleModal('open', `Please select at least one image type to download`)
@@ -1865,6 +1880,7 @@ function worldpartlandscapeSizeChange(e) {
     scope.worldpartlandscapeSize = e.value
     calculateScale()
 }
+
 function useworldpartChange(e) {
     calculateScale()
 }
@@ -1981,7 +1997,7 @@ width=900,height=600,left=500,top=100`;
     open('help.html', 'help', params);
 }
 
-async function sendToUnreal(landscapesize,useworldpart) {
+async function sendToUnreal(landscapesize, useworldpart) {
     startTimer('Sending to Unreal', true)
     console.log('sendtounreal')
     let host = 'http://localhost:30010/', call = 'remote/object/call', data = {}, dataJson, result,
@@ -2028,7 +2044,7 @@ async function sendToUnreal(landscapesize,useworldpart) {
                 "functionName": "GenerateMapboxLandscape",
                 "parameters": {
                     "LandscapeName": landscapename,
-                    "LandscapeSize": landscapesize.toString() ,
+                    "LandscapeSize": landscapesize.toString(),
                     "TileHeightmapFileName": subDirName + '/' + heightmapFileName,
                     "TileGeojsonFileName": "",
                     "TileInfoFileName": "",
