@@ -167,6 +167,27 @@ function checkFileApiSupport() {
     return bEnabled
 }
 
+function deleteCaches() {
+    if (confirm('Delete the caches.\nIs that okay?')) {
+        caches.delete('tiles').then(() => {
+            caches.open('tiles').then((data) => cache = data);
+        });
+    }
+}
+
+async function cacheStorageStats() {
+    let estimate = await navigator.storage.estimate()
+    return estimate
+}
+
 export default {
-    getDirHandle, verifyPermission, writeFileToDisk, fileExists, getFileHandle, readFileFromDisk, checkFileApiSupport
+    getDirHandle,
+    cacheStorageStats,
+    deleteCaches,
+    verifyPermission,
+    writeFileToDisk,
+    fileExists,
+    getFileHandle,
+    readFileFromDisk,
+    checkFileApiSupport
 }

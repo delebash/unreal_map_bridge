@@ -509,13 +509,7 @@ function getTileCountAdjusted(zoom, extent, override = false) {
     return obj
 }
 
-function deleteCaches() {
-    if (confirm('Delete the caches.\nIs that okay?')) {
-        caches.delete('tiles').then(() => {
-            caches.open('tiles').then((data) => cache = data);
-        });
-    }
-}
+
 
 function convertMapboxMaptilerStyles(key, layerId) {
 
@@ -590,7 +584,6 @@ export default {
     calcMinMaxHeight,
     getTileCount,
     getTileCountAdjusted,
-    deleteCaches,
     convertMapboxMaptilerStyles,
     Create2DArray,
     downloadPbfToTile,

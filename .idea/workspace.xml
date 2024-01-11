@@ -4,13 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="update deps,fix stream">
+    <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="add delete cache function">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/javascript/fs-helpers.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/javascript/fs-helpers.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/javascript/map-utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/javascript/map-utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -195,7 +195,7 @@
       <workItem from="1704587410611" duration="558000" />
       <workItem from="1704593982351" duration="632000" />
       <workItem from="1704680979561" duration="143000" />
-      <workItem from="1704992306375" duration="830000" />
+      <workItem from="1704992306375" duration="5482000" />
     </task>
     <task id="LOCAL-00001" summary="various fixes, sat download">
       <created>1686959652958</created>
@@ -322,14 +322,6 @@
       <option name="presentableId" value="LOCAL-00018" />
       <option name="project" value="LOCAL" />
       <updated>1687202316359</updated>
-    </task>
-    <task id="LOCAL-00056" summary="landscapesizes">
-      <option name="closed" value="true" />
-      <created>1688868822347</created>
-      <option name="number" value="00056" />
-      <option name="presentableId" value="LOCAL-00056" />
-      <option name="project" value="LOCAL" />
-      <updated>1688868822347</updated>
     </task>
     <task id="LOCAL-00057" summary="landscapesizes">
       <option name="closed" value="true" />
@@ -571,7 +563,15 @@
       <option name="project" value="LOCAL" />
       <updated>1702864047372</updated>
     </task>
-    <option name="localTasksCounter" value="87" />
+    <task id="LOCAL-00087" summary="add delete cache function">
+      <option name="closed" value="true" />
+      <created>1704993371888</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1704993371888</updated>
+    </task>
+    <option name="localTasksCounter" value="88" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -594,7 +594,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="filename" />
     <MESSAGE value="zoom level" />
     <MESSAGE value="add dist" />
     <MESSAGE value="fixes for desktop version" />
@@ -619,7 +618,8 @@
     <MESSAGE value="update to gl-js 3 rc, add mapbox standard style, update deps" />
     <MESSAGE value="update deps" />
     <MESSAGE value="update deps,fix stream" />
-    <option name="LAST_COMMIT_MESSAGE" value="update deps,fix stream" />
+    <MESSAGE value="add delete cache function" />
+    <option name="LAST_COMMIT_MESSAGE" value="add delete cache function" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

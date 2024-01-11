@@ -1044,6 +1044,7 @@ progress::-ms-fill {
     padding: 1rem 1.5rem;
     width: 24rem;
     border-radius: 0.5rem;
+    white-space: pre-line
 }
 
 .close-button {

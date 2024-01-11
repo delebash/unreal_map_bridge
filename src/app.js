@@ -2267,6 +2267,11 @@ async function captureScreen(panelid) {
     }
 }
 
+async function showStorageInfo(){
+    let estimate = await fileUtils.cacheStorageStats()
+    console.log(estimate)
+    toggleModal('open', `<u>Cache Storage Information</u>\nQuota: ${(estimate.quota/1000)} KB\nUsage: ${(estimate.usage/1000)} KB\n<u>Usage Details</u>\nCaches: ${(estimate.usageDetails.caches/1000)} KB \nIndexDB: ${(estimate.usageDetails.indexedDB/1000)} KB`)
+}
 window.toggleModal = toggleModal
 window.togglePanel = togglePanel
 window.openDirectory = openDirectory
@@ -2292,7 +2297,8 @@ window.geoJsonScreenShot = geoJsonScreenShot
 window.captureScreen = captureScreen
 window.loadGeojson = loadGeojson
 window.useworldpartChange = useworldpartChange
-window.deleteCaches = mapUtils.deleteCaches
+window.deleteCaches = fileUtils.deleteCaches
+window.showStorageInfo = showStorageInfo
 
 
 
