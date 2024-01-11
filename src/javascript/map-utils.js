@@ -16,6 +16,7 @@ caches.open('tiles').then((data) => cache = data);
 
 //const mapboxClient = mapboxSdk({ accessToken: 'pk.eyJ1IjoiZGVsZWJhc2giLCJhIjoiY2t1YWxkODF0MGh2NjJxcXA4czBpdXlmdyJ9.D_ngzR7j4vU1CILtpNLg4Q' })
 
+
 function getTileInfo(lng, lat, multiple, x, y, z, bbox) {
     // let tileInfo = {}
     // let xyzpoint

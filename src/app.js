@@ -2292,6 +2292,7 @@ window.geoJsonScreenShot = geoJsonScreenShot
 window.captureScreen = captureScreen
 window.loadGeojson = loadGeojson
 window.useworldpartChange = useworldpartChange
+window.deleteCaches = mapUtils.deleteCaches
 
 
 

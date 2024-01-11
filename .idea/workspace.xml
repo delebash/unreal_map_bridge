@@ -4,13 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="update deps">
+    <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="update deps,fix stream">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/assets/index-9EsOLfGl.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/dist/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/javascript/map-utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/javascript/map-utils.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,28 +42,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "F:/github/DansProjects/GES_Landscape",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "project.propDebugger",
-    "ts.external.directory.path": "D:\\JetBrains\\Toolbox\\WebStorm\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
-    "two.files.diff.last.used.file": "F:/github/DansProjects/unreal_map_bridge/test2.txt",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;F:/github/DansProjects/GES_Landscape&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propDebugger&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;D:\\JetBrains\\Toolbox\\WebStorm\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external&quot;,
+    &quot;two.files.diff.last.used.file&quot;: &quot;F:/github/DansProjects/unreal_map_bridge/test2.txt&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="F:\github\DansProjects\unreal_map_bridge\src\public" />
@@ -185,7 +185,17 @@
       <workItem from="1700847086910" duration="28000" />
       <workItem from="1701797645094" duration="269000" />
       <workItem from="1702448403512" duration="49000" />
-      <workItem from="1702860091184" duration="3513000" />
+      <workItem from="1702860091184" duration="3732000" />
+      <workItem from="1702939150527" duration="6000" />
+      <workItem from="1704484772960" duration="412000" />
+      <workItem from="1704487182750" duration="1368000" />
+      <workItem from="1704488603556" duration="5959000" />
+      <workItem from="1704556533322" duration="7791000" />
+      <workItem from="1704566743412" duration="17927000" />
+      <workItem from="1704587410611" duration="558000" />
+      <workItem from="1704593982351" duration="632000" />
+      <workItem from="1704680979561" duration="143000" />
+      <workItem from="1704992306375" duration="830000" />
     </task>
     <task id="LOCAL-00001" summary="various fixes, sat download">
       <created>1686959652958</created>
@@ -312,38 +322,6 @@
       <option name="presentableId" value="LOCAL-00018" />
       <option name="project" value="LOCAL" />
       <updated>1687202316359</updated>
-    </task>
-    <task id="LOCAL-00052" summary="help">
-      <option name="closed" value="true" />
-      <created>1688844946156</created>
-      <option name="number" value="00052" />
-      <option name="presentableId" value="LOCAL-00052" />
-      <option name="project" value="LOCAL" />
-      <updated>1688844946156</updated>
-    </task>
-    <task id="LOCAL-00053" summary="help">
-      <option name="closed" value="true" />
-      <created>1688844958893</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1688844958893</updated>
-    </task>
-    <task id="LOCAL-00054" summary="display resolution">
-      <option name="closed" value="true" />
-      <created>1688865356692</created>
-      <option name="number" value="00054" />
-      <option name="presentableId" value="LOCAL-00054" />
-      <option name="project" value="LOCAL" />
-      <updated>1688865356693</updated>
-    </task>
-    <task id="LOCAL-00055" summary="display resolution">
-      <option name="closed" value="true" />
-      <created>1688865486349</created>
-      <option name="number" value="00055" />
-      <option name="presentableId" value="LOCAL-00055" />
-      <option name="project" value="LOCAL" />
-      <updated>1688865486349</updated>
     </task>
     <task id="LOCAL-00056" summary="landscapesizes">
       <option name="closed" value="true" />
@@ -561,7 +539,39 @@
       <option name="project" value="LOCAL" />
       <updated>1701797789716</updated>
     </task>
-    <option name="localTasksCounter" value="83" />
+    <task id="LOCAL-00083" summary="update deps,fix stream">
+      <option name="closed" value="true" />
+      <created>1702863944459</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1702863944459</updated>
+    </task>
+    <task id="LOCAL-00084" summary="update deps,fix stream">
+      <option name="closed" value="true" />
+      <created>1702863961698</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1702863961698</updated>
+    </task>
+    <task id="LOCAL-00085" summary="update deps,fix stream">
+      <option name="closed" value="true" />
+      <created>1702864023771</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1702864023771</updated>
+    </task>
+    <task id="LOCAL-00086" summary="update deps,fix stream">
+      <option name="closed" value="true" />
+      <created>1702864047372</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1702864047372</updated>
+    </task>
+    <option name="localTasksCounter" value="87" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -584,7 +594,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="password" />
     <MESSAGE value="filename" />
     <MESSAGE value="zoom level" />
     <MESSAGE value="add dist" />
@@ -609,7 +618,8 @@
     <MESSAGE value="dis, help" />
     <MESSAGE value="update to gl-js 3 rc, add mapbox standard style, update deps" />
     <MESSAGE value="update deps" />
-    <option name="LAST_COMMIT_MESSAGE" value="update deps" />
+    <MESSAGE value="update deps,fix stream" />
+    <option name="LAST_COMMIT_MESSAGE" value="update deps,fix stream" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
