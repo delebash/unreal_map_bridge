@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="add delete cache function">
+    <list default="true" id="6e717310-33f6-455f-a527-bcca9f11a88b" name="Changes" comment="cache info">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/javascript/fs-helpers.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/javascript/fs-helpers.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/javascript/map-utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/javascript/map-utils.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/public/help.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/help.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,6 +24,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "delebash"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/delebash/unreal_map_bridge.git",
+    "accountId": "6aac42c3-fccd-4c83-9640-be0f6899bcd7"
+  }
+}]]></component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -80,6 +88,13 @@
     <configuration name="debug" type="JavascriptDebugType" uri="http://localhost:5173" useFirstLineBreakpoints="true">
       <method v="2" />
     </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-WS-241.14494.235" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -195,7 +210,11 @@
       <workItem from="1704587410611" duration="558000" />
       <workItem from="1704593982351" duration="632000" />
       <workItem from="1704680979561" duration="143000" />
-      <workItem from="1704992306375" duration="5482000" />
+      <workItem from="1704992306375" duration="5656000" />
+      <workItem from="1705422980016" duration="1027000" />
+      <workItem from="1706897935341" duration="92000" />
+      <workItem from="1706898049639" duration="155000" />
+      <workItem from="1712363182240" duration="39000" />
     </task>
     <task id="LOCAL-00001" summary="various fixes, sat download">
       <created>1686959652958</created>
@@ -322,14 +341,6 @@
       <option name="presentableId" value="LOCAL-00018" />
       <option name="project" value="LOCAL" />
       <updated>1687202316359</updated>
-    </task>
-    <task id="LOCAL-00057" summary="landscapesizes">
-      <option name="closed" value="true" />
-      <created>1688868834881</created>
-      <option name="number" value="00057" />
-      <option name="presentableId" value="LOCAL-00057" />
-      <option name="project" value="LOCAL" />
-      <updated>1688868834881</updated>
     </task>
     <task id="LOCAL-00058" summary="fixed selection, added back water draw">
       <option name="closed" value="true" />
@@ -571,7 +582,15 @@
       <option name="project" value="LOCAL" />
       <updated>1704993371888</updated>
     </task>
-    <option name="localTasksCounter" value="88" />
+    <task id="LOCAL-00088" summary="cache info">
+      <option name="closed" value="true" />
+      <created>1704998863270</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1704998863270</updated>
+    </task>
+    <option name="localTasksCounter" value="89" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -594,7 +613,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="zoom level" />
     <MESSAGE value="add dist" />
     <MESSAGE value="fixes for desktop version" />
     <MESSAGE value="help" />
@@ -619,7 +637,8 @@
     <MESSAGE value="update deps" />
     <MESSAGE value="update deps,fix stream" />
     <MESSAGE value="add delete cache function" />
-    <option name="LAST_COMMIT_MESSAGE" value="add delete cache function" />
+    <MESSAGE value="cache info" />
+    <option name="LAST_COMMIT_MESSAGE" value="cache info" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
