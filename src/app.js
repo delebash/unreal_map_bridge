@@ -11,8 +11,8 @@ import {GeocodingControl} from "@maptiler/geocoding-control/maptilersdk";
 import "@maptiler/sdk/dist/maptiler-sdk.css";
 import "@maptiler/geocoding-control/style.css"
 import {Grid} from 'ag-grid-community';
-import 'ag-grid-community/styles//ag-grid.css';
-import 'ag-grid-community/styles//ag-theme-alpine.css';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-alpine.css';
 import * as turf from '@turf/turf'
 import idbKeyval from "./javascript/idb-keyval-iife.js";
 import fileUtils from "./javascript/fs-helpers.js"
@@ -244,7 +244,8 @@ let rows = [
 ]
 let userSettings
 let grid
-
+let featuresFileName
+let fileinfo = {}
 //init
 init()
 
@@ -587,13 +588,16 @@ function setMouse() {
         mapCanvas.style.cursor = '';
         saveSettings();
     });
-
+    // map.on('mousemove', (e) => {
+    //     console.log(e.point)
+    //     console.log(e.lngLat.wrap());
+    // })
     map.on('mousedown', 'startsquare', function (e) {
         // Prevent the default map drag behavior.
         e.preventDefault();
         mapCanvas.style.cursor = 'grab';
-        map.on('mousemove', onMove);
-        map.once('mouseup', onUp);
+       map.on('mousemove', onMove);
+       map.once('mouseup', onUp);
     });
 
     map.on('touchstart', 'startsquare', function (e) {
@@ -1637,6 +1641,28 @@ async function exportMap() {
                 config.function = 'manipulateImage'
                 config.isHeightmap = true
                 await workerProcess(config)
+                //Write file info
+                fileinfo = {}
+                const llb = new mapboxgl.LngLatBounds(bbox);
+                let bboxCT = llb.getCenter();
+                fileinfo.heightmapFileName = heightmapFileName
+                fileinfo.lng = document.getElementById('lng').innerHTML
+                fileinfo.lat = document.getElementById('lat').innerHTML
+                fileinfo.minHeight = document.getElementById('minh').innerHTML
+                fileinfo.maxHeight = document.getElementById('maxh').innerHTML
+                fileinfo.bbox = bbox
+                fileinfo.MapMiddleLngX = bboxCT.lng
+                fileinfo.MapMiddleLatY = bboxCT.lat
+                fileinfo.MapBtmRLng = extent.bottomright[0]
+                fileinfo.MapBtmLLng = extent.topleft[0]
+                fileinfo.MapTopLLat = extent.topleft[1]
+                fileinfo.MapBtmLLat = extent.bottomright[1]
+                fileinfo.zoom = config.zoom
+                fileinfo.filename = "FileInfo.json"
+
+                let strFileInfo = JSON.stringify(fileinfo)
+                await fileUtils.writeFileToDisk(subDir, fileinfo.filename, strFileInfo)
+
                 stopTimer()
             }
         }
@@ -1774,6 +1800,7 @@ async function exportMap() {
             }
             stopTimer()
         }
+
         //Process geojson
         if (geojson === true) {
             console.log('Processing geojson')
@@ -1781,8 +1808,9 @@ async function exportMap() {
             startTimer()
             let features = mapUtils.getFeaturesFromBB(map, bbox, true)
             let strFeatures = JSON.stringify(features)
-            let featuresFileName = `features_lat_${lat}_lng_${lng}.json`
-            await fileUtils.writeFileToDisk(subDir, featuresFileName, strFeatures)
+
+            fileinfo.featuresFileName = `features_lat_${lat}_lng_${lng}.json`
+            await fileUtils.writeFileToDisk(subDir, fileinfo.featuresFileName, strFeatures)
             stopTimer()
         }
         if (scope.exportType === 'unrealSend') {
@@ -1998,7 +2026,8 @@ width=900,height=600,left=500,top=100`;
 }
 
 async function sendToUnreal(landscapesize, useworldpart) {
-    startTimer('Sending to Unreal', true)
+    progressMsg.innerHTML = 'Sending to Unreal'
+    startTimer()
     console.log('sendtounreal')
     let host = 'http://localhost:30010/', call = 'remote/object/call', data = {}, dataJson, result,
         bpPath, bluePrintName = 'Mapbox_BP'
@@ -2043,17 +2072,17 @@ async function sendToUnreal(landscapesize, useworldpart) {
                 "objectPath": bpPath,
                 "functionName": "GenerateMapboxLandscape",
                 "parameters": {
-                    "LandscapeName": landscapename,
+                    "LandscapeName": document.getElementById('landscapename').value,
                     "LandscapeSize": landscapesize.toString(),
-                    "TileHeightmapFileName": subDirName + '/' + heightmapFileName,
-                    "TileGeojsonFileName": "",
-                    "TileInfoFileName": "",
-                    "MapMiddleLngX": "",
-                    "MapMiddleLatY": "",
-                    "MapBtmRLng": "",
-                    "MapBtmLLng": "",
-                    "MapTopLLat": "",
-                    "MapBtmLLat": "",
+                    "TileHeightmapFileName": subDirName + '\\' + fileinfo.heightmapFileName,
+                    "TileGeojsonFileName": subDirName + '\\' + fileinfo.featuresFileName,
+                    "TileInfoFileName": subDirName + '\\' + fileinfo.filename,
+                    "MapMiddleLngX": fileinfo.MapMiddleLngX,
+                    "MapMiddleLatY": fileinfo.MapMiddleLatY,
+                    "MapBtmRLng": fileinfo.MapBtmRLng,
+                    "MapBtmLLng": fileinfo.MapBtmLLng,
+                    "MapTopLLat": fileinfo.MapTopLLat,
+                    "MapBtmLLat": fileinfo.MapBtmLLat,
                     "RunFunction": "Unreal Heightmap",
                     "SlippyMapTileString": "",
                     "HeightMapTexturesPath": '/Game/ImportedHeightMaps/',
@@ -2267,11 +2296,12 @@ async function captureScreen(panelid) {
     }
 }
 
-async function showStorageInfo(){
+async function showStorageInfo() {
     let estimate = await fileUtils.cacheStorageStats()
     console.log(estimate)
-    toggleModal('open', `<u>Cache Storage Information</u>\nQuota: ${(estimate.quota/1000)} KB\nUsage: ${(estimate.usage/1000)} KB\n<u>Usage Details</u>\nCaches: ${(estimate.usageDetails.caches/1000)} KB \nIndexDB: ${(estimate.usageDetails.indexedDB/1000)} KB`)
+    toggleModal('open', `<u>Cache Storage Information</u>\nQuota: ${(estimate.quota / 1000)} KB\nUsage: ${(estimate.usage / 1000)} KB\n<u>Usage Details</u>\nCaches: ${(estimate.usageDetails.caches / 1000)} KB \nIndexDB: ${(estimate.usageDetails.indexedDB / 1000)} KB`)
 }
+
 window.toggleModal = toggleModal
 window.togglePanel = togglePanel
 window.openDirectory = openDirectory

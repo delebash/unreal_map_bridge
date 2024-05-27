@@ -98,7 +98,9 @@ function getFeaturesFromBB(map, bbox, combine) {
     let bboxNE = llb.getNorthEast()
     let swPt = map.project(bboxSW)
     let nePt = map.project(bboxNE)
-
+    //const coordinate = [-122.420679, 37.772537];
+   // const point = map.project(coordinate);
+    //bottom left and top right points
     let features = map.queryRenderedFeatures([swPt, nePt])
 
     if (combine === true) {
