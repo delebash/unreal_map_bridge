@@ -28,3 +28,4 @@ https://discord.gg/2WkHWNDf8q
 Global Environmental System (GES) -- This system integrates Ultra Dynamic Sky Weather (potentially any Weather System) with Megascan Foliage, Trees, Props, UE Water, Ambient Wind System, and various other Systems.
 https://github.com/delebash/UE_GlobalEnvironmentalSystem
 
+Credits - Based on the Cities Skylines heightmap generator
